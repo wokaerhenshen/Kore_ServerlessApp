@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace core_backend.Repositories
+namespace AWSServerlessWebApi.Repositories
 {
     public class WBIRepo
     {
@@ -17,7 +17,7 @@ namespace core_backend.Repositories
             _context = context;
         }
 
-        public bool CreateWBI(WBIVM wbiVM)
+        public NewChangeRequestExtensionBase CreateWBI(WBIVM wbiVM)
         {
             NewChangeRequestExtensionBase wbi = new NewChangeRequestExtensionBase()
             {
@@ -30,7 +30,7 @@ namespace core_backend.Repositories
             _context.NewChangeRequestExtensionBase.Add(wbi);
             _context.SaveChanges();
 
-            return true;
+            return wbi;
         }
 
         public List<NewChangeRequestExtensionBase> GetAllWBIs()
@@ -38,14 +38,14 @@ namespace core_backend.Repositories
             return _context.NewChangeRequestExtensionBase.ToList();
         }
 
-        public WorkBreakdownItem GetOneWBI(int id)
+        public NewChangeRequestExtensionBase GetOneWBI(Guid id)
         {
-            return _context.WorkBreakdownItems.Where(i => i.WorkBreakdownItemId == id)
+            return _context.NewChangeRequestExtensionBase.Where(i => i.NewChangeRequestId == id)
                 .FirstOrDefault();
         }
-        public WorkBreakdownItem EditWBI(int id, string description, int estimatedHours, int actualHours)
+        public NewChangeRequestExtensionBase EditWBI(WBIVM wbiVM)
         {
-            var wbi = GetOneWBI(id);
+            var wbi = GetOneWBI(wbiVM.WBI_Id);
             if (wbi == null)
             {
                 return wbi;
@@ -53,24 +53,24 @@ namespace core_backend.Repositories
             else
             {
                 
-                wbi.Description = description;
-                wbi.EstimatedHours = estimatedHours;
-                wbi.ActualHours = actualHours;
+                wbi.NewRemarks = wbiVM.Description;
+                wbi.NewEstimatedHours = wbiVM.EstimatedHours;
+                wbi.NewActualHours = wbiVM.ActualHours;
                
                 _context.SaveChanges();
             }
             return wbi;
         }
-        public WorkBreakdownItem DeleteOneWBI(int id)
+        public bool DeleteOneWBI(Guid id)
         {
             var wbi = GetOneWBI(id);
             if (wbi == null)
             {
-                return wbi;
+                return false;
             }
-            _context.WorkBreakdownItems.Remove(wbi);
+            _context.NewChangeRequestExtensionBase.Remove(wbi);
             _context.SaveChanges();
-            return wbi;
+            return true;
         }
 
     }

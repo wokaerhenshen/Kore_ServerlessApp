@@ -1,76 +1,80 @@
-﻿using core_backend.Data;
-using core_backend.Models;
+﻿using AWSServerlessWebApi.Models;
+using AWSServerlessWebApi.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace core_backend.Repositories
+namespace AWSServerlessWebApi.Repositories
 {
     public class TimeslipRepo
     {
-        ApplicationDbContext _context;
+        KORE_Interactive_MSCRMContext _context;
 
-        public TimeslipRepo(ApplicationDbContext context)
+        public TimeslipRepo(KORE_Interactive_MSCRMContext context)
         {
             _context = context;
         }
 
-        public Timeslip CreateTimeslip (string StartTime, string EndTime, string remarks, string tag, int workBreakDownId)
+        public NewTimesheetEntryExtensionBase CreateTimeslip (TimeslipVM timeslipVM)
         {
             // application user needs to be here
-            Timeslip timeslip = new Timeslip()
+            NewTimesheetEntryExtensionBase timeslip = new NewTimesheetEntryExtensionBase()
             {
-                StartTime = DateTime.Parse(StartTime),
-                EndTime = DateTime.Parse(EndTime),
-                Remarks = remarks,
-                Tag = tag,
-                UserId = "1",
-                WorkBreakdownItemId = workBreakDownId
+                NewStartTask = timeslipVM.StartTime,
+                NewEndTask = timeslipVM.EndTime,
+                NewRemarks = timeslipVM.Remarks,
+                //include day_id when table gets added
+                //include user_id when we figure out which one it is...
+                NewChangeRequestId = timeslipVM.WBI_Id
+                
             };
-            _context.Timeslips.Add(timeslip);
+            _context.NewTimesheetEntryExtensionBase.Add(timeslip);
             _context.SaveChanges();
 
             return timeslip;
         }
 
-        public List<Timeslip> GetAllTimeslips()
+        public List<NewTimesheetEntryExtensionBase> GetAllTimeslips()
         {
-            return _context.Timeslips.ToList();
+            return _context.NewTimesheetEntryExtensionBase.ToList();
         }
 
-        public Timeslip GetOneTimeslip(int id)
+        public NewTimesheetEntryExtensionBase GetOneTimeslip(string id)
         {
-            return _context.Timeslips.Where(t => t.TimeslipId == id).FirstOrDefault();
+            Guid guid = Guid.Parse(id);
+            return _context.NewTimesheetEntryExtensionBase.Where(t => t.NewTimesheetEntryId == guid).FirstOrDefault();
         }
 
-        public Timeslip EditTimeslip(int id, string StartTime, string EndTime, string remarks, string tag)
+        public NewTimesheetEntryExtensionBase EditTimeslip(TimeslipVM timeslipVM)
         {
-            var timeslip = GetOneTimeslip(id);
+            
+            var timeslip = GetOneTimeslip(Convert.ToString(timeslipVM.TimeslipId));
             if (timeslip == null)
             {
                 return timeslip;
             }
             else
             {
-                timeslip.StartTime = DateTime.Parse(StartTime);
-                timeslip.EndTime = DateTime.Parse(EndTime);
-                timeslip.Remarks = remarks;
-                timeslip.Tag = tag;
+                timeslip.NewStartTask = timeslipVM.StartTime;
+                timeslip.NewEndTask = timeslipVM.EndTime;
+                timeslip.NewRemarks = timeslipVM.Remarks;
+                
                 _context.SaveChanges();
             }
             return timeslip;
         }
 
-        public Timeslip DeleteOneTimeslip(int id)
+        public NewTimesheetEntryExtensionBase DeleteOneTimeslip(string id)
         {
+            //Guid guid = Guid.Parse(id);
             var timeslip = GetOneTimeslip(id);
             if (timeslip == null)
             {
                 return timeslip;
             }
-            _context.Timeslips.Remove(timeslip);
+            _context.NewTimesheetEntryExtensionBase.Remove(timeslip);
             _context.SaveChanges();
             return timeslip;
         }
