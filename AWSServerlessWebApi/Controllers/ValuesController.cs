@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AWSServerlessWebApi.Models;
 //using AWSServerlessWebApi.Data;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,22 +12,23 @@ namespace AWSServerlessWebApi.Controllers
     public class ValuesController : Controller
     {
 
-        //ApplicationDbContext _context;
+        KORE_Interactive_MSCRMContext _context;
 
-        //public ValuesController(ApplicationDbContext context)
-        //{
-        //    _context = context;
-        //}
+        public ValuesController(KORE_Interactive_MSCRMContext context)
+        {
+            _context = context;
+        }
         // GET api/values
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            //Name name = new Name()
-            //{
-            //    firstName = "Karl"
-            //};
-            //_context.Name.Add(name);
-            //_context.SaveChanges();
+            NewProjectTypeExtensionBase PT = new NewProjectTypeExtensionBase()
+            {
+                NewProjectTypeId = Guid.NewGuid(),
+                NewName = "NewName"
+            };
+            _context.NewProjectTypeExtensionBase.Add(PT);
+            _context.SaveChanges();
 
             return new string[] { "value1", "value2" };
         }
