@@ -7,7 +7,7 @@ namespace AWSServerlessWebApi.Models
     public partial class KORE_Interactive_MSCRMContext : DbContext
     {
         public virtual DbSet<AccountBase> AccountBase { get; set; }
-        public virtual DbSet<NewChangeRequestExtensionBase> NewChangeRequestExtensionBases { get; set; }
+        public virtual DbSet<NewChangeRequestExtensionBase> NewChangeRequestExtensionBase { get; set; }
         public virtual DbSet<NewProjectExtensionBase> NewProjectExtensionBase { get; set; }
         public virtual DbSet<NewProjectTypeExtensionBase> NewProjectTypeExtensionBase { get; set; }
         public virtual DbSet<NewTimesheetEntryExtensionBase> NewTimesheetEntryExtensionBase { get; set; }
