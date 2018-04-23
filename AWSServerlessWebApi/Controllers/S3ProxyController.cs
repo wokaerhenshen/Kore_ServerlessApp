@@ -41,23 +41,25 @@ namespace AWSServerlessWebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> Get()
+        public string Get()
         {
-            var listResponse = await this.S3Client.ListObjectsV2Async(new ListObjectsV2Request
-            {
-                BucketName = this.BucketName
-            });
+            //var listResponse = await this.S3Client.ListObjectsV2Async(new ListObjectsV2Request
+            //{
+            //    BucketName = this.BucketName
+            //});
 
-            try
-            {
-                this.Response.ContentType = "text/json";
-                return new JsonResult(listResponse.S3Objects, new JsonSerializerSettings { Formatting = Formatting.Indented });
-            }
-            catch(AmazonS3Exception e)
-            {
-                this.Response.StatusCode = (int)e.StatusCode;
-                return new JsonResult(e.Message);
-            }
+            //try
+            //{
+            //    this.Response.ContentType = "text/json";
+            //    return new JsonResult(listResponse.S3Objects, new JsonSerializerSettings { Formatting = Formatting.Indented });
+            //}
+            //catch(AmazonS3Exception e)
+            //{
+            //    this.Response.StatusCode = (int)e.StatusCode;
+            //    return new JsonResult(e.Message);
+            //}
+
+            return "ok";
         }
 
         [HttpGet("{key}")]

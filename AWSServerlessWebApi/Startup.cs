@@ -2,8 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AWSServerlessWebApi.Models;
+//using AWSServerlessWebApi.Data;
+//using AWSServerlessWebApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -24,6 +28,10 @@ namespace AWSServerlessWebApi
         // This method gets called by the runtime. Use this method to add services to the container
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddDbContext<KORE_Interactive_MSCRMContext>(options =>
+                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddMvc();
 
             // Add S3 to the ASP.NET Core dependency injection framework.
@@ -34,6 +42,8 @@ namespace AWSServerlessWebApi
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseMvc();
+
+            
         }
     }
 }
