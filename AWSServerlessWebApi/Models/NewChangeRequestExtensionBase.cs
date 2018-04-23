@@ -5,6 +5,7 @@ namespace AWSServerlessWebApi.Models
 {
     public partial class NewChangeRequestExtensionBase
     {
+        
         public Guid NewChangeRequestId { get; set; }
         public string NewName { get; set; }
         public string NewChangeTitle { get; set; }

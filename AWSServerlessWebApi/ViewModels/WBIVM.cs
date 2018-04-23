@@ -7,11 +7,11 @@ namespace AWSServerlessWebApi.ViewModels
 {
     public class WBIVM
     {
-        public int WBI_Id { get; set; }
+        public Guid WBI_Id { get; set; }
         public string Description { get; set; }
         public int EstimatedHours { get; set; }
         public int ActualHours { get; set; }
-        public int ProjectId { get; set; }
+        public Guid ProjectId { get; set; }
 
         public virtual ProjectVM Project { get; set; }
         public virtual ICollection<TimeslipVM> Timeslips { get; set; }
