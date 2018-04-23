@@ -1,4 +1,5 @@
-﻿using core_backend.Data;
+﻿using AWSServerlessWebApi.Models;
+using AWSServerlessWebApi.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,50 +10,71 @@ namespace core_backend.Repositories
     public class ProjectRepo
     {
 
-        ApplicationDbContext _context;
+        KORE_Interactive_MSCRMContext _context;
 
-        public ProjectRepo (ApplicationDbContext context)
+        public ProjectRepo (KORE_Interactive_MSCRMContext context)
         {
             _context = context;
         }
 
-        public void CreateProject(int ClientId,string Name, string StartDate, string EndDate)
+        public void CreateProject(ProjectVM projectVM)
         {
-            Project project = new Project()
+            NewProjectExtensionBase project = new NewProjectExtensionBase()
             {
-                ClientId = ClientId,
-                Name = Name,
-                StartDate = Convert.ToDateTime(StartDate),
-                EndDate = Convert.ToDateTime(EndDate)
+                NewName = projectVM.ProjectName,
+                NewStartDate = projectVM.StartDate,
+                NewEndDate = projectVM.EndDate,
+                NewAccountId = projectVM.ClientId
             };
-            _context.Projects.Add(project);
+            NewProjectTypeExtensionBase projectType = new NewProjectTypeExtensionBase()
+            {
+                NewName = projectVM.ProjectType
+            };
+
+            _context.NewProjectExtensionBase.Add(project);
+            _context.NewProjectTypeExtensionBase.Add(projectType);
             _context.SaveChanges();
         }
 
-        public List<Project> GetAllProjects()
+        public List<NewProjectExtensionBase> GetAllProjects()
         {
-            return _context.Projects.ToList();
+            return _context.NewProjectExtensionBase.ToList();
         }
 
-        public Project GetOneProject(int id)
+        public NewProjectExtensionBase GetOneProject(Guid id)
         {
-            return _context.Projects.Where(i => i.ProjectId == id).FirstOrDefault();
+            return _context.NewProjectExtensionBase.Where(i => i.NewProjectId == id).FirstOrDefault();
         }
 
-        public void UpdateOneProject(int id, string Name, string StartDate, string EndDate)
+        public void UpdateOneProject(ProjectVM projectVM)
         {
-            Project project = _context.Projects.Where(i => i.ProjectId == id).FirstOrDefault();
-            project.Name = Name;
-            project.StartDate = Convert.ToDateTime(StartDate);
-            //05/05/2005
-            project.EndDate = Convert.ToDateTime(EndDate);
+            NewProjectExtensionBase project = _context.NewProjectExtensionBase
+                                             .Where(i => i.NewProjectId == projectVM.ProjectId)
+                                             .FirstOrDefault();
+            project.NewName = projectVM.ProjectName;
+            project.NewStartDate = projectVM.StartDate;
+            project.NewEndDate = projectVM.EndDate;
+            project.NewAccountId = projectVM.ClientId;
+
+            NewProjectTypeExtensionBase projectType = _context.NewProjectTypeExtensionBase
+                                                     .Where(u => u.NewProjectTypeId == project.NewProjectTypeId)
+                                                     .FirstOrDefault();
+            projectType.NewName = projectVM.ProjectType;
+
             _context.SaveChanges();
         }
 
-        public void DeleteOneProject(int id)
+        public void DeleteOneProject(Guid id)
         {
-            Project project = _context.Projects.Where(i => i.ProjectId == id).FirstOrDefault();
-            _context.Projects.Remove(project);
+            NewProjectExtensionBase project = _context.NewProjectExtensionBase
+                                              .Where(i => i.NewProjectId == id).FirstOrDefault();
+
+            NewProjectTypeExtensionBase projectType = _context.NewProjectTypeExtensionBase
+                                                      .Where(u => u.NewProjectTypeId == project.NewProjectTypeId)
+                                                      .FirstOrDefault();
+
+            _context.NewProjectExtensionBase.Remove(project);
+            _context.NewProjectTypeExtensionBase.Remove(projectType);
             _context.SaveChanges();
         }
     }
