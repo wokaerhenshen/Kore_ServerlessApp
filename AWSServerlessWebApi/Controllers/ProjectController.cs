@@ -22,7 +22,7 @@ namespace AWSServerlessWebApi.Controllers
 
         [HttpPost]
         [Route("Create")]
-        public bool Create(string Name, string StartDate, string EndDate, string ProjectType, ClientVM client)
+        public bool Create(string Name, string StartDate, string EndDate, string ProjectType, string clientId)
         {
             ProjectVM project = new ProjectVM()
             {
@@ -30,7 +30,7 @@ namespace AWSServerlessWebApi.Controllers
                 StartDate = Convert.ToDateTime(StartDate),
                 EndDate = Convert.ToDateTime(EndDate),
                 ProjectType = ProjectType,
-                ClientId = client.ClientId
+                ClientId = Guid.Parse(clientId)
             };
             
             projectRepo.CreateProject(project);

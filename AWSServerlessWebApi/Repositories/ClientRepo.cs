@@ -20,6 +20,7 @@ namespace AWSServerlessWebApi.Repositories
         {
             AccountBase client = new AccountBase()
             {
+                AccountId = Guid.NewGuid(),
                 Name = clientVM.ClientName,
                 DeletionStateCode = clientVM.DeletionStateCode,
                 StateCode = clientVM.StateCode

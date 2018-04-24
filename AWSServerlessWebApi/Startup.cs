@@ -31,6 +31,19 @@ namespace AWSServerlessWebApi
 
             services.AddDbContext<KORE_Interactive_MSCRMContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            // Call this before AddMvc()
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    builder =>
+                    {
+                        builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
+                    });
+            });
 
             services.AddMvc();
 
@@ -41,6 +54,7 @@ namespace AWSServerlessWebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseCors("AllowAll");
             app.UseMvc();          
         }
     }
