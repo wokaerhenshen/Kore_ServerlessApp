@@ -7,13 +7,13 @@ namespace AWSServerlessWebApi.ViewModels
 {
     public class ProjectVM
     {
-        public Guid ProjectId { get; set; }
+        public string ProjectId { get; set; }
         public string ProjectName { get; set; }
         public string ProjectTypeId { get; set; }
-        
+        public string ProjectType { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public Guid ClientId { get; set; }
+        public string ClientId { get; set; }
 
     //    public virtual ClientVM Client { get; set; }
     //    public virtual ICollection<WBIVM> WBIs { get; set; }

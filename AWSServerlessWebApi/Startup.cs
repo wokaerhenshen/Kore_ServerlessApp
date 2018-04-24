@@ -31,7 +31,7 @@ namespace AWSServerlessWebApi
 
             services.AddDbContext<KORE_Interactive_MSCRMContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            // Call this before AddMvc()
+                        // Call this before AddMvc()
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll",

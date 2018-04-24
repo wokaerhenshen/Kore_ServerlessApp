@@ -1,10 +1,10 @@
 ﻿using AWSServerlessWebApi.Models;
+using AWSServerlessWebApi.Utility;
 using AWSServerlessWebApi.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AWSServerlessWebApi.Utility;
 
 namespace AWSServerlessWebApi.Repositories
 {
@@ -20,6 +20,7 @@ namespace AWSServerlessWebApi.Repositories
 
         public void CreateProject(ProjectVM projectVM)
         {
+
             Guid projectTypeGuid;
             NewProjectTypeExtensionBase currentProjectType = null;
 
@@ -55,6 +56,7 @@ namespace AWSServerlessWebApi.Repositories
             } 
            
             
+
             NewProjectExtensionBase project = new NewProjectExtensionBase()
             {
                 NewProjectId = Guid.NewGuid(),
@@ -62,9 +64,11 @@ namespace AWSServerlessWebApi.Repositories
                 NewStartDate = projectVM.StartDate,
                 NewEndDate = projectVM.EndDate,
                 NewProjectTypeId = currentProjectType.NewProjectTypeId,
-                NewAccountId = projectVM.ClientId
+                NewAccountId = Guid.Parse(projectVM.ClientId)
             };
-            
+
+
+        
             _context.NewProjectExtensionBase.Add(project);
             _context.SaveChanges();
         }
@@ -82,17 +86,17 @@ namespace AWSServerlessWebApi.Repositories
         public void UpdateOneProject(ProjectVM projectVM)
         {
             NewProjectExtensionBase project = _context.NewProjectExtensionBase
-                                             .Where(i => i.NewProjectId == projectVM.ProjectId)
+                                             .Where(i => i.NewProjectId == Guid.Parse(projectVM.ProjectId))
                                              .FirstOrDefault();
             project.NewName = projectVM.ProjectName;
             project.NewStartDate = projectVM.StartDate;
             project.NewEndDate = projectVM.EndDate;
-            project.NewAccountId = projectVM.ClientId;
+            //project.NewAccountId = Guid.Parse(projectVM.ClientId);
 
-            NewProjectTypeExtensionBase projectType = _context.NewProjectTypeExtensionBase
-                                                     .Where(u => u.NewProjectTypeId == project.NewProjectTypeId)
-                                                     .FirstOrDefault();
-//            projectType.NewName = projectVM.ProjectTypeName;
+            //NewProjectTypeExtensionBase projectType = _context.NewProjectTypeExtensionBase
+            //                                         .Where(u => u.NewProjectTypeId == project.NewProjectTypeId)
+            //                                         .FirstOrDefault();
+            //projectType.NewName = projectVM.ProjectType;
 
             _context.SaveChanges();
         }

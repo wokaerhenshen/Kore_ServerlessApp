@@ -6,6 +6,7 @@ using AWSServerlessWebApi.Models;
 using AWSServerlessWebApi.ViewModels;
 using AWSServerlessWebApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
+//using System.Web.Http;
 
 namespace AWSServerlessWebApi.Controllers
 {
@@ -13,6 +14,7 @@ namespace AWSServerlessWebApi.Controllers
     [Route("project")]
     public class ProjectController : Controller
     {
+
         ProjectRepo projectRepo;
 
         public ProjectController(KORE_Interactive_MSCRMContext context)
@@ -22,20 +24,9 @@ namespace AWSServerlessWebApi.Controllers
 
         [HttpPost]
         [Route("Create")]
-        public bool Create(string Name, string StartDate, string EndDate, string projectTypeId, string clientId)
-        {
-            
-            ProjectVM project = new ProjectVM()
-            {
-                ProjectName = Name,
-                StartDate = Convert.ToDateTime(StartDate),
-                EndDate = Convert.ToDateTime(EndDate),
-                ProjectTypeId = projectTypeId,
-                ClientId = Guid.Parse(clientId)
-                
-            };
-            
-            projectRepo.CreateProject(project);
+        public bool Create([FromBody] ProjectVM Project)
+        {            
+            projectRepo.CreateProject(Project);
             return true;
         }
 
@@ -57,31 +48,27 @@ namespace AWSServerlessWebApi.Controllers
 
         [HttpPut]
         [Route("Update")]
-        public bool Update(string id, string Name, string StartDate, string EndDate)
+        public bool Update([FromBody] ProjectVM Project)
         {
-            Guid guid_id = Guid.Parse(id);
-
-            ProjectVM project = new ProjectVM()
-            {
-                ProjectId = guid_id,
-                ProjectName = Name,
-                StartDate = Convert.ToDateTime(StartDate),
-                EndDate = Convert.ToDateTime(EndDate),
-                
-            };
-
-            projectRepo.UpdateOneProject(project);
+            projectRepo.UpdateOneProject(Project);
             return true;
         }
 
-        [HttpDelete]
+        [HttpPost]
         [Route("Delete")]
-        public bool Delete(string id)
+        public bool Delete([FromBody] IdVM id)
         {
-            Guid guid_id = Guid.Parse(id);
+            Guid guid_id = Guid.Parse(id.id);
 
             projectRepo.DeleteOneProject(guid_id);
             return true;
         }
+    }
+
+
+
+    public class IdVM
+    {
+        public string id { get; set; }
     }
 }
