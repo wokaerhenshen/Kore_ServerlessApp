@@ -135,16 +135,14 @@ namespace AWSServerlessWebApi.Data
             {
                 new User { UserId = Guid.NewGuid(),
                            Email = "bob@home.com",
-                           Password = "password"
-
-                FirstName = "Bob",
-               LastName = "Jones" },
+                           Password = "password",
+                           FirstName = "Bob",
+                           LastName = "Jones" },
                 new User { UserId = Guid.NewGuid(),
                            Email = "sally@home.com",
                            Password = "password",
-                FirstName = "Sally"
-
-               LastName = "Smith" }
+                           FirstName = "Sally",
+                           LastName = "Smith" }
             };
             foreach (User u in users)
             {
