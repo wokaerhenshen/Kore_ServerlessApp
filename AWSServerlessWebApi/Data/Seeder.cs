@@ -188,7 +188,7 @@ namespace AWSServerlessWebApi.Data
             }
             var customMonday = new CustomDay
             {
-                CustomDayId = Guid.NewGuid(),
+                CustomDayId = 1,
                 Name = "My Monday",
                 Description = "This is my typical monday"
             };

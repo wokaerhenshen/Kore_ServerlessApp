@@ -9,7 +9,7 @@ namespace AWSServerlessWebApi.Models
     public class CustomDay
     {
         [Key]
-        public Guid CustomDayId { get; set; }
+        public int CustomDayId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
 
