@@ -9,7 +9,8 @@ namespace AWSServerlessWebApi.ViewModels
     {
         public Guid ProjectId { get; set; }
         public string ProjectName { get; set; }
-        public string ProjectType { get; set; }
+        public string ProjectTypeId { get; set; }
+        
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public Guid ClientId { get; set; }

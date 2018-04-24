@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AWSServerlessWebApi.Utility;
 
 namespace AWSServerlessWebApi.Repositories
 {
@@ -19,25 +20,36 @@ namespace AWSServerlessWebApi.Repositories
 
         public void CreateProject(ProjectVM projectVM)
         {
-
-            NewProjectTypeExtensionBase projectType = new NewProjectTypeExtensionBase()
+            //convert project type id from string to Guid
+            Guid projectTypeGuid = Guid.Parse(projectVM.ProjectTypeId);
+            //find existing project type in the database
+            NewProjectTypeExtensionBase currentProjectType = _context.NewProjectTypeExtensionBase.Where(p => p.NewProjectTypeId == projectTypeGuid)
+                .FirstOrDefault();
+            //if the project type doesn't exist, create it
+            if(currentProjectType == null)
             {
-                NewProjectTypeId = Guid.NewGuid(),
-                NewName = projectVM.ProjectType
-            };
+                currentProjectType = new NewProjectTypeExtensionBase()
+                {
+                    NewProjectTypeId = Guid.NewGuid(),
+                    //assign the default name
+                    NewName = ConstantDirectory.ProjectTypeNameDefault
+                    
+                };
+                
+                _context.NewProjectTypeExtensionBase.Add(currentProjectType);
+                _context.SaveChanges();
+            } 
+           
             NewProjectExtensionBase project = new NewProjectExtensionBase()
             {
                 NewProjectId = Guid.NewGuid(),
                 NewName = projectVM.ProjectName,
                 NewStartDate = projectVM.StartDate,
                 NewEndDate = projectVM.EndDate,
-                NewProjectTypeId = projectType.NewProjectTypeId,
+                NewProjectTypeId = currentProjectType.NewProjectTypeId,
                 NewAccountId = projectVM.ClientId
             };
-
-
-            _context.NewProjectTypeExtensionBase.Add(projectType);
-            _context.SaveChanges();
+            
             _context.NewProjectExtensionBase.Add(project);
             _context.SaveChanges();
         }
@@ -65,7 +77,7 @@ namespace AWSServerlessWebApi.Repositories
             NewProjectTypeExtensionBase projectType = _context.NewProjectTypeExtensionBase
                                                      .Where(u => u.NewProjectTypeId == project.NewProjectTypeId)
                                                      .FirstOrDefault();
-            projectType.NewName = projectVM.ProjectType;
+//            projectType.NewName = projectVM.ProjectTypeName;
 
             _context.SaveChanges();
         }

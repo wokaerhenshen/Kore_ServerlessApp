@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 using AWSServerlessWebApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using AWSServerlessWebApi.Repositories;
+
 using AWSServerlessWebApi.Models;
 using AWSServerlessWebApi.ViewModels;
 

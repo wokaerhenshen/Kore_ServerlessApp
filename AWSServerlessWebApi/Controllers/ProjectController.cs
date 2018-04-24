@@ -22,7 +22,7 @@ namespace AWSServerlessWebApi.Controllers
 
         [HttpPost]
         [Route("Create")]
-        public bool Create(string Name, string StartDate, string EndDate, string projectType, string clientId)
+        public bool Create(string Name, string StartDate, string EndDate, string projectTypeId, string clientId)
         {
             
             ProjectVM project = new ProjectVM()
@@ -30,7 +30,7 @@ namespace AWSServerlessWebApi.Controllers
                 ProjectName = Name,
                 StartDate = Convert.ToDateTime(StartDate),
                 EndDate = Convert.ToDateTime(EndDate),
-                ProjectType = projectType,
+                ProjectTypeId = projectTypeId,
                 ClientId = Guid.Parse(clientId)
                 
             };
@@ -57,7 +57,7 @@ namespace AWSServerlessWebApi.Controllers
 
         [HttpPut]
         [Route("Update")]
-        public bool Update(string id, string Name, string StartDate, string EndDate, string ProjectType)
+        public bool Update(string id, string Name, string StartDate, string EndDate)
         {
             Guid guid_id = Guid.Parse(id);
 
@@ -67,7 +67,7 @@ namespace AWSServerlessWebApi.Controllers
                 ProjectName = Name,
                 StartDate = Convert.ToDateTime(StartDate),
                 EndDate = Convert.ToDateTime(EndDate),
-                ProjectType = ProjectType
+                
             };
 
             projectRepo.UpdateOneProject(project);
