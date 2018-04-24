@@ -25,7 +25,7 @@ namespace AWSServerlessWebApi.Controllers
             NewProjectTypeExtensionBase PT = new NewProjectTypeExtensionBase()
             {
                 NewProjectTypeId = Guid.NewGuid(),
-                NewName = "NewName"
+                NewName = "karl"
             };
             _context.NewProjectTypeExtensionBase.Add(PT);
             _context.SaveChanges();

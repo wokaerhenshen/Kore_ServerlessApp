@@ -13,8 +13,8 @@ namespace AWSServerlessWebApi.ViewModels
         public int ActualHours { get; set; }
         public Guid ProjectId { get; set; }
 
-        public virtual ProjectVM Project { get; set; }
-        public virtual ICollection<TimeslipVM> Timeslips { get; set; }
+    //    public virtual ProjectVM Project { get; set; }
+    //    public virtual ICollection<TimeslipVM> Timeslips { get; set; }
 
     }
 }

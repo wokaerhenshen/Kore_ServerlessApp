@@ -15,8 +15,8 @@ namespace AWSServerlessWebApi.ViewModels
         public int UserId { get; set; }
         public int DayId { get; set; }
 
-        public virtual WBIVM WBI { get; set; }
-        public virtual UserDetailVM UserDetail { get; set; }
-        public virtual CustomDayVM CustomDay { get; set; }
+     //   public virtual WBIVM WBI { get; set; }
+     //   public virtual UserDetailVM UserDetail { get; set; }
+     //   public virtual CustomDayVM CustomDay { get; set; }
     }
 }

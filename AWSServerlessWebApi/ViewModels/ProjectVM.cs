@@ -14,7 +14,7 @@ namespace AWSServerlessWebApi.ViewModels
         public DateTime EndDate { get; set; }
         public int ClientId { get; set; }
 
-        public virtual ClientVM Client { get; set; }
-        public virtual ICollection<WBIVM> WBIs { get; set; }
+    //    public virtual ClientVM Client { get; set; }
+    //    public virtual ICollection<WBIVM> WBIs { get; set; }
 }
 }

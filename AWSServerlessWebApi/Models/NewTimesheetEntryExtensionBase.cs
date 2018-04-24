@@ -24,5 +24,27 @@ namespace AWSServerlessWebApi.Models
         public bool? NewApprovedForBilling { get; set; }
         public bool? NewCredit { get; set; }
         public Guid? NewTimesheetbatchid { get; set; }
+
+
+        // the columns below and getten from a similar table
+        public DateTime? CreatedOn { get; set; }
+        public Guid? CreatedBy { get; set; }
+        public DateTime? ModifiedOn { get; set; }
+        public Guid? ModifiedBy { get; set; }
+        public Guid? OwningUser { get; set; }
+        public Guid? OwningBusinessUnit { get; set; }
+        public int StateCode { get; set; }
+        public int? StatusCode { get; set; }
+        public int? DeletionStateCode { get; set; }
+        public DateTime? VersionNumber { get; set; }
+        public int? ImportSequenceNumber { get; set; }
+        public DateTime? OverriddenCreatedOn { get; set; }
+
+
+
+
+
+        public virtual ICollection<CustomDayTimeSlip> CustomDayTimeSlips { get; set; }
+
     }
 }

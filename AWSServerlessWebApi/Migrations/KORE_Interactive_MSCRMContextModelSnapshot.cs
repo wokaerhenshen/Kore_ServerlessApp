@@ -17,8 +17,7 @@ namespace AWSServerlessWebApi.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.2-rtm-10011")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "2.0.2-rtm-10011");
 
             modelBuilder.Entity("AWSServerlessWebApi.Models.AccountBase", b =>
                 {
@@ -245,6 +244,40 @@ namespace AWSServerlessWebApi.Migrations
                     b.HasIndex("ParentAccountId");
 
                     b.ToTable("AccountBase");
+                });
+
+            modelBuilder.Entity("AWSServerlessWebApi.Models.CustomDay", b =>
+                {
+                    b.Property<int>("CustomDayId")
+                        .HasColumnName("CustomDayId");
+
+                    b.Property<string>("Description")
+                        .HasColumnName("Description");
+
+                    b.Property<string>("Name")
+                        .HasColumnName("Name");
+
+                    b.HasKey("CustomDayId");
+
+                    b.ToTable("Custom_Day");
+                });
+
+            modelBuilder.Entity("AWSServerlessWebApi.Models.CustomDayTimeSlip", b =>
+                {
+                    b.Property<Guid>("TimeSlipId")
+                        .HasColumnName("TimeSlip_Id");
+
+                    b.Property<int>("CustomDayId")
+                        .HasColumnName("CustomDay_Id");
+
+                    b.HasKey("TimeSlipId");
+
+                    b.HasAlternateKey("CustomDayId");
+
+
+                    b.HasAlternateKey("CustomDayId", "TimeSlipId");
+
+                    b.ToTable("CustomDayTimeSlips");
                 });
 
             modelBuilder.Entity("AWSServerlessWebApi.Models.NewChangeRequestExtensionBase", b =>
@@ -566,6 +599,18 @@ namespace AWSServerlessWebApi.Migrations
                     b.Property<Guid>("NewTimesheetEntryId")
                         .HasColumnName("New_TimesheetEntryId");
 
+                    b.Property<Guid?>("CreatedBy");
+
+                    b.Property<DateTime?>("CreatedOn");
+
+                    b.Property<int?>("DeletionStateCode");
+
+                    b.Property<int?>("ImportSequenceNumber");
+
+                    b.Property<Guid?>("ModifiedBy");
+
+                    b.Property<DateTime?>("ModifiedOn");
+
                     b.Property<bool?>("NewApprovedForBilling")
                         .HasColumnName("New_ApprovedForBilling");
 
@@ -624,6 +669,18 @@ namespace AWSServerlessWebApi.Migrations
                     b.Property<Guid?>("NewTimesheetbatchid")
                         .HasColumnName("new_timesheetbatchid");
 
+                    b.Property<DateTime?>("OverriddenCreatedOn");
+
+                    b.Property<Guid?>("OwningBusinessUnit");
+
+                    b.Property<Guid?>("OwningUser");
+
+                    b.Property<int>("StateCode");
+
+                    b.Property<int?>("StatusCode");
+
+                    b.Property<DateTime?>("VersionNumber");
+
                     b.HasKey("NewTimesheetEntryId");
 
                     b.ToTable("New_TimesheetEntryExtensionBase");
@@ -681,6 +738,19 @@ namespace AWSServerlessWebApi.Migrations
                         .WithMany("InverseParentAccount")
                         .HasForeignKey("ParentAccountId")
                         .HasConstraintName("account_parent_account");
+                });
+
+            modelBuilder.Entity("AWSServerlessWebApi.Models.CustomDayTimeSlip", b =>
+                {
+                    b.HasOne("AWSServerlessWebApi.Models.CustomDay", "CustomDay")
+                        .WithMany("CustomDayTimeSlips")
+                        .HasForeignKey("CustomDayId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("AWSServerlessWebApi.Models.NewTimesheetEntryExtensionBase", "GetNewTimesheetEntryExtensionBase")
+                        .WithMany("CustomDayTimeSlips")
+                        .HasForeignKey("TimeSlipId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("AWSServerlessWebApi.Models.NewProjectExtensionBase", b =>

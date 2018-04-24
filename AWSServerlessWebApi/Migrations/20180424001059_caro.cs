@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace AWSServerlessWebApi.Migrations
 {
-    public partial class karl : Migration
+    public partial class caro : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -114,6 +114,19 @@ namespace AWSServerlessWebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Custom_Day",
+                columns: table => new
+                {
+                    CustomDayId = table.Column<int>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Custom_Day", x => x.CustomDayId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "New_ChangeRequestExtensionBase",
                 columns: table => new
                 {
@@ -192,6 +205,12 @@ namespace AWSServerlessWebApi.Migrations
                 columns: table => new
                 {
                     New_TimesheetEntryId = table.Column<Guid>(nullable: false),
+                    CreatedBy = table.Column<Guid>(nullable: true),
+                    CreatedOn = table.Column<DateTime>(nullable: true),
+                    DeletionStateCode = table.Column<int>(nullable: true),
+                    ImportSequenceNumber = table.Column<int>(nullable: true),
+                    ModifiedBy = table.Column<Guid>(nullable: true),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
                     New_ApprovedForBilling = table.Column<bool>(nullable: true),
                     New_ChangeRequestId = table.Column<Guid>(nullable: true),
                     New_Credit = table.Column<bool>(nullable: true),
@@ -209,7 +228,13 @@ namespace AWSServerlessWebApi.Migrations
                     New_RequestedBy = table.Column<string>(maxLength: 50, nullable: true),
                     New_StartTask = table.Column<DateTime>(type: "datetime", nullable: true),
                     New_TaskType = table.Column<int>(nullable: true),
-                    new_timesheetbatchid = table.Column<Guid>(nullable: true)
+                    new_timesheetbatchid = table.Column<Guid>(nullable: true),
+                    OverriddenCreatedOn = table.Column<DateTime>(nullable: true),
+                    OwningBusinessUnit = table.Column<Guid>(nullable: true),
+                    OwningUser = table.Column<Guid>(nullable: true),
+                    StateCode = table.Column<int>(nullable: false),
+                    StatusCode = table.Column<int>(nullable: true),
+                    VersionNumber = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -291,6 +316,32 @@ namespace AWSServerlessWebApi.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "CustomDayTimeSlips",
+                columns: table => new
+                {
+                    TimeSlip_Id = table.Column<Guid>(nullable: false),
+                    CustomDay_Id = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CustomDayTimeSlips", x => x.TimeSlip_Id);
+                    table.UniqueConstraint("AK_CustomDayTimeSlips_CustomDay_Id", x => x.CustomDay_Id);
+                    table.UniqueConstraint("AK_CustomDayTimeSlips_CustomDay_Id_TimeSlip_Id", x => new { x.CustomDay_Id, x.TimeSlip_Id });
+                    table.ForeignKey(
+                        name: "FK_CustomDayTimeSlips_Custom_Day_CustomDay_Id",
+                        column: x => x.CustomDay_Id,
+                        principalTable: "Custom_Day",
+                        principalColumn: "CustomDayId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CustomDayTimeSlips_New_TimesheetEntryExtensionBase_TimeSlip_Id",
+                        column: x => x.TimeSlip_Id,
+                        principalTable: "New_TimesheetEntryExtensionBase",
+                        principalColumn: "New_TimesheetEntryId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AccountBase_MasterId",
                 table: "AccountBase",
@@ -321,6 +372,9 @@ namespace AWSServerlessWebApi.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "CustomDayTimeSlips");
+
+            migrationBuilder.DropTable(
                 name: "New_ChangeRequestExtensionBase");
 
             migrationBuilder.DropTable(
@@ -330,10 +384,13 @@ namespace AWSServerlessWebApi.Migrations
                 name: "New_ProjectTypeExtensionBase");
 
             migrationBuilder.DropTable(
-                name: "New_TimesheetEntryExtensionBase");
+                name: "StringMap");
 
             migrationBuilder.DropTable(
-                name: "StringMap");
+                name: "Custom_Day");
+
+            migrationBuilder.DropTable(
+                name: "New_TimesheetEntryExtensionBase");
 
             migrationBuilder.DropTable(
                 name: "AccountBase");

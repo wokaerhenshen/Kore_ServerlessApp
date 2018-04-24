@@ -6,13 +6,17 @@ namespace AWSServerlessWebApi.Models
 {
     public partial class KORE_Interactive_MSCRMContext : DbContext
     {
+           
         public virtual DbSet<AccountBase> AccountBase { get; set; }
         public virtual DbSet<NewChangeRequestExtensionBase> NewChangeRequestExtensionBases { get; set; }
         public virtual DbSet<NewProjectExtensionBase> NewProjectExtensionBase { get; set; }
         public virtual DbSet<NewProjectTypeExtensionBase> NewProjectTypeExtensionBase { get; set; }
         public virtual DbSet<NewTimesheetEntryExtensionBase> NewTimesheetEntryExtensionBase { get; set; }
         public virtual DbSet<StringMap> StringMap { get; set; }
+        public virtual DbSet<CustomDay> CustomDays { get; set; }
+        public virtual DbSet<CustomDayTimeSlip> CustomDayTimeSlips { get; set; }
 
+        // this is not auto generated
         public KORE_Interactive_MSCRMContext(DbContextOptions<KORE_Interactive_MSCRMContext> options)
     : base(options)
         {
@@ -466,6 +470,15 @@ namespace AWSServerlessWebApi.Models
                 entity.Property(e => e.NewTaskType).HasColumnName("New_TaskType");
 
                 entity.Property(e => e.NewTimesheetbatchid).HasColumnName("new_timesheetbatchid");
+
+
+                // the properties below and hard coded :
+                // nothing actually
+
+
+
+
+
             });
 
             modelBuilder.Entity<StringMap>(entity =>
@@ -489,7 +502,52 @@ namespace AWSServerlessWebApi.Models
                 entity.Property(e => e.VersionNumber).IsRowVersion();
             });
 
-           // base.OnModelCreating(entity);
+            modelBuilder.Entity<CustomDay>(entity =>
+            {
+
+                entity.HasKey(e => e.CustomDayId);
+
+                entity.ToTable("Custom_Day");
+
+                entity.Property(e => e.CustomDayId)
+                .HasColumnName("CustomDayId")
+                .ValueGeneratedNever();
+
+                entity.Property(e => e.Name).HasColumnName("Name");
+
+                entity.Property(e => e.Description).HasColumnName("Description");
+
+            });
+
+            modelBuilder.Entity<CustomDayTimeSlip>(entity =>
+            {
+                entity.HasKey(e => e.CustomDayId);
+                entity.HasKey(e => e.TimeSlipId);
+
+                entity.Property(e => e.CustomDayId)
+                .HasColumnName("CustomDay_Id")
+                .ValueGeneratedNever();
+
+
+                entity.Property(e => e.TimeSlipId)
+                .HasColumnName("TimeSlip_Id")
+                .ValueGeneratedNever();
+
+                entity.HasOne(e => e.CustomDay)
+                    .WithMany(p => p.CustomDayTimeSlips)
+                    .HasForeignKey(d => d.CustomDayId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.GetNewTimesheetEntryExtensionBase)
+                .WithMany(e => e.CustomDayTimeSlips)
+                .HasForeignKey(e=> e.TimeSlipId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            });
+
+
+
+            // base.OnModelCreating(entity);
 
         }
     }

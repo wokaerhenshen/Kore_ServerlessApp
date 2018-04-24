@@ -12,7 +12,7 @@ namespace AWSServerlessWebApi.ViewModels
         public string LastName { get; set; }
         public string Position { get; set; }
 
-        public virtual ICollection<TimeslipVM> Timeslips { get; set; }
+    //  public virtual ICollection<TimeslipVM> Timeslips { get; set; }
 
     }
 }
