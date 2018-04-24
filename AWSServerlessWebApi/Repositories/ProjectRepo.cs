@@ -19,17 +19,20 @@ namespace core_backend.Repositories
 
         public void CreateProject(ProjectVM projectVM)
         {
+
+            NewProjectTypeExtensionBase projectType = new NewProjectTypeExtensionBase()
+            {
+                NewName = projectVM.ProjectType
+            };
             NewProjectExtensionBase project = new NewProjectExtensionBase()
             {
                 NewName = projectVM.ProjectName,
                 NewStartDate = projectVM.StartDate,
                 NewEndDate = projectVM.EndDate,
+                NewProjectTypeId = projectType.NewProjectTypeId,
                 NewAccountId = projectVM.ClientId
             };
-            NewProjectTypeExtensionBase projectType = new NewProjectTypeExtensionBase()
-            {
-                NewName = projectVM.ProjectType
-            };
+           
 
             _context.NewProjectExtensionBase.Add(project);
             _context.NewProjectTypeExtensionBase.Add(projectType);

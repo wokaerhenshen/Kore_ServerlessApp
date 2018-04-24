@@ -24,6 +24,7 @@ namespace AWSServerlessWebApi.Controllers
         [Route("Create")]
         public bool Create(string Name, string StartDate, string EndDate, string ProjectType, ClientVM client)
         {
+            //add server side validation in VM
             ProjectVM project = new ProjectVM()
             {
                 ProjectName = Name,
