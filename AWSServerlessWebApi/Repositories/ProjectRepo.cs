@@ -20,26 +20,41 @@ namespace AWSServerlessWebApi.Repositories
 
         public void CreateProject(ProjectVM projectVM)
         {
-            //convert project type id from string to Guid
-            Guid projectTypeGuid = Guid.Parse(projectVM.ProjectTypeId);
-            //find existing project type in the database
-            NewProjectTypeExtensionBase currentProjectType = _context.NewProjectTypeExtensionBase.Where(p => p.NewProjectTypeId == projectTypeGuid)
-                .FirstOrDefault();
-            //if the project type doesn't exist, create it
-            if(currentProjectType == null)
+            Guid projectTypeGuid;
+            NewProjectTypeExtensionBase currentProjectType = null;
+
+            //if the input projectTypeId is a valid Guid, use it to search the database
+            bool success = Guid.TryParse(projectVM.ProjectTypeId, out Guid result);
+            //fix this
+            if (success)
+            {
+                projectTypeGuid = result;
+
+                //find existing project type in the database
+                currentProjectType = _context.NewProjectTypeExtensionBase.Where(p => p.NewProjectTypeId == projectTypeGuid)
+                   .FirstOrDefault();
+            }
+            //if the project type doesn't exist, use the default
+            if (currentProjectType == null)
+            {
+                currentProjectType = _context.NewProjectTypeExtensionBase.Where(pt => pt.NewName == ConstantDirectory.ProjectTypeNameDefault).FirstOrDefault();
+
+            }
+            //if it still doesn't exist, create it
+            if (currentProjectType == null)
             {
                 currentProjectType = new NewProjectTypeExtensionBase()
                 {
                     NewProjectTypeId = Guid.NewGuid(),
                     //assign the default name
                     NewName = ConstantDirectory.ProjectTypeNameDefault
-                    
+
                 };
-                
                 _context.NewProjectTypeExtensionBase.Add(currentProjectType);
                 _context.SaveChanges();
             } 
            
+            
             NewProjectExtensionBase project = new NewProjectExtensionBase()
             {
                 NewProjectId = Guid.NewGuid(),
