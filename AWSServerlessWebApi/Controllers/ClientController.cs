@@ -6,6 +6,8 @@ using AWSServerlessWebApi.Models;
 using AWSServerlessWebApi.Repositories;
 using AWSServerlessWebApi.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using AWSServerlessWebApi.Utility;
+
 
 namespace AWSServerlessWebApi.Controllers
 {
@@ -22,13 +24,13 @@ namespace AWSServerlessWebApi.Controllers
 
         [HttpPost]
         [Route("Create")]
-        public bool Create(string Name, int DeletionStateCode, int StateCode)
+        public bool Create(string Name)
         {
             ClientVM client = new ClientVM()
             {
                 ClientName = Name,
-                DeletionStateCode = DeletionStateCode,
-                StateCode = StateCode
+                DeletionStateCode = ConstantDirectory.DeleteStateCodeDefault,
+                StateCode = ConstantDirectory.StateCodeDefault
             };
 
             clientRepo.CreateClient(client);
@@ -46,6 +48,7 @@ namespace AWSServerlessWebApi.Controllers
         [Route("GetOneClient/{id}")]
         public IActionResult GetOneClient(string id)
         {
+            //put in try/catch
             Guid guid_id = Guid.Parse(id);
 
             return new OkObjectResult(clientRepo.GetOneClient(guid_id));
@@ -54,16 +57,15 @@ namespace AWSServerlessWebApi.Controllers
         //update client
         [HttpPut]
         [Route("Update")]
-        public bool Update(string id, string Name, int DeletionStateCode, int StateCode)
+        public bool Update(string id, string Name)
         {
             Guid guid_id = Guid.Parse(id);
 
             ClientVM client = new ClientVM()
             {
                 ClientId = guid_id,
-                ClientName = Name,
-                DeletionStateCode = DeletionStateCode,
-                StateCode = StateCode
+                ClientName = Name
+                
             };
 
             clientRepo.UpdateOneClient(client);

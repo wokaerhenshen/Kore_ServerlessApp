@@ -22,14 +22,15 @@ namespace AWSServerlessWebApi.Controllers
 
         [HttpPost]
         [Route("Create")]
-        public bool Create(string Name, string StartDate, string EndDate, string ProjectType)
+        public bool Create(string Name, string StartDate, string EndDate, string ProjectType, ClientVM client)
         {
             ProjectVM project = new ProjectVM()
             {
                 ProjectName = Name,
                 StartDate = Convert.ToDateTime(StartDate),
                 EndDate = Convert.ToDateTime(EndDate),
-                ProjectType = ProjectType
+                ProjectType = ProjectType,
+                ClientId = client.ClientId
             };
             
             projectRepo.CreateProject(project);
