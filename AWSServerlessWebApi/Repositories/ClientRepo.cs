@@ -43,8 +43,8 @@ namespace AWSServerlessWebApi.Repositories
         {
             AccountBase client = _context.AccountBase.Where(i => i.AccountId == clientVM.ClientId).FirstOrDefault();
             client.Name = clientVM.ClientName;
-            client.DeletionStateCode = clientVM.DeletionStateCode;
-            client.StateCode = clientVM.StateCode;
+            //client.DeletionStateCode = clientVM.DeletionStateCode;
+            //client.StateCode = clientVM.StateCode;
             _context.SaveChanges();
         }
 

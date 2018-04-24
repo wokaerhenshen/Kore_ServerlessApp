@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace core_backend.Repositories
+namespace AWSServerlessWebApi.Repositories
 {
     public class ProjectRepo
     {
@@ -19,20 +19,26 @@ namespace core_backend.Repositories
 
         public void CreateProject(ProjectVM projectVM)
         {
+
+            NewProjectTypeExtensionBase projectType = new NewProjectTypeExtensionBase()
+            {
+                NewProjectTypeId = Guid.NewGuid(),
+                NewName = projectVM.ProjectType
+            };
             NewProjectExtensionBase project = new NewProjectExtensionBase()
             {
+                NewProjectId = Guid.NewGuid(),
                 NewName = projectVM.ProjectName,
                 NewStartDate = projectVM.StartDate,
                 NewEndDate = projectVM.EndDate,
+                NewProjectTypeId = projectType.NewProjectTypeId,
                 NewAccountId = projectVM.ClientId
             };
-            NewProjectTypeExtensionBase projectType = new NewProjectTypeExtensionBase()
-            {
-                NewName = projectVM.ProjectType
-            };
 
-            _context.NewProjectExtensionBase.Add(project);
+
             _context.NewProjectTypeExtensionBase.Add(projectType);
+            _context.SaveChanges();
+            _context.NewProjectExtensionBase.Add(project);
             _context.SaveChanges();
         }
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AWSServerlessWebApi.Models;
 using AWSServerlessWebApi.ViewModels;
-using core_backend.Repositories;
+using AWSServerlessWebApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AWSServerlessWebApi.Controllers
@@ -22,15 +22,17 @@ namespace AWSServerlessWebApi.Controllers
 
         [HttpPost]
         [Route("Create")]
-        public bool Create(string Name, string StartDate, string EndDate, string ProjectType, string clientId)
+        public bool Create(string Name, string StartDate, string EndDate, string projectType, string clientId)
         {
+            
             ProjectVM project = new ProjectVM()
             {
                 ProjectName = Name,
                 StartDate = Convert.ToDateTime(StartDate),
                 EndDate = Convert.ToDateTime(EndDate),
-                ProjectType = ProjectType,
+                ProjectType = projectType,
                 ClientId = Guid.Parse(clientId)
+                
             };
             
             projectRepo.CreateProject(project);

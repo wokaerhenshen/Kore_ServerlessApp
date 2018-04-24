@@ -28,6 +28,7 @@ namespace AWSServerlessWebApi.Controllers
         {
             ClientVM client = new ClientVM()
             {
+                
                 ClientName = Name,
                 DeletionStateCode = ConstantDirectory.DeleteStateCodeDefault,
                 StateCode = ConstantDirectory.StateCodeDefault

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using core_backend.Repositories;
+using AWSServerlessWebApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using AWSServerlessWebApi.Models;
 using AWSServerlessWebApi.Repositories;
