@@ -7,16 +7,16 @@ namespace AWSServerlessWebApi.ViewModels
 {
     public class TimeslipVM
     {
-        public int TimeslipId { get; set; }
+        public Guid TimeslipId { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public string Remarks { get; set; }
-        public int WBI_Id { get; set; }
+        public Guid WBI_Id { get; set; }
         public int UserId { get; set; }
         public int DayId { get; set; }
 
-     //   public virtual WBIVM WBI { get; set; }
-     //   public virtual UserDetailVM UserDetail { get; set; }
-     //   public virtual CustomDayVM CustomDay { get; set; }
+        //public virtual WBIVM WBI { get; set; }
+        //public virtual UserDetailVM UserDetail { get; set; }
+        //public virtual CustomDayVM CustomDay { get; set; }
     }
 }
