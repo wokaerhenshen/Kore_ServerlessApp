@@ -45,6 +45,7 @@ namespace AWSServerlessWebApi.Models
 
 
         public virtual ICollection<CustomDayTimeSlip> CustomDayTimeSlips { get; set; }
+        public virtual User User { get; set; }
 
     }
 }

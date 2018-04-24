@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace AWSServerlessWebApi.Migrations
 {
-    public partial class caro : Migration
+    public partial class mimo : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -201,47 +201,6 @@ namespace AWSServerlessWebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "New_TimesheetEntryExtensionBase",
-                columns: table => new
-                {
-                    New_TimesheetEntryId = table.Column<Guid>(nullable: false),
-                    CreatedBy = table.Column<Guid>(nullable: true),
-                    CreatedOn = table.Column<DateTime>(nullable: true),
-                    DeletionStateCode = table.Column<int>(nullable: true),
-                    ImportSequenceNumber = table.Column<int>(nullable: true),
-                    ModifiedBy = table.Column<Guid>(nullable: true),
-                    ModifiedOn = table.Column<DateTime>(nullable: true),
-                    New_ApprovedForBilling = table.Column<bool>(nullable: true),
-                    New_ChangeRequestId = table.Column<Guid>(nullable: true),
-                    New_Credit = table.Column<bool>(nullable: true),
-                    New_Duration = table.Column<int>(nullable: true),
-                    New_DurationHours = table.Column<double>(nullable: true),
-                    New_EndTask = table.Column<DateTime>(type: "datetime", nullable: true),
-                    New_EntryNo = table.Column<int>(nullable: true),
-                    New_ID = table.Column<string>(maxLength: 100, nullable: true),
-                    New_InternalRemarks = table.Column<string>(nullable: true),
-                    New_IsBatched = table.Column<bool>(nullable: true),
-                    New_IssueId = table.Column<Guid>(nullable: true),
-                    New_OutofScope = table.Column<bool>(nullable: true),
-                    New_ProjectId = table.Column<Guid>(nullable: true),
-                    New_Remarks = table.Column<string>(nullable: true),
-                    New_RequestedBy = table.Column<string>(maxLength: 50, nullable: true),
-                    New_StartTask = table.Column<DateTime>(type: "datetime", nullable: true),
-                    New_TaskType = table.Column<int>(nullable: true),
-                    new_timesheetbatchid = table.Column<Guid>(nullable: true),
-                    OverriddenCreatedOn = table.Column<DateTime>(nullable: true),
-                    OwningBusinessUnit = table.Column<Guid>(nullable: true),
-                    OwningUser = table.Column<Guid>(nullable: true),
-                    StateCode = table.Column<int>(nullable: false),
-                    StatusCode = table.Column<int>(nullable: true),
-                    VersionNumber = table.Column<DateTime>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_New_TimesheetEntryExtensionBase", x => x.New_TimesheetEntryId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "StringMap",
                 columns: table => new
                 {
@@ -259,6 +218,19 @@ namespace AWSServerlessWebApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_StringMap", x => x.StringMapId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(nullable: false),
+                    Email = table.Column<string>(nullable: true),
+                    Password = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.UserId);
                 });
 
             migrationBuilder.CreateTable(
@@ -317,6 +289,53 @@ namespace AWSServerlessWebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "New_TimesheetEntryExtensionBase",
+                columns: table => new
+                {
+                    New_TimesheetEntryId = table.Column<Guid>(nullable: false),
+                    CreatedBy = table.Column<Guid>(nullable: true),
+                    CreatedOn = table.Column<DateTime>(nullable: true),
+                    DeletionStateCode = table.Column<int>(nullable: true),
+                    ImportSequenceNumber = table.Column<int>(nullable: true),
+                    ModifiedBy = table.Column<Guid>(nullable: true),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
+                    New_ApprovedForBilling = table.Column<bool>(nullable: true),
+                    New_ChangeRequestId = table.Column<Guid>(nullable: true),
+                    New_Credit = table.Column<bool>(nullable: true),
+                    New_Duration = table.Column<int>(nullable: true),
+                    New_DurationHours = table.Column<double>(nullable: true),
+                    New_EndTask = table.Column<DateTime>(type: "datetime", nullable: true),
+                    New_EntryNo = table.Column<int>(nullable: true),
+                    New_ID = table.Column<string>(maxLength: 100, nullable: true),
+                    New_InternalRemarks = table.Column<string>(nullable: true),
+                    New_IsBatched = table.Column<bool>(nullable: true),
+                    New_IssueId = table.Column<Guid>(nullable: true),
+                    New_OutofScope = table.Column<bool>(nullable: true),
+                    New_ProjectId = table.Column<Guid>(nullable: true),
+                    New_Remarks = table.Column<string>(nullable: true),
+                    New_RequestedBy = table.Column<string>(maxLength: 50, nullable: true),
+                    New_StartTask = table.Column<DateTime>(type: "datetime", nullable: true),
+                    New_TaskType = table.Column<int>(nullable: true),
+                    new_timesheetbatchid = table.Column<Guid>(nullable: true),
+                    OverriddenCreatedOn = table.Column<DateTime>(nullable: true),
+                    OwningBusinessUnit = table.Column<Guid>(nullable: true),
+                    OwningUser = table.Column<Guid>(nullable: true),
+                    StateCode = table.Column<int>(nullable: false),
+                    StatusCode = table.Column<int>(nullable: true),
+                    VersionNumber = table.Column<DateTime>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_New_TimesheetEntryExtensionBase", x => x.New_TimesheetEntryId);
+                    table.ForeignKey(
+                        name: "FK_New_TimesheetEntryExtensionBase_Users_OwningUser",
+                        column: x => x.OwningUser,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CustomDayTimeSlips",
                 columns: table => new
                 {
@@ -363,6 +382,11 @@ namespace AWSServerlessWebApi.Migrations
                 column: "New_PSSAccountId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_New_TimesheetEntryExtensionBase_OwningUser",
+                table: "New_TimesheetEntryExtensionBase",
+                column: "OwningUser");
+
+            migrationBuilder.CreateIndex(
                 name: "UQ_StringMap",
                 table: "StringMap",
                 columns: new[] { "ObjectTypeCode", "AttributeName", "AttributeValue", "LangId", "OrganizationId" },
@@ -394,6 +418,9 @@ namespace AWSServerlessWebApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "AccountBase");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }

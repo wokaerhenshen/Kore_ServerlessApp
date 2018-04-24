@@ -80,5 +80,6 @@ namespace AWSServerlessWebApi.Controllers
             clientRepo.DeleteOneClient(guid_id);
             return true;
         }
+
     }
 }

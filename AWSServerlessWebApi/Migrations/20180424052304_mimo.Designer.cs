@@ -11,8 +11,8 @@ using System;
 namespace AWSServerlessWebApi.Migrations
 {
     [DbContext(typeof(KORE_Interactive_MSCRMContext))]
-    [Migration("20180424001059_caro")]
-    partial class caro
+    [Migration("20180424052304_mimo")]
+    partial class mimo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -684,6 +684,8 @@ namespace AWSServerlessWebApi.Migrations
 
                     b.HasKey("NewTimesheetEntryId");
 
+                    b.HasIndex("OwningUser");
+
                     b.ToTable("New_TimesheetEntryExtensionBase");
                 });
 
@@ -728,6 +730,19 @@ namespace AWSServerlessWebApi.Migrations
                     b.ToTable("StringMap");
                 });
 
+            modelBuilder.Entity("AWSServerlessWebApi.Models.User", b =>
+                {
+                    b.Property<Guid>("UserId");
+
+                    b.Property<string>("Email");
+
+                    b.Property<string>("Password");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("AWSServerlessWebApi.Models.AccountBase", b =>
                 {
                     b.HasOne("AWSServerlessWebApi.Models.AccountBase", "Master")
@@ -765,6 +780,14 @@ namespace AWSServerlessWebApi.Migrations
                         .WithMany("NewProjectExtensionBaseNewPssaccount")
                         .HasForeignKey("NewPssaccountId")
                         .HasConstraintName("new_pssaccount_new_project");
+                });
+
+            modelBuilder.Entity("AWSServerlessWebApi.Models.NewTimesheetEntryExtensionBase", b =>
+                {
+                    b.HasOne("AWSServerlessWebApi.Models.User", "User")
+                        .WithMany("NewTimesheetEntryExtensionBase")
+                        .HasForeignKey("OwningUser")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

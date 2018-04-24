@@ -6,12 +6,13 @@ namespace AWSServerlessWebApi.Models
 {
     public partial class KORE_Interactive_MSCRMContext : DbContext
     {
-           
+        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<AccountBase> AccountBase { get; set; }
         public virtual DbSet<NewChangeRequestExtensionBase> NewChangeRequestExtensionBase { get; set; }
         public virtual DbSet<NewProjectExtensionBase> NewProjectExtensionBase { get; set; }
         public virtual DbSet<NewProjectTypeExtensionBase> NewProjectTypeExtensionBase { get; set; }
         public virtual DbSet<NewTimesheetEntryExtensionBase> NewTimesheetEntryExtensionBase { get; set; }
+        
         public virtual DbSet<StringMap> StringMap { get; set; }
         public virtual DbSet<CustomDay> CustomDays { get; set; }
         public virtual DbSet<CustomDayTimeSlip> CustomDayTimeSlips { get; set; }
@@ -35,6 +36,15 @@ namespace AWSServerlessWebApi.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasKey(e => e.UserId);
+                entity.Property(e => e.UserId).ValueGeneratedNever();
+
+            });
+
+
             modelBuilder.Entity<AccountBase>(entity =>
             {
                 entity.HasKey(e => e.AccountId);
@@ -474,11 +484,10 @@ namespace AWSServerlessWebApi.Models
 
                 // the properties below and hard coded :
                 // nothing actually
-
-
-
-
-
+                entity.HasOne(e => e.User)
+                    .WithMany(p => p.NewTimesheetEntryExtensionBase)
+                    .HasForeignKey(d => d.OwningUser)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<StringMap>(entity =>
