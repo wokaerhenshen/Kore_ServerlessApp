@@ -39,6 +39,11 @@ namespace AWSServerlessWebApi.Repositories
             return _context.NewChangeRequestExtensionBase.ToList();
         }
 
+        public List<NewChangeRequestExtensionBase> GetAllWBIsByProjectId(Guid id)
+        {
+            return _context.NewChangeRequestExtensionBase.Where(wbi => wbi.NewProjectId == id).ToList();
+        }
+
         public NewChangeRequestExtensionBase GetOneWBI(Guid id)
         {
             return _context.NewChangeRequestExtensionBase.Where(i => i.NewChangeRequestId == id)
