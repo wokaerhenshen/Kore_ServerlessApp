@@ -5,6 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using AWSServerlessWebApi.Models;
+using AWSServerlessWebApi.Data;
 
 namespace AWSServerlessWebApi
 {
@@ -15,7 +18,23 @@ namespace AWSServerlessWebApi
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args).Run();
+            //BuildWebHost(args).Run();
+
+            //seeding database
+            var host = BuildWebHost(args);
+
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+
+                var context = services.GetRequiredService<KORE_Interactive_MSCRMContext>();
+                
+                Seeder seeder = new Seeder(context);
+                seeder.SeedData();
+
+            }
+            host.Run();
+
         }
 
         public static IWebHost BuildWebHost(string[] args) =>

@@ -54,8 +54,6 @@ namespace AWSServerlessWebApi.Repositories
                 _context.NewProjectTypeExtensionBase.Add(currentProjectType);
                 _context.SaveChanges();
             } 
-           
-            
 
             NewProjectExtensionBase project = new NewProjectExtensionBase()
             {
@@ -67,8 +65,6 @@ namespace AWSServerlessWebApi.Repositories
                 NewAccountId = Guid.Parse(projectVM.ClientId)
             };
 
-
-        
             _context.NewProjectExtensionBase.Add(project);
             _context.SaveChanges();
         }

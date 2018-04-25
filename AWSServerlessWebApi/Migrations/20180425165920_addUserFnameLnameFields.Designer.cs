@@ -11,9 +11,10 @@ using System;
 namespace AWSServerlessWebApi.Migrations
 {
     [DbContext(typeof(KORE_Interactive_MSCRMContext))]
-    partial class KORE_Interactive_MSCRMContextModelSnapshot : ModelSnapshot
+    [Migration("20180425165920_addUserFnameLnameFields")]
+    partial class addUserFnameLnameFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
