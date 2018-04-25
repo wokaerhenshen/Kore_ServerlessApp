@@ -11,8 +11,8 @@ using System;
 namespace AWSServerlessWebApi.Migrations
 {
     [DbContext(typeof(KORE_Interactive_MSCRMContext))]
-    [Migration("20180425165920_addUserFnameLnameFields")]
-    partial class addUserFnameLnameFields
+    [Migration("20180425195421_mimmmo")]
+    partial class mimmmo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -692,11 +692,11 @@ namespace AWSServerlessWebApi.Migrations
             modelBuilder.Entity("AWSServerlessWebApi.Models.StringMap", b =>
                 {
                     b.Property<Guid>("StringMapId")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("(newid())");
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("AttributeName")
                         .IsRequired()
+                        .HasColumnName("Attribute_Name")
                         .HasMaxLength(100);
 
                     b.Property<int>("AttributeValue");
@@ -709,10 +709,7 @@ namespace AWSServerlessWebApi.Migrations
 
                     b.Property<Guid>("OrganizationId");
 
-                    b.Property<Guid>("Rowguid")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("rowguid")
-                        .HasDefaultValueSql("(newid())");
+                    b.Property<Guid>("Rowguid");
 
                     b.Property<string>("Value")
                         .HasMaxLength(255);
@@ -727,7 +724,7 @@ namespace AWSServerlessWebApi.Migrations
                         .IsUnique()
                         .HasName("UQ_StringMap");
 
-                    b.ToTable("StringMap");
+                    b.ToTable("String_Map");
                 });
 
             modelBuilder.Entity("AWSServerlessWebApi.Models.User", b =>
