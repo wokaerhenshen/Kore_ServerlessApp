@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace AWSServerlessWebApi.Migrations
 {
-    public partial class mimo : Migration
+    public partial class mimmmmmo : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -201,23 +201,23 @@ namespace AWSServerlessWebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "StringMap",
+                name: "String_Map",
                 columns: table => new
                 {
-                    StringMapId = table.Column<Guid>(nullable: false, defaultValueSql: "(newid())"),
-                    AttributeName = table.Column<string>(maxLength: 100, nullable: false),
+                    StringMapId = table.Column<Guid>(nullable: false),
+                    Attribute_Name = table.Column<string>(maxLength: 100, nullable: false),
                     AttributeValue = table.Column<int>(nullable: false),
                     DisplayOrder = table.Column<int>(nullable: true),
                     LangId = table.Column<int>(nullable: false),
                     ObjectTypeCode = table.Column<int>(nullable: false),
                     OrganizationId = table.Column<Guid>(nullable: false),
-                    rowguid = table.Column<Guid>(nullable: false, defaultValueSql: "(newid())"),
+                    Rowguid = table.Column<Guid>(nullable: false),
                     Value = table.Column<string>(maxLength: 255, nullable: true),
                     VersionNumber = table.Column<byte[]>(rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StringMap", x => x.StringMapId);
+                    table.PrimaryKey("PK_String_Map", x => x.StringMapId);
                 });
 
             migrationBuilder.CreateTable(
@@ -226,6 +226,8 @@ namespace AWSServerlessWebApi.Migrations
                 {
                     UserId = table.Column<Guid>(nullable: false),
                     Email = table.Column<string>(nullable: true),
+                    FirstName = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -388,8 +390,8 @@ namespace AWSServerlessWebApi.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "UQ_StringMap",
-                table: "StringMap",
-                columns: new[] { "ObjectTypeCode", "AttributeName", "AttributeValue", "LangId", "OrganizationId" },
+                table: "String_Map",
+                columns: new[] { "ObjectTypeCode", "Attribute_Name", "AttributeValue", "LangId", "OrganizationId" },
                 unique: true);
         }
 
@@ -408,7 +410,7 @@ namespace AWSServerlessWebApi.Migrations
                 name: "New_ProjectTypeExtensionBase");
 
             migrationBuilder.DropTable(
-                name: "StringMap");
+                name: "String_Map");
 
             migrationBuilder.DropTable(
                 name: "Custom_Day");
