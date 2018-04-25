@@ -45,7 +45,19 @@ namespace AWSServerlessWebApi.Controllers
 
             return new OkObjectResult(projectRepo.GetOneProject(guid_id));
         }
-
+        [HttpGet]
+        [Route("GetAllProjectsByClientId/{id}")]
+        public IActionResult GetAllProjectsByClientId(string id)
+        {
+            Guid clientGuid = Guid.Parse(id);
+            return new OkObjectResult(projectRepo.GetAllProjectsByClientId(clientGuid));
+        }
+        [HttpGet]
+        [Route("GetAllProjectTypes")]
+        public IActionResult GetAllProjectTypes()
+        {
+            return new OkObjectResult(projectRepo.GetAllProjectTypes());
+        }
         [HttpPut]
         [Route("Update")]
         public bool Update([FromBody] ProjectVM Project)

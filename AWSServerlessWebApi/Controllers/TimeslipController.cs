@@ -44,6 +44,14 @@ namespace AWSServerlessWebApi.Controllers
             return new ObjectResult(timeslipRepo.GetOneTimeslip(id));
         }
 
+        [HttpGet]
+        [Route("GetAllTimeslipsByUserId/{id}")]
+        public IActionResult GetAllTimeslipsByUserId(string id)
+        {
+            Guid userGuid = Guid.Parse(id);
+            return new OkObjectResult(timeslipRepo.GetAllTimeslipsByUserId(userGuid));
+        }
+
         [HttpPut]
         [Route("Edit")]
         public IActionResult Edit(TimeslipVM timeslipVM)
@@ -56,16 +64,15 @@ namespace AWSServerlessWebApi.Controllers
             return new ObjectResult(timeslip);
         }
 
-        [HttpDelete]
+        [HttpPost]
         [Route("Delete")]
-        public IActionResult Delete(string id)
+        public IActionResult Delete(IdVM timeslipId)
         {
-            var timeslip = timeslipRepo.DeleteOneTimeslip(id);
-            if (timeslip == null)
-            {
-                return new NotFoundObjectResult(timeslip);
-            }
-            return new ObjectResult(timeslip);
+           
+            bool success = timeslipRepo.DeleteOneTimeslip(timeslipId.id);
+            
+            return new ObjectResult(success);
         }
     }
+    
 }

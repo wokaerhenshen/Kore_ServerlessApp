@@ -20,7 +20,7 @@ namespace AWSServerlessWebApi.Repositories
         {
             User user = new User()
             {
-                UserId = userVM.UserId,
+                UserId = Guid.NewGuid(),
                 Email = userVM.Email,
                 Password = userVM.Password,
                 FirstName = userVM.FirstName,
@@ -43,7 +43,9 @@ namespace AWSServerlessWebApi.Repositories
 
         public void UpdateOneUser(UserVM userVM)
         {
-            User user = _context.Users.Where(i => i.UserId == userVM.UserId).FirstOrDefault();
+
+            User user = _context.Users.Where(i => i.UserId == Guid.Parse(userVM.UserId)).FirstOrDefault();
+
             user.Email = userVM.Email;
             user.Password = userVM.Password;
             user.FirstName = userVM.FirstName;

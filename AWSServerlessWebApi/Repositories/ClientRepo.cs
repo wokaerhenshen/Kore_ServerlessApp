@@ -41,7 +41,8 @@ namespace AWSServerlessWebApi.Repositories
         }
         public void UpdateOneClient(ClientVM clientVM)
         {
-            AccountBase client = _context.AccountBase.Where(i => i.AccountId == clientVM.ClientId).FirstOrDefault();
+            Guid clientGuid = Guid.Parse(clientVM.ClientId);
+            AccountBase client = _context.AccountBase.Where(i => i.AccountId == clientGuid).FirstOrDefault();
             client.Name = clientVM.ClientName;
             //client.DeletionStateCode = clientVM.DeletionStateCode;
             //client.StateCode = clientVM.StateCode;
