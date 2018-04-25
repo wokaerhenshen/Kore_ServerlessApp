@@ -24,7 +24,7 @@ namespace AWSServerlessWebApi.Controllers
 
         [HttpPost]
         [Route("Create")]
-        public IActionResult Create(TimeslipVM timeslipVM)
+        public IActionResult Create([FromBody] TimeslipVM timeslipVM)
         {
 
             return new ObjectResult(timeslipRepo.CreateTimeslip(timeslipVM));
@@ -54,7 +54,7 @@ namespace AWSServerlessWebApi.Controllers
 
         [HttpPut]
         [Route("Edit")]
-        public IActionResult Edit(TimeslipVM timeslipVM)
+        public IActionResult Edit([FromBody] TimeslipVM timeslipVM)
         {
             var timeslip = timeslipRepo.EditTimeslip(timeslipVM);
             if (timeslip == null)
@@ -66,7 +66,7 @@ namespace AWSServerlessWebApi.Controllers
 
         [HttpPost]
         [Route("Delete")]
-        public IActionResult Delete(IdVM timeslipId)
+        public IActionResult Delete([FromBody]IdVM timeslipId)
         {
            
             bool success = timeslipRepo.DeleteOneTimeslip(timeslipId.id);

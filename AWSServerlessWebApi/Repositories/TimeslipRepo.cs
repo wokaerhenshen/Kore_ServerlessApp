@@ -59,7 +59,7 @@ namespace AWSServerlessWebApi.Repositories
         public NewTimesheetEntryExtensionBase EditTimeslip(TimeslipVM timeslipVM)
         {
             
-            var timeslip = GetOneTimeslip(Convert.ToString(timeslipVM.TimeslipId));
+            var timeslip = GetOneTimeslip(timeslipVM.TimeslipId);
             if (timeslip == null)
             {
                 return timeslip;
@@ -77,6 +77,16 @@ namespace AWSServerlessWebApi.Repositories
 
         public bool DeleteOneTimeslip(string id)
         {
+            Guid timeslipGuid = Guid.Parse(id);
+            //get all customday timeslips where TimeslipId == id
+            var customDayTimeslips = _context.CustomDayTimeSlips.Where(cd => cd.TimeSlipId == timeslipGuid).ToList();
+
+            foreach(var item in customDayTimeslips)
+            {
+                _context.CustomDayTimeSlips.Remove(item);
+                _context.SaveChanges();
+            }
+            
             //Guid guid = Guid.Parse(id);
             var timeslip = GetOneTimeslip(id);
             if (timeslip == null)

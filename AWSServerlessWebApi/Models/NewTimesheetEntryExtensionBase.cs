@@ -40,10 +40,6 @@ namespace AWSServerlessWebApi.Models
         public int? ImportSequenceNumber { get; set; }
         public DateTime? OverriddenCreatedOn { get; set; }
 
-
-
-
-
         public virtual ICollection<CustomDayTimeSlip> CustomDayTimeSlips { get; set; }
         public virtual User User { get; set; }
 

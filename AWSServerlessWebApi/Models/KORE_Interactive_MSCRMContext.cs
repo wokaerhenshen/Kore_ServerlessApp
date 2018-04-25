@@ -492,26 +492,19 @@ namespace AWSServerlessWebApi.Models
 
             modelBuilder.Entity<StringMap>(entity =>
             {
-
-                entity.HasKey(e => e.StringMapId);
-
-                entity.ToTable("String_Map");
-
-                entity.Property(e => e.AttributeName).HasColumnName("Attribute_Name");
-
                 entity.HasIndex(e => new { e.ObjectTypeCode, e.AttributeName, e.AttributeValue, e.LangId, e.OrganizationId })
                     .HasName("UQ_StringMap")
                     .IsUnique();
 
-                //entity.Property(e => e.StringMapId).HasDefaultValueSql("(newid())");
+                entity.Property(e => e.StringMapId).HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.AttributeName)
                     .IsRequired()
                     .HasMaxLength(100);
 
-                //entity.Property(e => e.Rowguid)
-                //    .HasColumnName("rowguid")
-                //    .HasDefaultValueSql("(newid())");
+                entity.Property(e => e.Rowguid)
+                    .HasColumnName("rowguid")
+                    .HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.Value).HasMaxLength(255);
 

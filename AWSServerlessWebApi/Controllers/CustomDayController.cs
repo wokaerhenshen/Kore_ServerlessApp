@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace AWSServerlessWebApi.Controllers
 {
     [Produces("application/json")]
-    [Route("customerDay")]
+    [Route("customDay")]
     public class CustomDayController
     {
         CustomDayRepo customDayRepo;
