@@ -691,11 +691,11 @@ namespace AWSServerlessWebApi.Migrations
             modelBuilder.Entity("AWSServerlessWebApi.Models.StringMap", b =>
                 {
                     b.Property<Guid>("StringMapId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<string>("AttributeName")
                         .IsRequired()
-                        .HasColumnName("Attribute_Name")
                         .HasMaxLength(100);
 
                     b.Property<int>("AttributeValue");
@@ -708,7 +708,10 @@ namespace AWSServerlessWebApi.Migrations
 
                     b.Property<Guid>("OrganizationId");
 
-                    b.Property<Guid>("Rowguid");
+                    b.Property<Guid>("Rowguid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("rowguid")
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<string>("Value")
                         .HasMaxLength(255);
@@ -723,7 +726,7 @@ namespace AWSServerlessWebApi.Migrations
                         .IsUnique()
                         .HasName("UQ_StringMap");
 
-                    b.ToTable("String_Map");
+                    b.ToTable("StringMap");
                 });
 
             modelBuilder.Entity("AWSServerlessWebApi.Models.User", b =>
