@@ -30,7 +30,7 @@ namespace AWSServerlessWebApi.Repositories
                 NewRemarks = timeslipVM.Remarks,
                 //include day_id when table gets added
                 //include user_id when we figure out which one it is...
-                NewChangeRequestId = timeslipVM.WBI_Id
+                NewChangeRequestId = wbiGuid
                 
             };
             _context.NewTimesheetEntryExtensionBase.Add(timeslip);
