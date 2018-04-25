@@ -56,16 +56,15 @@ namespace AWSServerlessWebApi.Controllers
             return new ObjectResult(timeslip);
         }
 
-        [HttpDelete]
+        [HttpPost]
         [Route("Delete")]
-        public IActionResult Delete(string id)
+        public IActionResult Delete(IdVM timeslipId)
         {
-            var timeslip = timeslipRepo.DeleteOneTimeslip(id);
-            if (timeslip == null)
-            {
-                return new NotFoundObjectResult(timeslip);
-            }
-            return new ObjectResult(timeslip);
+           
+            bool success = timeslipRepo.DeleteOneTimeslip(timeslipId.id);
+            
+            return new ObjectResult(success);
         }
     }
+    
 }

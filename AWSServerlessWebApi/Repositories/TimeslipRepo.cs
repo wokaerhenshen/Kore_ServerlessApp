@@ -19,9 +19,12 @@ namespace AWSServerlessWebApi.Repositories
 
         public NewTimesheetEntryExtensionBase CreateTimeslip (TimeslipVM timeslipVM)
         {
+            Guid userGuid = Guid.Parse(timeslipVM.UserId);
+            Guid wbiGuid = Guid.Parse(timeslipVM.WBI_Id);
             // application user needs to be here
             NewTimesheetEntryExtensionBase timeslip = new NewTimesheetEntryExtensionBase()
             {
+                NewTimesheetEntryId = Guid.NewGuid(),
                 NewStartTask = timeslipVM.StartTime,
                 NewEndTask = timeslipVM.EndTime,
                 NewRemarks = timeslipVM.Remarks,
@@ -66,17 +69,17 @@ namespace AWSServerlessWebApi.Repositories
             return timeslip;
         }
 
-        public NewTimesheetEntryExtensionBase DeleteOneTimeslip(string id)
+        public bool DeleteOneTimeslip(string id)
         {
             //Guid guid = Guid.Parse(id);
             var timeslip = GetOneTimeslip(id);
             if (timeslip == null)
             {
-                return timeslip;
+                return false;
             }
             _context.NewTimesheetEntryExtensionBase.Remove(timeslip);
             _context.SaveChanges();
-            return timeslip;
+            return true;
         }
 
     }

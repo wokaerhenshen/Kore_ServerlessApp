@@ -7,7 +7,7 @@ namespace AWSServerlessWebApi.ViewModels
 {
     public class CustomDayVM
     {
-        public Guid CustomDayId { get; set; }
+        public string CustomDayId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public List<TimeslipVM> TimeSlip { get; set; }

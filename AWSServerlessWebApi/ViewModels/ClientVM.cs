@@ -7,7 +7,7 @@ namespace AWSServerlessWebApi.ViewModels
 {
     public class ClientVM
     {
-        public Guid ClientId { get; set; }
+        public string ClientId { get; set; }
         public string ClientName { get; set; }
         public int DeletionStateCode { get; set; }
         public int StateCode { get; set; }

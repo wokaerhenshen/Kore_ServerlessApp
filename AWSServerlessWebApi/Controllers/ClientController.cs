@@ -60,13 +60,10 @@ namespace AWSServerlessWebApi.Controllers
         [Route("Update")]
         public bool Update(string id, string Name)
         {
-            Guid guid_id = Guid.Parse(id);
-
             ClientVM client = new ClientVM()
             {
-                ClientId = guid_id,
-                ClientName = Name
-                
+                ClientId = id,
+                ClientName = Name                
             };
 
             clientRepo.UpdateOneClient(client);
