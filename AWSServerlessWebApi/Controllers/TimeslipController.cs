@@ -44,6 +44,14 @@ namespace AWSServerlessWebApi.Controllers
             return new ObjectResult(timeslipRepo.GetOneTimeslip(id));
         }
 
+        [HttpGet]
+        [Route("GetAllTimeslipsByUserId/{id}")]
+        public IActionResult GetAllTimeslipsByUserId(string id)
+        {
+            Guid userGuid = Guid.Parse(id);
+            return new OkObjectResult(timeslipRepo.GetAllTimeslipsByUserId(userGuid));
+        }
+
         [HttpPut]
         [Route("Edit")]
         public IActionResult Edit(TimeslipVM timeslipVM)
