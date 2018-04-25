@@ -212,6 +212,11 @@ namespace AWSServerlessWebApi.Data
 
         public void SeedStringMap()
         {
+            if (_context.StringMap.Any())
+            {
+                return;
+            }
+
             var filepath = "string-map-data.csv";
             var readcsv = File.ReadAllText(filepath);
             string[] csvfilerecord = readcsv.Split('\n');
