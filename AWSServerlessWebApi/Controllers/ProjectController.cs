@@ -54,21 +54,15 @@ namespace AWSServerlessWebApi.Controllers
             return true;
         }
 
-        [HttpPost]
+        [HttpDelete]
         [Route("Delete")]
-        public bool Delete([FromBody] IdVM id)
+        public bool Delete(string id)
         {
-            Guid guid_id = Guid.Parse(id.id);
+            Guid guid_id = Guid.Parse(id);
 
             projectRepo.DeleteOneProject(guid_id);
             return true;
         }
     }
 
-
-
-    public class IdVM
-    {
-        public string id { get; set; }
-    }
 }

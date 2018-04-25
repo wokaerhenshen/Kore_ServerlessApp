@@ -1,4 +1,5 @@
 ﻿using AWSServerlessWebApi.Models;
+using AWSServerlessWebApi.Utility;
 using AWSServerlessWebApi.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -20,24 +21,50 @@ namespace AWSServerlessWebApi.Repositories
         public void CreateProject(ProjectVM projectVM)
         {
 
-            NewProjectTypeExtensionBase projectType = new NewProjectTypeExtensionBase()
+            Guid projectTypeGuid;
+            NewProjectTypeExtensionBase currentProjectType = null;
+
+            //if the input projectTypeId is a valid Guid, use it to search the database
+            bool success = Guid.TryParse(projectVM.ProjectTypeId, out Guid result);
+            //fix this
+            if (success)
             {
-                NewProjectTypeId = Guid.NewGuid(),
-                NewName = projectVM.ProjectType
-            };
+                projectTypeGuid = result;
+
+                //find existing project type in the database
+                currentProjectType = _context.NewProjectTypeExtensionBase.Where(p => p.NewProjectTypeId == projectTypeGuid)
+                   .FirstOrDefault();
+            }
+            //if the project type doesn't exist, use the default
+            if (currentProjectType == null)
+            {
+                currentProjectType = _context.NewProjectTypeExtensionBase.Where(pt => pt.NewName == ConstantDirectory.ProjectTypeNameDefault).FirstOrDefault();
+
+            }
+            //if it still doesn't exist, create it
+            if (currentProjectType == null)
+            {
+                currentProjectType = new NewProjectTypeExtensionBase()
+                {
+                    NewProjectTypeId = Guid.NewGuid(),
+                    //assign the default name
+                    NewName = ConstantDirectory.ProjectTypeNameDefault
+
+                };
+                _context.NewProjectTypeExtensionBase.Add(currentProjectType);
+                _context.SaveChanges();
+            } 
+
             NewProjectExtensionBase project = new NewProjectExtensionBase()
             {
                 NewProjectId = Guid.NewGuid(),
                 NewName = projectVM.ProjectName,
                 NewStartDate = projectVM.StartDate,
                 NewEndDate = projectVM.EndDate,
-                NewProjectTypeId = projectType.NewProjectTypeId,
+                NewProjectTypeId = currentProjectType.NewProjectTypeId,
                 NewAccountId = Guid.Parse(projectVM.ClientId)
             };
 
-
-            _context.NewProjectTypeExtensionBase.Add(projectType);
-            _context.SaveChanges();
             _context.NewProjectExtensionBase.Add(project);
             _context.SaveChanges();
         }
