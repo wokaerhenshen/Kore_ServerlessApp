@@ -66,15 +66,11 @@ namespace AWSServerlessWebApi.Controllers
         [Route("Delete")]
         public IActionResult Delete([FromBody]IdVM id)
         {
-            Guid guid = Guid.Parse(id.Id);
+            Guid guid = Guid.Parse(id.id);
             var success = wbiRepo.DeleteOneWBI(guid);
             return new ObjectResult(success);
         }
 
 
-    }
-    public class IdVM
-    {
-        public string Id { get; set; }
     }
 }
