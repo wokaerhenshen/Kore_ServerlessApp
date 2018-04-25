@@ -80,7 +80,7 @@ namespace AWSServerlessWebApi.Repositories
             return _context.CustomDays.Select(i => i.CustomDayId).Max() + 1;
         }
 
-        
+
 
 
 

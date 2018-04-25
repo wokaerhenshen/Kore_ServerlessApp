@@ -31,6 +31,7 @@ namespace AWSServerlessWebApi
                 
                 Seeder seeder = new Seeder(context);
                 seeder.SeedData();
+                seeder.SeedStringMap();
 
             }
             host.Run();
