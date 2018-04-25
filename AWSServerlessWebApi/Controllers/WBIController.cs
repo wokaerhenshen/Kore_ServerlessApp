@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using AWSServerlessWebApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using AWSServerlessWebApi.Models;
-using AWSServerlessWebApi.Repositories;
+
 using AWSServerlessWebApi.ViewModels;
 
 namespace AWSServerlessWebApi.Controllers
@@ -24,7 +24,7 @@ namespace AWSServerlessWebApi.Controllers
 
         [HttpPost]
         [Route("Create")]
-        public IActionResult Create(WBIVM wbiVM)
+        public IActionResult Create([FromBody] WBIVM wbiVM)
         {
             return new OkObjectResult(wbiRepo.CreateWBI(wbiVM));
         }
@@ -35,7 +35,13 @@ namespace AWSServerlessWebApi.Controllers
         {
             return new OkObjectResult(wbiRepo.GetAllWBIs());
         }
-
+        [HttpGet]
+        [Route("GetAllWBIsByProjectId/{id}")]
+        public IActionResult GetAllWBIsByProjectId(string id)
+        {
+            Guid projectGuid = Guid.Parse(id);
+            return new OkObjectResult(wbiRepo.GetAllWBIsByProjectId(projectGuid));
+        }
         [HttpGet]
         [Route("GetOneWBI/{id}")]
         public IActionResult GetOneWBI(string id)
@@ -46,7 +52,7 @@ namespace AWSServerlessWebApi.Controllers
 
         [HttpPut]
         [Route("Edit")]
-        public IActionResult Edit(WBIVM wbiVM)
+        public IActionResult Edit([FromBody]WBIVM wbiVM)
         {
             var wbi = wbiRepo.EditWBI(wbiVM);
             if (wbi == null)
@@ -58,11 +64,17 @@ namespace AWSServerlessWebApi.Controllers
 
         [HttpDelete]
         [Route("Delete")]
-        public IActionResult Delete(string id)
+        public IActionResult Delete([FromBody]IdVM id)
         {
-            Guid guid = Guid.Parse(id);
+            Guid guid = Guid.Parse(id.Id);
             var success = wbiRepo.DeleteOneWBI(guid);
             return new ObjectResult(success);
         }
+
+
+    }
+    public class IdVM
+    {
+        public string Id { get; set; }
     }
 }
