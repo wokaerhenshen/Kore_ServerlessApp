@@ -56,7 +56,7 @@ namespace AWSServerlessWebApi.Controllers
         [Route("Update")]
         public bool Update(string Id, string Email, string Password, string FirstName, string LastName)
         {
-            
+            //Guid guid_id = Guid.Parse(Id);
 
             UserVM user = new UserVM()
             {

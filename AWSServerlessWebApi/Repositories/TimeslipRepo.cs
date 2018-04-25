@@ -1,4 +1,4 @@
-﻿    using AWSServerlessWebApi.Models;
+﻿using AWSServerlessWebApi.Models;
 using AWSServerlessWebApi.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -30,7 +30,8 @@ namespace AWSServerlessWebApi.Repositories
                 NewRemarks = timeslipVM.Remarks,
                 //include day_id when table gets added
                 //include user_id when we figure out which one it is...
-                NewChangeRequestId = wbiGuid
+                NewChangeRequestId = wbiGuid,
+                OwningUser = userGuid
                 
             };
             _context.NewTimesheetEntryExtensionBase.Add(timeslip);
@@ -48,6 +49,11 @@ namespace AWSServerlessWebApi.Repositories
         {
             Guid guid = Guid.Parse(id);
             return _context.NewTimesheetEntryExtensionBase.Where(t => t.NewTimesheetEntryId == guid).FirstOrDefault();
+        }
+
+        public List<NewTimesheetEntryExtensionBase> GetAllTimeslipsByUserId (Guid userId)
+        {
+            return _context.NewTimesheetEntryExtensionBase.Where(t => t.OwningUser == userId).ToList();
         }
 
         public NewTimesheetEntryExtensionBase EditTimeslip(TimeslipVM timeslipVM)

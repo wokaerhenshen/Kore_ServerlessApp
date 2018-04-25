@@ -42,6 +42,8 @@ namespace AWSServerlessWebApi.Controllers
             Guid projectGuid = Guid.Parse(id);
             return new OkObjectResult(wbiRepo.GetAllWBIsByProjectId(projectGuid));
         }
+
+
         [HttpGet]
         [Route("GetOneWBI/{id}")]
         public IActionResult GetOneWBI(string id)
