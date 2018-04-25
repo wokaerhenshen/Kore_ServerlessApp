@@ -17,15 +17,16 @@ namespace AWSServerlessWebApi.Repositories
             _context = context;
         }
 
-        public NewChangeRequestExtensionBase CreateWBI(WBIVM wbiVM)
+        public NewChangeRequestExtensionBase CreateWBI( WBIVM wbiVM)
         {
+            Guid projectGuid = Guid.Parse(wbiVM.ProjectId);
             NewChangeRequestExtensionBase wbi = new NewChangeRequestExtensionBase()
             {
-                
+                NewChangeRequestId = Guid.NewGuid(),
                 NewRemarks = wbiVM.Description,
                 NewEstimatedHours = wbiVM.EstimatedHours,
                 NewActualHours = wbiVM.ActualHours,
-                NewProjectId = wbiVM.ProjectId
+                NewProjectId = projectGuid
             };
             _context.NewChangeRequestExtensionBase.Add(wbi);
             _context.SaveChanges();
@@ -38,6 +39,11 @@ namespace AWSServerlessWebApi.Repositories
             return _context.NewChangeRequestExtensionBase.ToList();
         }
 
+        public List<NewChangeRequestExtensionBase> GetAllWBIsByProjectId(Guid id)
+        {
+            return _context.NewChangeRequestExtensionBase.Where(wbi => wbi.NewProjectId == id).ToList();
+        }
+
         public NewChangeRequestExtensionBase GetOneWBI(Guid id)
         {
             return _context.NewChangeRequestExtensionBase.Where(i => i.NewChangeRequestId == id)
@@ -45,7 +51,8 @@ namespace AWSServerlessWebApi.Repositories
         }
         public NewChangeRequestExtensionBase EditWBI(WBIVM wbiVM)
         {
-            var wbi = GetOneWBI(wbiVM.WBI_Id);
+            Guid wbiGuid = Guid.Parse(wbiVM.WBI_Id);
+            var wbi = GetOneWBI(wbiGuid);
             if (wbi == null)
             {
                 return wbi;
