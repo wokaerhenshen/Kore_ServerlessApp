@@ -15,7 +15,7 @@ namespace AWSServerlessWebApi.Models
         [Key, Column(Order = 1)]
         public Guid TimeSlipId { get; set; }
 
-        public virtual CustomDay CustomDay { get; set; }
+        public virtual CustomDay CustomDay{ get; set; }
         public virtual NewTimesheetEntryExtensionBase GetNewTimesheetEntryExtensionBase { get; set; }
     }
 }
