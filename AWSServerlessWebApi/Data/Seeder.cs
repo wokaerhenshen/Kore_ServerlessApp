@@ -3,7 +3,9 @@ using AWSServerlessWebApi.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace AWSServerlessWebApi.Data
@@ -192,14 +194,62 @@ namespace AWSServerlessWebApi.Data
                 Name = "My Monday",
                 Description = "This is my typical monday"
             };
+            _context.CustomDays.Add(customMonday);
             _context.SaveChanges();
 
             //this is for view model 
+            //CustomDay_TimeslipVM myMonday = new CustomDay_TimeslipVM();
+            //myMonday.CustomDay = customMonday;
+            //myMonday.TimeslipList.Add(timeslips.FirstOrDefault());
+            var myMonday = new CustomDayTimeSlip
+            {
+                CustomDayId = customMonday.CustomDayId,
+                TimeSlipId = timeslips.FirstOrDefault().NewTimesheetEntryId
+            };
+            _context.CustomDayTimeSlips.Add(myMonday);
+            _context.SaveChanges();
+        }
 
-            CustomDay_TimeslipVM myMonday = new CustomDay_TimeslipVM();
-            myMonday.CustomDay = customMonday;
-            myMonday.TimeslipList.Add(timeslips.FirstOrDefault());
+        public void SeedStringMap()
+        {
+            if (_context.StringMap.Any())
+            {
+                return;
+            }
 
+            var filepath = "string-map-data.csv";
+            var readcsv = File.ReadAllText(filepath);
+            string[] csvfilerecord = readcsv.Split('\n');
+
+            foreach (var row in csvfilerecord)
+            {
+                if (!string.IsNullOrEmpty(row))
+                {
+                    var cells = row.Split(',');
+
+                    var stringmaps = new StringMap[]
+                    {
+                        new StringMap
+                        {
+                            ObjectTypeCode = Convert.ToInt32(cells[0]),
+                            AttributeName = cells[1],
+                            AttributeValue = Convert.ToInt32(cells[2]),
+                            LangId = Convert.ToInt32(cells[3]),
+                            OrganizationId = Guid.Parse(cells[4]),
+                            Value = cells[5],
+                            DisplayOrder = Convert.ToInt32(cells[6]),
+                            Rowguid = Guid.Parse(cells[7]),
+                            VersionNumber = Encoding.UTF8.GetBytes(cells[8]),
+                            StringMapId = Guid.Parse(cells[9])
+                        }
+                    };
+                    foreach ( StringMap s in stringmaps)
+                    {
+                        _context.StringMap.Add(s);
+                    }
+                    _context.SaveChanges();
+                }
+            }
         }
     }
 }
