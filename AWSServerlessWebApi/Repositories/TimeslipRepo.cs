@@ -28,9 +28,9 @@ namespace AWSServerlessWebApi.Repositories
                 NewStartTask = timeslipVM.StartTime,
                 NewEndTask = timeslipVM.EndTime,
                 NewRemarks = timeslipVM.Remarks,
+                CustomDayId = timeslipVM.DayId,
                 NewChangeRequestId = wbiGuid,
-                OwningUser = userGuid,
-                CustomDayId = timeslipVM.DayId
+                OwningUser = userGuid
                 
             };
             _context.NewTimesheetEntryExtensionBase.Add(timeslip);
