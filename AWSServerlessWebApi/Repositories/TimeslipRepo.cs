@@ -76,22 +76,13 @@ namespace AWSServerlessWebApi.Repositories
 
         public bool DeleteOneTimeslip(string id)
         {
-            Guid timeslipGuid = Guid.Parse(id);
-            //get all customday timeslips where TimeslipId == id
-            //var customDayTimeslips = _context.CustomDayTimeSlips.Where(cd => cd.TimeSlipId == timeslipGuid).ToList();
-
-            //foreach(var item in customDayTimeslips)
-            //{
-            //    _context.CustomDayTimeSlips.Remove(item);
-            //    _context.SaveChanges();
-            //}
-            
-            //Guid guid = Guid.Parse(id);
             var timeslip = GetOneTimeslip(id);
+
             if (timeslip == null)
             {
                 return false;
             }
+
             _context.NewTimesheetEntryExtensionBase.Remove(timeslip);
             _context.SaveChanges();
             return true;
