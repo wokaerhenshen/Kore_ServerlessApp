@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+//FIX LATER
 namespace AWSServerlessWebApi.Repositories
 {
     public class CustomDayRepo
@@ -19,6 +19,7 @@ namespace AWSServerlessWebApi.Repositories
         {
             CustomDay customDay = new CustomDay()
             {
+                //fix later.
                 CustomDayId = GenerateCustomDayId(),
                 Name = Name,
                 Description = Description
@@ -33,12 +34,12 @@ namespace AWSServerlessWebApi.Repositories
             return _context.CustomDays.ToList();
         }
 
-        public CustomDay GetOneCustomDay(int id)
+        public CustomDay GetOneCustomDay(string id)
         {
             return _context.CustomDays.Where(i => i.CustomDayId == id).FirstOrDefault();
         }
 
-        public bool UpdateCustomDay(int id, string Name, string Description)
+        public bool UpdateCustomDay(string id, string Name, string Description)
         {
             CustomDay customDay = _context.CustomDays.Where(i => i.CustomDayId == id).FirstOrDefault();
             customDay.Name = Name;
@@ -47,7 +48,7 @@ namespace AWSServerlessWebApi.Repositories
             return true;
         }
 
-        public bool DeleteCustomDay(int id)
+        public bool DeleteCustomDay(string id)
         {
             CustomDay customDay = _context.CustomDays.Where(i => i.CustomDayId == id).FirstOrDefault();
             _context.CustomDays.Remove(customDay);
@@ -55,36 +56,30 @@ namespace AWSServerlessWebApi.Repositories
             return true;
         }
 
-        public bool AssignTimeSlip(int customDayId, Guid timeslipId)
+        //public bool AssignTimeSlip(int customDayId, Guid timeslipId)
+        //{
+        //    CustomDayTimeSlip customDayTimeSlip = new CustomDayTimeSlip()
+        //    {
+        //        CustomDayId = customDayId,
+        //        TimeSlipId = timeslipId
+        //    };
+        //    _context.CustomDayTimeSlips.Add(customDayTimeSlip);
+        //    _context.SaveChanges();
+        //    return true;
+        //}
+
+        //public bool DeleteTimeSlipInCustomDay(int customDayId, Guid timeslipId)
+        //{
+        //    CustomDayTimeSlip customDayTimeSlip = _context.CustomDayTimeSlips.Where(i => i.CustomDayId == customDayId && i.TimeSlipId == timeslipId).FirstOrDefault();
+        //    _context.CustomDayTimeSlips.Remove(customDayTimeSlip);
+        //    _context.SaveChanges();
+        //    return true;
+        //}
+
+            //fix later.
+        public string GenerateCustomDayId()
         {
-            CustomDayTimeSlip customDayTimeSlip = new CustomDayTimeSlip()
-            {
-                CustomDayId = customDayId,
-                TimeSlipId = timeslipId
-            };
-            _context.CustomDayTimeSlips.Add(customDayTimeSlip);
-            _context.SaveChanges();
-            return true;
+            return _context.CustomDays.Select(i => i.CustomDayId) + "s";
         }
-
-        public bool DeleteTimeSlipInCustomDay(int customDayId, Guid timeslipId)
-        {
-            CustomDayTimeSlip customDayTimeSlip = _context.CustomDayTimeSlips.Where(i => i.CustomDayId == customDayId && i.TimeSlipId == timeslipId).FirstOrDefault();
-            _context.CustomDayTimeSlips.Remove(customDayTimeSlip);
-            _context.SaveChanges();
-            return true;
-        }
-
-        public int GenerateCustomDayId()
-        {
-            return _context.CustomDays.Select(i => i.CustomDayId).Max() + 1;
-        }
-
-
-
-
-
-
-
     }
 }

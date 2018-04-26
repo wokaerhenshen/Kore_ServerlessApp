@@ -190,7 +190,7 @@ namespace AWSServerlessWebApi.Data
             }
             var customMonday = new CustomDay
             {
-                CustomDayId = 1,
+                CustomDayId = "aosidjf",
                 Name = "My Monday",
                 Description = "This is my typical monday"
             };
@@ -201,13 +201,13 @@ namespace AWSServerlessWebApi.Data
             //CustomDay_TimeslipVM myMonday = new CustomDay_TimeslipVM();
             //myMonday.CustomDay = customMonday;
             //myMonday.TimeslipList.Add(timeslips.FirstOrDefault());
-            var myMonday = new CustomDayTimeSlip
-            {
-                CustomDayId = customMonday.CustomDayId,
-                TimeSlipId = timeslips.FirstOrDefault().NewTimesheetEntryId
-            };
-            _context.CustomDayTimeSlips.Add(myMonday);
-            _context.SaveChanges();
+            //var myMonday = new CustomDayTimeSlip
+            //{
+            //    CustomDayId = customMonday.CustomDayId,
+            //    TimeSlipId = timeslips.FirstOrDefault().NewTimesheetEntryId
+            //};
+            //_context.CustomDayTimeSlips.Add(myMonday);
+            //_context.SaveChanges();
         }
 
         public void SeedStringMap()

@@ -248,7 +248,7 @@ namespace AWSServerlessWebApi.Migrations
 
             modelBuilder.Entity("AWSServerlessWebApi.Models.CustomDay", b =>
                 {
-                    b.Property<int>("CustomDayId")
+                    b.Property<string>("CustomDayId")
                         .HasColumnName("CustomDayId");
 
                     b.Property<string>("Description")
@@ -260,24 +260,6 @@ namespace AWSServerlessWebApi.Migrations
                     b.HasKey("CustomDayId");
 
                     b.ToTable("Custom_Day");
-                });
-
-            modelBuilder.Entity("AWSServerlessWebApi.Models.CustomDayTimeSlip", b =>
-                {
-                    b.Property<Guid>("TimeSlipId")
-                        .HasColumnName("TimeSlip_Id");
-
-                    b.Property<int>("CustomDayId")
-                        .HasColumnName("CustomDay_Id");
-
-                    b.HasKey("TimeSlipId");
-
-                    b.HasAlternateKey("CustomDayId");
-
-
-                    b.HasAlternateKey("CustomDayId", "TimeSlipId");
-
-                    b.ToTable("CustomDayTimeSlips");
                 });
 
             modelBuilder.Entity("AWSServerlessWebApi.Models.NewChangeRequestExtensionBase", b =>
@@ -603,6 +585,8 @@ namespace AWSServerlessWebApi.Migrations
 
                     b.Property<DateTime?>("CreatedOn");
 
+                    b.Property<string>("CustomDayId");
+
                     b.Property<int?>("DeletionStateCode");
 
                     b.Property<int?>("ImportSequenceNumber");
@@ -683,6 +667,8 @@ namespace AWSServerlessWebApi.Migrations
 
                     b.HasKey("NewTimesheetEntryId");
 
+                    b.HasIndex("CustomDayId");
+
                     b.HasIndex("OwningUser");
 
                     b.ToTable("New_TimesheetEntryExtensionBase");
@@ -759,19 +745,6 @@ namespace AWSServerlessWebApi.Migrations
                         .HasConstraintName("account_parent_account");
                 });
 
-            modelBuilder.Entity("AWSServerlessWebApi.Models.CustomDayTimeSlip", b =>
-                {
-                    b.HasOne("AWSServerlessWebApi.Models.CustomDay", "CustomDay")
-                        .WithMany("CustomDayTimeSlips")
-                        .HasForeignKey("CustomDayId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("AWSServerlessWebApi.Models.NewTimesheetEntryExtensionBase", "GetNewTimesheetEntryExtensionBase")
-                        .WithMany("CustomDayTimeSlips")
-                        .HasForeignKey("TimeSlipId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
             modelBuilder.Entity("AWSServerlessWebApi.Models.NewProjectExtensionBase", b =>
                 {
                     b.HasOne("AWSServerlessWebApi.Models.AccountBase", "NewAccount")
@@ -787,6 +760,11 @@ namespace AWSServerlessWebApi.Migrations
 
             modelBuilder.Entity("AWSServerlessWebApi.Models.NewTimesheetEntryExtensionBase", b =>
                 {
+                    b.HasOne("AWSServerlessWebApi.Models.CustomDay", "CustomDay")
+                        .WithMany("Timeslips")
+                        .HasForeignKey("CustomDayId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("AWSServerlessWebApi.Models.User", "User")
                         .WithMany("NewTimesheetEntryExtensionBase")
                         .HasForeignKey("OwningUser")

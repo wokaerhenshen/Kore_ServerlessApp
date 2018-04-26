@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace AWSServerlessWebApi.ViewModels
 {
-    public class CustomDay_TimeslipVM
-    {
-        public CustomDay CustomDay { get; set; }
-        public List<NewTimesheetEntryExtensionBase> TimeslipList { get; set; }
-    }
+    //public class CustomDay_TimeslipVM
+    //{
+    //    public CustomDay CustomDay { get; set; }
+    //    public List<NewTimesheetEntryExtensionBase> TimeslipList { get; set; }
+    //}
 }

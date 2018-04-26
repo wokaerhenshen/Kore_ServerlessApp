@@ -15,7 +15,7 @@ namespace AWSServerlessWebApi.Models
         
         public virtual DbSet<StringMap> StringMap { get; set; }
         public virtual DbSet<CustomDay> CustomDays { get; set; }
-        public virtual DbSet<CustomDayTimeSlip> CustomDayTimeSlips { get; set; }
+        //public virtual DbSet<CustomDayTimeSlip> CustomDayTimeSlips { get; set; }
 
         // this is not auto generated
         public KORE_Interactive_MSCRMContext(DbContextOptions<KORE_Interactive_MSCRMContext> options)
@@ -488,6 +488,12 @@ namespace AWSServerlessWebApi.Models
                     .WithMany(p => p.NewTimesheetEntryExtensionBase)
                     .HasForeignKey(d => d.OwningUser)
                     .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.CustomDay)
+                  .WithMany(p => p.Timeslips)
+                  .HasForeignKey(d => d.CustomDayId)
+                  .OnDelete(DeleteBehavior.Restrict);
+
             });
 
             modelBuilder.Entity<StringMap>(entity =>
@@ -528,31 +534,31 @@ namespace AWSServerlessWebApi.Models
 
             });
 
-            modelBuilder.Entity<CustomDayTimeSlip>(entity =>
-            {
-                entity.HasKey(e => e.CustomDayId);
-                entity.HasKey(e => e.TimeSlipId);
+            //modelBuilder.Entity<CustomDayTimeSlip>(entity =>
+            //{
+            //    entity.HasKey(e => e.CustomDayId);
+            //    entity.HasKey(e => e.TimeSlipId);
 
-                entity.Property(e => e.CustomDayId)
-                .HasColumnName("CustomDay_Id")
-                .ValueGeneratedNever();
+            //    entity.Property(e => e.CustomDayId)
+            //    .HasColumnName("CustomDay_Id")
+            //    .ValueGeneratedNever();
 
 
-                entity.Property(e => e.TimeSlipId)
-                .HasColumnName("TimeSlip_Id")
-                .ValueGeneratedNever();
+            //    entity.Property(e => e.TimeSlipId)
+            //    .HasColumnName("TimeSlip_Id")
+            //    .ValueGeneratedNever();
 
-                entity.HasOne(e => e.CustomDay)
-                    .WithMany(p => p.CustomDayTimeSlips)
-                    .HasForeignKey(d => d.CustomDayId)
-                    .OnDelete(DeleteBehavior.Restrict);
+            //    entity.HasOne(e => e.CustomDay)
+            //        .WithMany(p => p.CustomDayTimeSlips)
+            //        .HasForeignKey(d => d.CustomDayId)
+            //        .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasOne(e => e.GetNewTimesheetEntryExtensionBase)
-                .WithMany(e => e.CustomDayTimeSlips)
-                .HasForeignKey(e=> e.TimeSlipId)
-                .OnDelete(DeleteBehavior.Restrict);
+            //    entity.HasOne(e => e.GetNewTimesheetEntryExtensionBase)
+            //    .WithMany(e => e.CustomDayTimeSlips)
+            //    .HasForeignKey(e=> e.TimeSlipId)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
-            });
+            //});
 
 
 
