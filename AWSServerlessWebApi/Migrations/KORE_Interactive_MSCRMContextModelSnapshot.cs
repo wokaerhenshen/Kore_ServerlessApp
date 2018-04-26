@@ -763,7 +763,7 @@ namespace AWSServerlessWebApi.Migrations
                     b.HasOne("AWSServerlessWebApi.Models.CustomDay", "CustomDay")
                         .WithMany("Timeslips")
                         .HasForeignKey("CustomDayId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("AWSServerlessWebApi.Models.User", "User")
                         .WithMany("NewTimesheetEntryExtensionBase")

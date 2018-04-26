@@ -492,7 +492,7 @@ namespace AWSServerlessWebApi.Models
                 entity.HasOne(e => e.CustomDay)
                   .WithMany(p => p.Timeslips)
                   .HasForeignKey(d => d.CustomDayId)
-                  .OnDelete(DeleteBehavior.Restrict);
+                  .OnDelete(DeleteBehavior.Cascade);
 
             });
 

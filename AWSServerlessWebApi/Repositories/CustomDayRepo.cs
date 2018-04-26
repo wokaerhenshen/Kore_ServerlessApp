@@ -35,14 +35,18 @@ namespace AWSServerlessWebApi.Repositories
             //create custom day
             string dayId = CreateCustomDay(customDayVM);
             //set the ID?
-            
-            //create timeslips
-            foreach (TimeslipVM ts in customDayVM.TimeSlip)
-            {
-                ts.DayId = dayId;
 
-                TimeslipRepo timeslipRepo = new TimeslipRepo(_context);
-                timeslipRepo.CreateTimeslip(ts);     
+            //create timeslips
+            if (customDayVM.TimeSlip != null)
+            {
+                foreach (TimeslipVM ts in customDayVM.TimeSlip)
+                {
+                    ts.DayId = dayId;
+
+                    TimeslipRepo timeslipRepo = new TimeslipRepo(_context);
+                    timeslipRepo.CreateTimeslip(ts);
+                }
+                
             }
             return true;
         }
@@ -69,7 +73,28 @@ namespace AWSServerlessWebApi.Repositories
 
         public bool DeleteCustomDay(string id)
         {
-            CustomDay customDay = _context.CustomDays.Where(i => i.CustomDayId == id).FirstOrDefault();
+            //remove references to CustomDay from relevant timeslips
+            TimeslipRepo timeslipRepo = new TimeslipRepo(_context);
+
+            var timeslips = timeslipRepo.GetAllTimeslipsByCustomDayId(id);
+
+            foreach(NewTimesheetEntryExtensionBase timeslip in timeslips)
+            {
+
+                TimeslipVM timeslipVM = new TimeslipVM()
+                {
+                    TimeslipId = Convert.ToString(timeslip.NewTimesheetEntryId),
+                    //the important part here is to remove the reference to the DayId
+                    DayId = null,
+                    StartTime = Convert.ToString(timeslip.NewStartTask),
+                    EndTime = Convert.ToString(timeslip.NewEndTask),
+                    Remarks = timeslip.NewRemarks,
+                    UserId = Convert.ToString(timeslip.OwningUser),
+                    WBI_Id = Convert.ToString(timeslip.NewChangeRequestId)
+                };
+                timeslipRepo.EditTimeslip( timeslipVM);
+            }
+            CustomDay customDay = GetOneCustomDay(id);
             _context.CustomDays.Remove(customDay);
             _context.SaveChanges();
             return true;

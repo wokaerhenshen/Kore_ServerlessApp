@@ -25,14 +25,23 @@ namespace AWSServerlessWebApi.Repositories
             NewTimesheetEntryExtensionBase timeslip = new NewTimesheetEntryExtensionBase()
             {
                 NewTimesheetEntryId = Guid.NewGuid(),
-                NewStartTask = DateTime.Parse(timeslipVM.StartTime),
-                NewEndTask = DateTime.Parse(timeslipVM.EndTime),
                 NewRemarks = timeslipVM.Remarks,
                 CustomDayId = timeslipVM.DayId,
                 NewChangeRequestId = wbiGuid,
                 OwningUser = userGuid
                 
             };
+
+            if(timeslipVM.StartTime != null)
+            {
+                //should use TryParse for safety...
+                timeslip.NewStartTask = DateTime.Parse(timeslipVM.StartTime);
+            }
+            if (timeslipVM.EndTime != null)
+            {
+                timeslip.NewEndTask = DateTime.Parse(timeslipVM.EndTime);
+            }
+            
             _context.NewTimesheetEntryExtensionBase.Add(timeslip);
             _context.SaveChanges();
 
@@ -53,6 +62,10 @@ namespace AWSServerlessWebApi.Repositories
         public List<NewTimesheetEntryExtensionBase> GetAllTimeslipsByUserId (Guid userId)
         {
             return _context.NewTimesheetEntryExtensionBase.Where(t => t.OwningUser == userId).ToList();
+        }
+        public List<NewTimesheetEntryExtensionBase> GetAllTimeslipsByCustomDayId(string dayId)
+        {
+            return _context.NewTimesheetEntryExtensionBase.Where(t => t.CustomDayId == dayId).ToList();
         }
 
         public NewTimesheetEntryExtensionBase EditTimeslip(TimeslipVM timeslipVM)
