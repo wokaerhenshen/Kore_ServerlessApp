@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace AWSServerlessWebApi.Migrations
 {
-    public partial class initialCreate : Migration
+    public partial class mimmo : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
