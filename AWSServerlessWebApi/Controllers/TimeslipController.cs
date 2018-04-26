@@ -63,7 +63,7 @@ namespace AWSServerlessWebApi.Controllers
             }
             return new ObjectResult(timeslip);
         }
-
+        //add a method to assign a timeslip to a custom day
         [HttpPost]
         [Route("Delete")]
         public IActionResult Delete([FromBody]IdVM timeslipId)

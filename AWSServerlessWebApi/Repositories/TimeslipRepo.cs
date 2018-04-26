@@ -28,8 +28,7 @@ namespace AWSServerlessWebApi.Repositories
                 NewStartTask = timeslipVM.StartTime,
                 NewEndTask = timeslipVM.EndTime,
                 NewRemarks = timeslipVM.Remarks,
-                //include day_id when table gets added
-                //include user_id when we figure out which one it is...
+                CustomDayId = timeslipVM.DayId,
                 NewChangeRequestId = wbiGuid,
                 OwningUser = userGuid
                 

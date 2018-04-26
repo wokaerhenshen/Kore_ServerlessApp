@@ -1,5 +1,6 @@
 ﻿using AWSServerlessWebApi.Models;
 using AWSServerlessWebApi.Repositories;
+using AWSServerlessWebApi.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -20,9 +21,9 @@ namespace AWSServerlessWebApi.Controllers
 
         [HttpPost]
         [Route("Create")]
-        public bool Create(string Name, string Description)
+        public bool Create([FromBody] CustomDayVM customDayVM)
         {
-            return customDayRepo.CreateNewCustomDay(Name, Description);
+            return customDayRepo.CreateCustomDayWithTimeslips(customDayVM);
         }
 
         [HttpGet]
@@ -41,16 +42,16 @@ namespace AWSServerlessWebApi.Controllers
 
         [HttpPut]
         [Route("Update")]
-        public bool Update(string id, string Name, string Description)
+        public bool Update([FromBody] CustomDayVM customDayVM)
         {
-            return customDayRepo.UpdateCustomDay(id,Name, Description);
+            return customDayRepo.UpdateCustomDay(customDayVM);
         }
 
         [HttpDelete]
         [Route("Delete")]
-        public bool Delete(string id)
+        public bool Delete([FromBody] CustomDayVM customDayVM)
         {
-            return customDayRepo.DeleteCustomDay(id);
+            return customDayRepo.DeleteCustomDay(customDayVM.CustomDayId);
         }
 
 

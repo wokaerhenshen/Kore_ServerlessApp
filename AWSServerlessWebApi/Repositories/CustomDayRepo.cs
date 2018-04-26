@@ -1,4 +1,5 @@
 ﻿using AWSServerlessWebApi.Models;
+using AWSServerlessWebApi.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,17 +16,34 @@ namespace AWSServerlessWebApi.Repositories
             _context = context;
         }
 
-        public bool CreateNewCustomDay(string Name, string Description)
+        private string CreateCustomDay(CustomDayVM customDay)
         {
-            CustomDay customDay = new CustomDay()
+            CustomDay newCustomDay = new CustomDay()
             {
-                //fix later.
                 CustomDayId = GenerateCustomDayId(),
-                Name = Name,
-                Description = Description
+                Name = customDay.Name,
+                Description = customDay.Description
             };
-            _context.CustomDays.Add(customDay);
+            _context.CustomDays.Add(newCustomDay);
             _context.SaveChanges();
+
+            return newCustomDay.CustomDayId;
+        }
+
+        public bool CreateCustomDayWithTimeslips(CustomDayVM customDayVM)
+        {
+            //create custom day
+            string dayId = CreateCustomDay(customDayVM);
+            //set the ID?
+            
+            //create timeslips
+            foreach (TimeslipVM ts in customDayVM.TimeSlip)
+            {
+                ts.DayId = dayId;
+
+                TimeslipRepo timeslipRepo = new TimeslipRepo(_context);
+                timeslipRepo.CreateTimeslip(ts);     
+            }
             return true;
         }
 
@@ -39,11 +57,12 @@ namespace AWSServerlessWebApi.Repositories
             return _context.CustomDays.Where(i => i.CustomDayId == id).FirstOrDefault();
         }
 
-        public bool UpdateCustomDay(string id, string Name, string Description)
+
+        public bool UpdateCustomDay(CustomDayVM customDayVM)
         {
-            CustomDay customDay = _context.CustomDays.Where(i => i.CustomDayId == id).FirstOrDefault();
-            customDay.Name = Name;
-            customDay.Description = Description;
+            CustomDay customDay = _context.CustomDays.Where(i => i.CustomDayId == customDayVM.CustomDayId).FirstOrDefault();
+            customDay.Name = customDayVM.Name;
+            customDay.Description = customDayVM.Description;
             _context.SaveChanges();
             return true;
         }
@@ -76,10 +95,10 @@ namespace AWSServerlessWebApi.Repositories
         //    return true;
         //}
 
-            //fix later.
+
         public string GenerateCustomDayId()
         {
-            return _context.CustomDays.Select(i => i.CustomDayId) + "s";
+            return DateTime.Now + "j2lasdere";
         }
     }
 }
