@@ -11,8 +11,8 @@ using System;
 namespace AWSServerlessWebApi.Migrations
 {
     [DbContext(typeof(KORE_Interactive_MSCRMContext))]
-    [Migration("20180426204657_mimmo")]
-    partial class mimmo
+    [Migration("20180426205414_mimmmo")]
+    partial class mimmmo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
