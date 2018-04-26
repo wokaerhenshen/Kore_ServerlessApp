@@ -86,8 +86,8 @@ namespace AWSServerlessWebApi.Repositories
                     TimeslipId = Convert.ToString(timeslip.NewTimesheetEntryId),
                     //the important part here is to remove the reference to the DayId
                     DayId = null,
-                    StartTime = (DateTime)timeslip.NewStartTask,
-                    EndTime = (DateTime)timeslip.NewEndTask,
+                    StartTime = Convert.ToString(timeslip.NewStartTask),
+                    EndTime = Convert.ToString(timeslip.NewEndTask),
                     Remarks = timeslip.NewRemarks,
                     UserId = Convert.ToString(timeslip.OwningUser),
                     WBI_Id = Convert.ToString(timeslip.NewChangeRequestId)

@@ -11,8 +11,8 @@ using System;
 namespace AWSServerlessWebApi.Migrations
 {
     [DbContext(typeof(KORE_Interactive_MSCRMContext))]
-    [Migration("20180426204657_mimmo")]
-    partial class mimmo
+    [Migration("20180426213522_initialCreate")]
+    partial class initialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -764,7 +764,7 @@ namespace AWSServerlessWebApi.Migrations
                     b.HasOne("AWSServerlessWebApi.Models.CustomDay", "CustomDay")
                         .WithMany("Timeslips")
                         .HasForeignKey("CustomDayId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("AWSServerlessWebApi.Models.User", "User")
                         .WithMany("NewTimesheetEntryExtensionBase")

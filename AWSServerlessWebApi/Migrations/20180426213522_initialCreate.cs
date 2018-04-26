@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace AWSServerlessWebApi.Migrations
 {
-    public partial class initial : Migration
+    public partial class initialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -335,7 +335,7 @@ namespace AWSServerlessWebApi.Migrations
                         column: x => x.CustomDayId,
                         principalTable: "Custom_Day",
                         principalColumn: "CustomDayId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_New_TimesheetEntryExtensionBase_Users_OwningUser",
                         column: x => x.OwningUser,
