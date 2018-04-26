@@ -9,10 +9,10 @@ namespace AWSServerlessWebApi.Models
     public class CustomDay
     {
         [Key]
-        public int CustomDayId { get; set; }
+        public string CustomDayId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-
-        public virtual ICollection<CustomDayTimeSlip> CustomDayTimeSlips { get; set; }
+        
+        public virtual ICollection<NewTimesheetEntryExtensionBase> Timeslips { get; set; }
     }
 }

@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace AWSServerlessWebApi.Models
 {
-    public class CustomDayTimeSlip
-    {
-        [Key, Column(Order = 0)]
-        public int CustomDayId { get; set; }
+    //public class CustomDayTimeSlip
+    //{
+    //    [Key, Column(Order = 0)]
+    //    public int CustomDayId { get; set; }
 
-        [Key, Column(Order = 1)]
-        public Guid TimeSlipId { get; set; }
+    //    [Key, Column(Order = 1)]
+    //    public Guid TimeSlipId { get; set; }
 
-        public virtual CustomDay CustomDay{ get; set; }
-        public virtual NewTimesheetEntryExtensionBase GetNewTimesheetEntryExtensionBase { get; set; }
-    }
+    //    public virtual CustomDay CustomDay{ get; set; }
+    //    public virtual NewTimesheetEntryExtensionBase GetNewTimesheetEntryExtensionBase { get; set; }
+    //}
 }

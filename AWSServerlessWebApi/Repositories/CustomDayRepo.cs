@@ -1,9 +1,10 @@
 ﻿using AWSServerlessWebApi.Models;
+using AWSServerlessWebApi.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+//FIX LATER
 namespace AWSServerlessWebApi.Repositories
 {
     public class CustomDayRepo
@@ -15,16 +16,34 @@ namespace AWSServerlessWebApi.Repositories
             _context = context;
         }
 
-        public bool CreateNewCustomDay(string Name, string Description)
+        private string CreateCustomDay(CustomDayVM customDay)
         {
-            CustomDay customDay = new CustomDay()
+            CustomDay newCustomDay = new CustomDay()
             {
                 CustomDayId = GenerateCustomDayId(),
-                Name = Name,
-                Description = Description
+                Name = customDay.Name,
+                Description = customDay.Description
             };
-            _context.CustomDays.Add(customDay);
+            _context.CustomDays.Add(newCustomDay);
             _context.SaveChanges();
+
+            return newCustomDay.CustomDayId;
+        }
+
+        public bool CreateCustomDayWithTimeslips(CustomDayVM customDayVM)
+        {
+            //create custom day
+            string dayId = CreateCustomDay(customDayVM);
+            //set the ID?
+            
+            //create timeslips
+            foreach (TimeslipVM ts in customDayVM.TimeSlip)
+            {
+                ts.DayId = dayId;
+
+                TimeslipRepo timeslipRepo = new TimeslipRepo(_context);
+                timeslipRepo.CreateTimeslip(ts);     
+            }
             return true;
         }
 
@@ -33,21 +52,22 @@ namespace AWSServerlessWebApi.Repositories
             return _context.CustomDays.ToList();
         }
 
-        public CustomDay GetOneCustomDay(int id)
+        public CustomDay GetOneCustomDay(string id)
         {
             return _context.CustomDays.Where(i => i.CustomDayId == id).FirstOrDefault();
         }
 
-        public bool UpdateCustomDay(int id, string Name, string Description)
+
+        public bool UpdateCustomDay(CustomDayVM customDayVM)
         {
-            CustomDay customDay = _context.CustomDays.Where(i => i.CustomDayId == id).FirstOrDefault();
-            customDay.Name = Name;
-            customDay.Description = Description;
+            CustomDay customDay = _context.CustomDays.Where(i => i.CustomDayId == customDayVM.CustomDayId).FirstOrDefault();
+            customDay.Name = customDayVM.Name;
+            customDay.Description = customDayVM.Description;
             _context.SaveChanges();
             return true;
         }
 
-        public bool DeleteCustomDay(int id)
+        public bool DeleteCustomDay(string id)
         {
             CustomDay customDay = _context.CustomDays.Where(i => i.CustomDayId == id).FirstOrDefault();
             _context.CustomDays.Remove(customDay);
@@ -55,36 +75,30 @@ namespace AWSServerlessWebApi.Repositories
             return true;
         }
 
-        public bool AssignTimeSlip(int customDayId, Guid timeslipId)
+        //public bool AssignTimeSlip(int customDayId, Guid timeslipId)
+        //{
+        //    CustomDayTimeSlip customDayTimeSlip = new CustomDayTimeSlip()
+        //    {
+        //        CustomDayId = customDayId,
+        //        TimeSlipId = timeslipId
+        //    };
+        //    _context.CustomDayTimeSlips.Add(customDayTimeSlip);
+        //    _context.SaveChanges();
+        //    return true;
+        //}
+
+        //public bool DeleteTimeSlipInCustomDay(int customDayId, Guid timeslipId)
+        //{
+        //    CustomDayTimeSlip customDayTimeSlip = _context.CustomDayTimeSlips.Where(i => i.CustomDayId == customDayId && i.TimeSlipId == timeslipId).FirstOrDefault();
+        //    _context.CustomDayTimeSlips.Remove(customDayTimeSlip);
+        //    _context.SaveChanges();
+        //    return true;
+        //}
+
+
+        public string GenerateCustomDayId()
         {
-            CustomDayTimeSlip customDayTimeSlip = new CustomDayTimeSlip()
-            {
-                CustomDayId = customDayId,
-                TimeSlipId = timeslipId
-            };
-            _context.CustomDayTimeSlips.Add(customDayTimeSlip);
-            _context.SaveChanges();
-            return true;
+            return DateTime.Now + "j2lasdere";
         }
-
-        public bool DeleteTimeSlipInCustomDay(int customDayId, Guid timeslipId)
-        {
-            CustomDayTimeSlip customDayTimeSlip = _context.CustomDayTimeSlips.Where(i => i.CustomDayId == customDayId && i.TimeSlipId == timeslipId).FirstOrDefault();
-            _context.CustomDayTimeSlips.Remove(customDayTimeSlip);
-            _context.SaveChanges();
-            return true;
-        }
-
-        public int GenerateCustomDayId()
-        {
-            return _context.CustomDays.Select(i => i.CustomDayId).Max() + 1;
-        }
-
-
-
-
-
-
-
     }
 }
