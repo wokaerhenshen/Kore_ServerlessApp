@@ -123,7 +123,7 @@ namespace AWSServerlessWebApi.Repositories
 
         public string GenerateCustomDayId()
         {
-            return DateTime.Now + "j2lasdere";
+            return (DateTime.Now + "j2lasdere").Trim();
         }
     }
 }
