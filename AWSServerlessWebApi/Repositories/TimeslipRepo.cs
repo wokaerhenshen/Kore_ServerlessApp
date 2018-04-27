@@ -41,9 +41,25 @@ namespace AWSServerlessWebApi.Repositories
             {
                 timeslip.NewEndTask = DateTime.Parse(timeslipVM.EndTime);
             }
-            
-            _context.NewTimesheetEntryExtensionBase.Add(timeslip);
-            _context.SaveChanges();
+
+            TimeSpan? duration = timeslip.NewEndTask - timeslip.NewStartTask;
+
+            int durationInHours = (int)duration?.TotalHours;
+
+            NewChangeRequestExtensionBase wbi = _context.NewChangeRequestExtensionBase
+                                                .Where(w => w.NewChangeRequestId == timeslip.NewChangeRequestId)
+                                                .FirstOrDefault();
+
+            wbi.NewActualHours += durationInHours;
+
+            if (wbi.NewActualHours > wbi.NewEstimatedHours)
+            {
+                throw new ArithmeticException("Alloted hours for this WBI has been maxed out.");
+            } else
+            {
+                _context.NewTimesheetEntryExtensionBase.Add(timeslip);
+                _context.SaveChanges();
+            }
 
             return timeslip;
         }
