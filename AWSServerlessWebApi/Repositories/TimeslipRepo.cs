@@ -54,7 +54,7 @@ namespace AWSServerlessWebApi.Repositories
 
             if (wbi.NewActualHours > wbi.NewEstimatedHours)
             {
-                throw new ArithmeticException("Alloted hours for this WBI has been maxed out.");
+                throw new ArgumentException("Alloted hours for this WBI has been maxed out.");
             } else
             {
                 _context.NewTimesheetEntryExtensionBase.Add(timeslip);
