@@ -42,7 +42,7 @@ namespace AWSServerlessWebApi.Models
         public string CustomDayId { get; set; }
 
 
-        public virtual CustomDay CustomDay { get; set; }
+       // public virtual CustomDay CustomDay { get; set; }
         public virtual User User { get; set; }
 
     }

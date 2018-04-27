@@ -489,10 +489,10 @@ namespace AWSServerlessWebApi.Models
                     .HasForeignKey(d => d.OwningUser)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasOne(e => e.CustomDay)
-                  .WithMany(p => p.Timeslips)
-                  .HasForeignKey(d => d.CustomDayId)
-                  .OnDelete(DeleteBehavior.Cascade);
+                //entity.HasOne(e => e.CustomDay)
+                //  .WithMany(p => p.Timeslips)
+                //  .HasForeignKey(d => d.CustomDayId)
+                //  .OnDelete(DeleteBehavior.Cascade);
 
             });
 
@@ -531,6 +531,11 @@ namespace AWSServerlessWebApi.Models
                 entity.Property(e => e.Name).HasColumnName("Name");
 
                 entity.Property(e => e.Description).HasColumnName("Description");
+
+                entity.HasOne(e => e.User)
+                  .WithMany(p => p.CustomDay)
+                  .HasForeignKey(d => d.UserId)
+                  .OnDelete(DeleteBehavior.Cascade);
 
             });
 

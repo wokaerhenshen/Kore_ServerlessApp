@@ -26,8 +26,14 @@ namespace AWSServerlessWebApi.Controllers
         [Route("Create")]
         public IActionResult Create([FromBody] TimeslipVM timeslipVM)
         {
-
             return new ObjectResult(timeslipRepo.CreateTimeslip(timeslipVM));
+        }
+
+        [HttpPost]
+        [Route("CreateByCustomday")]
+        public bool CreateByCustomday([FromBody] CustomDateVM customDateVM)
+        {
+            return timeslipRepo.CreateByCustomday(customDateVM);
         }
 
         [HttpGet]
