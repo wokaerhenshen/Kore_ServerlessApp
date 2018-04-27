@@ -34,11 +34,20 @@ namespace AWSServerlessWebApi.Controllers
         }
 
         [HttpGet]
+        [Route("GetOneUserCustomDays/{id}")]
+        public IActionResult GetOneUserCustomDays(string id)
+        {
+            return new OkObjectResult(customDayRepo.GetOneUserCustomDays(id));
+        }
+
+        [HttpGet]
         [Route("GetOneCustomDay/{id}")]
         public IActionResult GetOneCustomDay(string id)
         {
             return new OkObjectResult(customDayRepo.GetOneCustomDay(id));
         }
+
+
 
         [HttpPut]
         [Route("Update")]

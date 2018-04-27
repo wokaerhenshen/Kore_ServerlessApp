@@ -12,7 +12,9 @@ namespace AWSServerlessWebApi.Models
         public string CustomDayId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public Guid UserId { get; set; }
 
-        public virtual ICollection<NewTimesheetEntryExtensionBase> Timeslips { get; set; }
+        public virtual User User { get; set; }
+        //public virtual ICollection<NewTimesheetEntryExtensionBase> Timeslips { get; set; }
     }
 }

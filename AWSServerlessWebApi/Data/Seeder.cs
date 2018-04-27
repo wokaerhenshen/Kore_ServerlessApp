@@ -193,8 +193,9 @@ namespace AWSServerlessWebApi.Data
                 CustomDayId = "aosidjf",
                 Name = "My Monday",
                 Description = "This is my typical monday",
-                Timeslips = new List<NewTimesheetEntryExtensionBase> { timeslips.Single(u => u.NewRemarks == "Test Remark"),
-                                                                       timeslips.Single(u => u.NewRemarks == "Test Remark two")}
+                //Timeslips = new List<NewTimesheetEntryExtensionBase> { timeslips.Single(u => u.NewRemarks == "Test Remark"),
+                //                                                       timeslips.Single(u => u.NewRemarks == "Test Remark two")},
+                UserId = _context.Users.FirstOrDefault().UserId
             };
             _context.CustomDays.Add(customMonday);
             _context.SaveChanges();

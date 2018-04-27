@@ -13,6 +13,7 @@ namespace AWSServerlessWebApi.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
+        public virtual ICollection<CustomDay> CustomDay { get; set; }
         public virtual ICollection<NewTimesheetEntryExtensionBase> NewTimesheetEntryExtensionBase { get; set; }
     }
 }

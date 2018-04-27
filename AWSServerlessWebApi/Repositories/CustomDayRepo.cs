@@ -22,7 +22,9 @@ namespace AWSServerlessWebApi.Repositories
             {
                 CustomDayId = GenerateCustomDayId(),
                 Name = customDay.Name,
-                Description = customDay.Description
+                Description = customDay.Description,
+                UserId = Guid.Parse(customDay.UserId)
+                
             };
             _context.CustomDays.Add(newCustomDay);
             _context.SaveChanges();
@@ -54,6 +56,11 @@ namespace AWSServerlessWebApi.Repositories
         public List<CustomDay> GetAllCustomDays()
         {
             return _context.CustomDays.ToList();
+        }
+
+        public List<CustomDay> GetOneUserCustomDays(string id)
+        {
+            return _context.CustomDays.Where(i => i.UserId == Guid.Parse(id) && i.CustomDayId != "").ToList();
         }
 
         public CustomDay GetOneCustomDay(string id)
