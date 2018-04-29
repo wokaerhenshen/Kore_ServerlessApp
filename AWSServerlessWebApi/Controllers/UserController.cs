@@ -22,17 +22,9 @@ namespace AWSServerlessWebApi.Controllers
 
         [HttpPost]
         [Route("Create")]
-        public bool Create(string Email, string Password, string FirstName, string LastName)
+        public bool Create([FromBody] UserVM userVM)
         {
-            UserVM user = new UserVM()
-            {
-                Email = Email,
-                Password = Password,
-                FirstName = FirstName,
-                LastName = LastName
-            };
-
-            userRepo.CreateUser(user);
+            userRepo.CreateUser(userVM);
             return true;
         }
 
@@ -54,25 +46,14 @@ namespace AWSServerlessWebApi.Controllers
 
         [HttpPut]
         [Route("Update")]
-        public bool Update(string Id, string Email, string Password, string FirstName, string LastName)
+        public bool Update([FromBody] UserVM userVM)
         {
-            //Guid guid_id = Guid.Parse(Id);
-
-            UserVM user = new UserVM()
-            {
-                UserId = Id,
-                Email = Email,
-                Password = Password,
-                FirstName = FirstName,
-                LastName = LastName
-            };
-
-            userRepo.UpdateOneUser(user);
+            userRepo.UpdateOneUser(userVM);
             return true;
         }
 
         [HttpDelete]
-        [Route("Delete")]
+        [Route("Delete/{id}")]
         public bool Delete(string id)
         {
             Guid guid_id = Guid.Parse(id);

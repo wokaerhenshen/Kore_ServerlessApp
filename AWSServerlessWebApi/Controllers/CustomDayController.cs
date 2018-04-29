@@ -57,10 +57,10 @@ namespace AWSServerlessWebApi.Controllers
         }
 
         [HttpDelete]
-        [Route("Delete")]
-        public bool Delete([FromBody] CustomDayVM customDayVM)
+        [Route("Delete/{id}")]
+        public bool Delete(string id)
         {
-            return customDayRepo.DeleteCustomDay(customDayVM.CustomDayId);
+            return customDayRepo.DeleteCustomDay(id);
         }
 
 
