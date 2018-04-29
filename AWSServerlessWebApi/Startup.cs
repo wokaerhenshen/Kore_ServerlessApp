@@ -30,7 +30,7 @@ namespace AWSServerlessWebApi
         {
 
             services.AddDbContext<KORE_Interactive_MSCRMContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
                         // Call this before AddMvc()
             services.AddCors(options =>
             {
@@ -46,6 +46,8 @@ namespace AWSServerlessWebApi
             });
 
             services.AddMvc();
+
+            //var context = services.GetRequiredService<KORE_Interactive_MSCRMContext>();
 
             // Add S3 to the ASP.NET Core dependency injection framework.
             services.AddAWSService<Amazon.S3.IAmazonS3>();

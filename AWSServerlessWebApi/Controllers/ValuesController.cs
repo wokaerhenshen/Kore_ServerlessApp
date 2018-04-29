@@ -22,13 +22,13 @@ namespace AWSServerlessWebApi.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            NewProjectTypeExtensionBase PT = new NewProjectTypeExtensionBase()
-            {
-                NewProjectTypeId = Guid.NewGuid(),
-                NewName = "karl"
-            };
-            _context.NewProjectTypeExtensionBase.Add(PT);
-            _context.SaveChanges();
+            //NewProjectTypeExtensionBase PT = new NewProjectTypeExtensionBase()
+            //{
+            //    NewProjectTypeId = Guid.NewGuid(),
+            //    NewName = "karl"
+            //};
+            //_context.NewProjectTypeExtensionBase.Add(PT);
+            //_context.SaveChanges();
 
             return new string[] { "value1", "value2" };
         }

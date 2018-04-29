@@ -14,6 +14,7 @@ namespace AWSServerlessWebApi
     /// 
     /// AWSServerlessWebApi::AWSServerlessWebApi.LambdaEntryPoint::FunctionHandlerAsync
     /// </summary>
+    ///  not sure how to impleament the seeder here.
     public class LambdaEntryPoint : Amazon.Lambda.AspNetCoreServer.APIGatewayProxyFunction
     {
         /// <summary>
@@ -21,10 +22,16 @@ namespace AWSServerlessWebApi
         /// needs to be configured in this method using the UseStartup<>() method.
         /// </summary>
         /// <param name="builder"></param>
+        /// 
+
         protected override void Init(IWebHostBuilder builder)
         {
             builder
                 .UseStartup<Startup>();
+            
+
+           // builder.ConfigureServices
+
         }
     }
 }
