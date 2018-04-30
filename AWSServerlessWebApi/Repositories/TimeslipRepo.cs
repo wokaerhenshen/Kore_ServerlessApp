@@ -37,9 +37,17 @@ namespace AWSServerlessWebApi.Repositories
                 //should use TryParse for safety...
                 timeslip.NewStartTask = DateTime.Parse(timeslipVM.StartTime);
             }
+            else
+            {
+                throw new ArgumentNullException("You need to enter a start time...");
+            }
             if (timeslipVM.EndTime != null)
             {
                 timeslip.NewEndTask = DateTime.Parse(timeslipVM.EndTime);
+            }
+            else
+            {
+                throw new ArgumentNullException("You need to enter an end time...");
             }
 
             TimeSpan? duration = timeslip.NewEndTask - timeslip.NewStartTask;

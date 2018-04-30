@@ -44,6 +44,5 @@ namespace AWSServerlessWebApi.Models
 
        // public virtual CustomDay CustomDay { get; set; }
         public virtual User User { get; set; }
-
     }
 }

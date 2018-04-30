@@ -24,9 +24,9 @@ namespace AWSServerlessWebApi.Controllers
 
         [HttpPost]
         [Route("Create")]
-        public bool Create([FromBody] CustomDayVM customDayVM)
+        public IActionResult Create([FromBody] CustomDayVM customDayVM)
         {
-            return customDayRepo.CreateCustomDayWithTimeslips(customDayVM);
+            return new OkObjectResult(customDayRepo.CreateCustomDay(customDayVM));
         }
 
         [HttpGet]

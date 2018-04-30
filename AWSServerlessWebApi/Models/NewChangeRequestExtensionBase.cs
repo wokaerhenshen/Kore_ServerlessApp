@@ -58,5 +58,7 @@ namespace AWSServerlessWebApi.Models
         public bool? NewCreatePbi { get; set; }
         public string NewWeeklyWbititle { get; set; }
         public string NewRecurringWbititleMonthly { get; set; }
+
+        public virtual ICollection<CustomDay_WBI> Timeslip_Templates { get; set; }
     }
 }
