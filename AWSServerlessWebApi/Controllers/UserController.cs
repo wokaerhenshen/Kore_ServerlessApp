@@ -82,7 +82,7 @@ namespace AWSServerlessWebApi.Controllers
 
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Route("List")]
         public IActionResult List()
         {
