@@ -193,24 +193,41 @@ namespace AWSServerlessWebApi.Data
                 CustomDayId = "aosidjf",
                 Name = "My Monday",
                 Description = "This is my typical monday",
-                //Timeslips = new List<NewTimesheetEntryExtensionBase> { timeslips.Single(u => u.NewRemarks == "Test Remark"),
-                //                                                       timeslips.Single(u => u.NewRemarks == "Test Remark two")},
                 UserId = _context.Users.FirstOrDefault().UserId
             };
             _context.CustomDays.Add(customMonday);
             _context.SaveChanges();
 
-            //this is for view model 
-            //CustomDay_TimeslipVM myMonday = new CustomDay_TimeslipVM();
-            //myMonday.CustomDay = customMonday;
-            //myMonday.TimeslipList.Add(timeslips.FirstOrDefault());
-            //var myMonday = new CustomDayTimeSlip
-            //{
-            //    CustomDayId = customMonday.CustomDayId,
-            //    TimeSlipId = timeslips.FirstOrDefault().NewTimesheetEntryId
-            //};
-            //_context.CustomDayTimeSlips.Add(myMonday);
-            //_context.SaveChanges();
+            if (_context.Timeslip_Templates.Any())
+            {
+                return;
+            }
+            var timeslipTemplates = new CustomDay_WBI[]
+            {
+                new CustomDay_WBI
+                {
+                    TimeslipTemplateId = "testId1",
+                    NewChangeRequestId = workBreakdownItems.Single(w => w.NewRemarks == "Calgary's Finance").NewChangeRequestId,
+                    CustomDayId = customMonday.CustomDayId,
+                    StartTime = DateTime.ParseExact("08:00", "HH:mm", CultureInfo.InvariantCulture),
+                    EndTime = DateTime.ParseExact("11:00", "HH:mm", CultureInfo.InvariantCulture),
+                    Remarks = "This is a test remark on morning timeslip template"
+                },
+                new CustomDay_WBI
+                {
+                    TimeslipTemplateId = "testId2",
+                    NewChangeRequestId = workBreakdownItems.Single(w => w.NewRemarks == "Vancouver's Finance").NewChangeRequestId,
+                    CustomDayId = customMonday.CustomDayId,
+                    StartTime = DateTime.ParseExact("13:00", "HH:mm", CultureInfo.InvariantCulture),
+                    EndTime = DateTime.ParseExact("16:00", "HH:mm", CultureInfo.InvariantCulture),
+                    Remarks = "This is a test remark on afternoon timeslip template"
+                },
+            };
+            foreach (CustomDay_WBI c in timeslipTemplates)
+            {
+                _context.Timeslip_Templates.Add(c);
+            }
+            _context.SaveChanges();
         }
 
         public void SeedStringMap()
