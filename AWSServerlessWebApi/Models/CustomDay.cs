@@ -15,6 +15,7 @@ namespace AWSServerlessWebApi.Models
         public Guid UserId { get; set; }
 
         public virtual User User { get; set; }
-        //public virtual ICollection<NewTimesheetEntryExtensionBase> Timeslips { get; set; }
+        
+        public virtual ICollection<CustomDay_WBI> Timeslip_Templates { get; set; }
     }
 }

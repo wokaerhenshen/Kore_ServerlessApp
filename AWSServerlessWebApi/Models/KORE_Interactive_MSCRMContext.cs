@@ -15,7 +15,7 @@ namespace AWSServerlessWebApi.Models
         
         public virtual DbSet<StringMap> StringMap { get; set; }
         public virtual DbSet<CustomDay> CustomDays { get; set; }
-        //public virtual DbSet<CustomDayTimeSlip> CustomDayTimeSlips { get; set; }
+        public virtual DbSet<CustomDay_WBI> Timeslip_Templates { get; set; }
 
         // this is not auto generated
         public KORE_Interactive_MSCRMContext(DbContextOptions<KORE_Interactive_MSCRMContext> options)
@@ -539,31 +539,30 @@ namespace AWSServerlessWebApi.Models
 
             });
 
-            //modelBuilder.Entity<CustomDayTimeSlip>(entity =>
-            //{
-            //    entity.HasKey(e => e.CustomDayId);
-            //    entity.HasKey(e => e.TimeSlipId);
+            modelBuilder.Entity<CustomDay_WBI>(entity =>
+            {
+                entity.HasKey(e => e.CustomDayId);
+                entity.HasKey(e => e.NewChangeRequestId);
 
-            //    entity.Property(e => e.CustomDayId)
-            //    .HasColumnName("CustomDay_Id")
-            //    .ValueGeneratedNever();
+                entity.Property(e => e.CustomDayId)
+                .HasColumnName("CustomDay_Id")
+                .ValueGeneratedNever();
 
 
-            //    entity.Property(e => e.TimeSlipId)
-            //    .HasColumnName("TimeSlip_Id")
-            //    .ValueGeneratedNever();
+                entity.Property(e => e.NewChangeRequestId)
+                .HasColumnName("New_ChangeRequestId")
+                .ValueGeneratedNever();
 
-            //    entity.HasOne(e => e.CustomDay)
-            //        .WithMany(p => p.CustomDayTimeSlips)
-            //        .HasForeignKey(d => d.CustomDayId)
-            //        .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(e => e.CustomDay)
+                    .WithMany(p => p.Timeslip_Templates)
+                    .HasForeignKey(d => d.CustomDayId)
+                    .OnDelete(DeleteBehavior.Restrict);
 
-            //    entity.HasOne(e => e.GetNewTimesheetEntryExtensionBase)
-            //    .WithMany(e => e.CustomDayTimeSlips)
-            //    .HasForeignKey(e=> e.TimeSlipId)
-            //    .OnDelete(DeleteBehavior.Restrict);
-
-            //});
+                entity.HasOne(e => e.WBI)
+                .WithMany(e => e.Timeslip_Templates)
+                .HasForeignKey(e => e.NewChangeRequestId)
+                .OnDelete(DeleteBehavior.Restrict);
+            });
 
 
 
