@@ -49,6 +49,7 @@ namespace AWSServerlessWebApi.Repositories
             return _context.NewChangeRequestExtensionBase.Where(i => i.NewChangeRequestId == id)
                 .FirstOrDefault();
         }
+
         public NewChangeRequestExtensionBase EditWBI(WBIVM wbiVM)
         {
             Guid wbiGuid = Guid.Parse(wbiVM.WBI_Id);

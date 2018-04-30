@@ -6,11 +6,14 @@ using AWSServerlessWebApi.Models;
 using AWSServerlessWebApi.ViewModels;
 using AWSServerlessWebApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 //using System.Web.Http;
 
 namespace AWSServerlessWebApi.Controllers
 {
     [Produces("application/json")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("project")]
     public class ProjectController : Controller
     {
@@ -45,6 +48,16 @@ namespace AWSServerlessWebApi.Controllers
 
             return new OkObjectResult(projectRepo.GetOneProject(guid_id));
         }
+
+        [HttpGet]
+        [Route("GetOneProjectByWBIId/{id}")]
+        public IActionResult GetOneProjectByWBIId(string id)
+        {
+            Guid guid_id = Guid.Parse(id);
+            return new OkObjectResult(projectRepo.GetOneProjectByWBIId(guid_id));
+        }
+
+
         [HttpGet]
         [Route("GetAllProjectsByClientId/{id}")]
         public IActionResult GetAllProjectsByClientId(string id)

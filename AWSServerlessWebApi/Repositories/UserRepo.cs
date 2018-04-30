@@ -1,8 +1,13 @@
 ﻿using AWSServerlessWebApi.Models;
 using AWSServerlessWebApi.ViewModels;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace AWSServerlessWebApi.Repositories
@@ -10,11 +15,14 @@ namespace AWSServerlessWebApi.Repositories
     public class UserRepo
     {
         KORE_Interactive_MSCRMContext _context;
+        
 
         public UserRepo(KORE_Interactive_MSCRMContext context)
         {
             _context = context;
         }
+
+
 
         public void CreateUser(UserVM userVM)
         {
@@ -29,6 +37,19 @@ namespace AWSServerlessWebApi.Repositories
 
             _context.Users.Add(user);
             _context.SaveChanges();
+        }
+
+        public string SignIn(LoginVM model)
+        {
+            User user = _context.Users.Where(i => i.Email == model.Email && i.Password == model.Password).FirstOrDefault();
+            if (user != null)
+            {
+                return user.UserId.ToString();
+            }else
+            {
+                return "karl";
+            }
+
         }
 
         public List<User> GetAllUsers()

@@ -74,9 +74,17 @@ namespace AWSServerlessWebApi.Repositories
             return _context.NewProjectExtensionBase.ToList();
         }
 
-        public NewProjectExtensionBase GetOneProject(Guid id)
+        public NewProjectExtensionBase GetOneProject(Guid? id)
         {
             return _context.NewProjectExtensionBase.Where(i => i.NewProjectId == id).FirstOrDefault();
+        }
+
+        public NewProjectExtensionBase GetOneProjectByWBIId(Guid id)
+        {
+
+            Guid? guid = _context.NewChangeRequestExtensionBase.Where(i => i.NewChangeRequestId == id).FirstOrDefault().NewProjectId;
+            return GetOneProject(guid);
+
         }
 
         public List<NewProjectExtensionBase> GetAllProjectsByClientId(Guid projectId)

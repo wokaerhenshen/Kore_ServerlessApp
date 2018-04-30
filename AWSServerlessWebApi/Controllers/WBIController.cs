@@ -8,10 +8,13 @@ using Microsoft.AspNetCore.Mvc;
 using AWSServerlessWebApi.Models;
 
 using AWSServerlessWebApi.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace AWSServerlessWebApi.Controllers
 {
     [Produces("application/json")]
+    
     [Route("wbi")]
     public class WBIController : Controller
     {
@@ -51,6 +54,13 @@ namespace AWSServerlessWebApi.Controllers
             Guid guid = Guid.Parse(id);
             return new OkObjectResult(wbiRepo.GetOneWBI(guid));
         }
+
+        //[HttpGet]
+        //[Route("GetProjectNameByWBI/{id}")]
+        //public string GetProjectNameByWBI(string id)
+        //{
+        //    return wbiRepo.GetProjectNameByWBI(id);
+        //}
 
         [HttpPut]
         [Route("Edit")]

@@ -8,10 +8,13 @@ using Microsoft.AspNetCore.Mvc;
 
 using AWSServerlessWebApi.Models;
 using AWSServerlessWebApi.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace AWSServerlessWebApi.Controllers
 {
     [Produces("application/json")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("timeslip")]
     public class TimeslipController : Controller
     {
@@ -70,12 +73,12 @@ namespace AWSServerlessWebApi.Controllers
             return new ObjectResult(timeslip);
         }
         //add a method to assign a timeslip to a custom day
-        [HttpDelete]
-        [Route("Delete/{id}")]
-        public IActionResult Delete(string timeslipId)
+        [HttpPost]
+        [Route("Delete")]
+        public IActionResult Delete([FromBody] DeleteTSVM timeslipId)
         {
            
-            bool success = timeslipRepo.DeleteOneTimeslip(timeslipId);
+            bool success = timeslipRepo.DeleteOneTimeslip(timeslipId.TimeSlipId);
             
             return new ObjectResult(success);
         }

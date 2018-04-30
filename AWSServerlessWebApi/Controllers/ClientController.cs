@@ -7,11 +7,13 @@ using AWSServerlessWebApi.Repositories;
 using AWSServerlessWebApi.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using AWSServerlessWebApi.Utility;
-
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace AWSServerlessWebApi.Controllers
 {
     [Produces("application/json")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("client")]
     public class ClientController : Controller
     {
