@@ -12,9 +12,6 @@ namespace AWSServerlessWebApi.ViewModels
         public string UserId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public List<TimeslipVM> TimeSlip { get; set; }
-
-    //  public virtual ICollection<TimeslipVM> Timeslips { get; set; }
+        public List<CustomDay_WBIVM> TimeSlip_Templates { get; set; }
     }
-
 }

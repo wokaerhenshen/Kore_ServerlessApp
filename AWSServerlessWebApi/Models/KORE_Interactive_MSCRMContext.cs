@@ -541,14 +541,12 @@ namespace AWSServerlessWebApi.Models
 
             modelBuilder.Entity<CustomDay_WBI>(entity =>
             {
-                entity.HasKey(e => e.CustomDayId);
-                entity.HasKey(e => e.NewChangeRequestId);
+                entity.HasKey(e => e.TimeslipTemplateId);
 
                 entity.Property(e => e.CustomDayId)
                 .HasColumnName("CustomDay_Id")
                 .ValueGeneratedNever();
-
-
+                
                 entity.Property(e => e.NewChangeRequestId)
                 .HasColumnName("New_ChangeRequestId")
                 .ValueGeneratedNever();

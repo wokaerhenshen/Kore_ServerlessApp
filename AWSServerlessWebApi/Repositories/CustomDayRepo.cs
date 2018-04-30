@@ -16,7 +16,7 @@ namespace AWSServerlessWebApi.Repositories
             _context = context;
         }
 
-        private string CreateCustomDay(CustomDayVM customDay)
+        public CustomDay CreateCustomDay(CustomDayVM customDay)
         {
             CustomDay newCustomDay = new CustomDay()
             {
@@ -29,29 +29,29 @@ namespace AWSServerlessWebApi.Repositories
             _context.CustomDays.Add(newCustomDay);
             _context.SaveChanges();
 
-            return newCustomDay.CustomDayId;
+            return newCustomDay;
         }
 
-        public bool CreateCustomDayWithTimeslips(CustomDayVM customDayVM)
-        {
-            //create custom day
-            string dayId = CreateCustomDay(customDayVM);
-            //set the ID?
+        //public bool CreateCustomDayWithTimeslipTemplate(CustomDayVM customDayVM)
+        //{
+        //    //create custom day
+        //    string dayId = CreateCustomDay(customDayVM);
+        //    //set the ID?
 
-            //create timeslips
-            if (customDayVM.TimeSlip != null)
-            {
-                foreach (TimeslipVM ts in customDayVM.TimeSlip)
-                {
-                    ts.DayId = dayId;
+        //    //create timeslips
+        //    if (customDayVM.TimeSlip != null)
+        //    {
+        //        foreach (TimeslipVM ts in customDayVM.TimeSlip)
+        //        {
+        //            ts.DayId = dayId;
 
-                    TimeslipRepo timeslipRepo = new TimeslipRepo(_context);
-                    timeslipRepo.CreateTimeslip(ts);
-                }
+        //            TimeslipRepo timeslipRepo = new TimeslipRepo(_context);
+        //            timeslipRepo.CreateTimeslip(ts);
+        //        }
                 
-            }
-            return true;
-        }
+        //    }
+        //    return true;
+        //}
 
         public List<CustomDay> GetAllCustomDays()
         {
