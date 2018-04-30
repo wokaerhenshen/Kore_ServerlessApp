@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 namespace AWSServerlessWebApi.Controllers
 {
     [Produces("application/json")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("timeslip")]
     public class TimeslipController : Controller
     {

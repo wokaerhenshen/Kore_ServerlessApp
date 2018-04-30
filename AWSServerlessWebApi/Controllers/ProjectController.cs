@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 namespace AWSServerlessWebApi.Controllers
 {
     [Produces("application/json")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("project")]
     public class ProjectController : Controller
     {
