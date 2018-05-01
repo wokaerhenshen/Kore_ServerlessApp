@@ -61,7 +61,7 @@ namespace AWSServerlessWebApi.Repositories
         {
             return _context.Users.Where(i => i.UserId == id).FirstOrDefault();
         }
-
+        
         public void UpdateOneUser(UserVM userVM)
         {
 

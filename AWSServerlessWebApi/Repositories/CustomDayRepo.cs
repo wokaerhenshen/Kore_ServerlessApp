@@ -10,10 +10,18 @@ namespace AWSServerlessWebApi.Repositories
     public class CustomDayRepo
     {
         KORE_Interactive_MSCRMContext _context;
+        private static Random random = new Random();
 
         public CustomDayRepo(KORE_Interactive_MSCRMContext context)
         {
             _context = context;
+        }
+
+        public static string RandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
         public CustomDay CreateCustomDay(CustomDayVM customDay)
@@ -131,7 +139,7 @@ namespace AWSServerlessWebApi.Repositories
 
         public string GenerateCustomDayId()
         {
-            return (DateTime.Now + "j2lasdere").Trim();
+            return RandomString(10);
         }
     }
 }

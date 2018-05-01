@@ -102,16 +102,19 @@ namespace AWSServerlessWebApi.Repositories
         //    return true;
         //}
 
-        public void CreateTimeslipsByCustomDay(CustomDateVM customDateVM)
+        public bool CreateTimeslipsByCustomDay(CustomDateVM customDateVM)
         {
             CustomDay_WBIRepo customDay_WBIRepo = new CustomDay_WBIRepo(_context);
+            CustomDayRepo customDayRepo = new CustomDayRepo(_context);
 
             var timeslipTemplateList = customDay_WBIRepo.GetAllTimeslipTemplateByCustomDay(customDateVM.CustomdayId);
+            CustomDay customDay = customDayRepo.GetOneCustomDay(customDateVM.CustomdayId);
 
             foreach (CustomDay_WBI tt in timeslipTemplateList)
             {
                 DateTime newStartTime = new DateTime(DateTime.Parse(customDateVM.Date).Year, DateTime.Parse(customDateVM.Date).Month, DateTime.Parse(customDateVM.Date).Day, tt.StartTime.Hour, tt.StartTime.Minute, tt.StartTime.Second);
                 DateTime newEndTime = new DateTime(DateTime.Parse(customDateVM.Date).Year, DateTime.Parse(customDateVM.Date).Month, DateTime.Parse(customDateVM.Date).Day, tt.EndTime.Hour, tt.EndTime.Minute, tt.EndTime.Second);
+
                 TimeslipVM newTimeslip = new TimeslipVM()
                 {
                     TimeslipId = null,
@@ -120,10 +123,11 @@ namespace AWSServerlessWebApi.Repositories
                     Remarks = tt.Remarks,
                     DayId = customDateVM.CustomdayId,
                     WBI_Id = Convert.ToString(tt.NewChangeRequestId),
-                    UserId = Convert.ToString(tt.CustomDay.UserId)
+                    UserId = Convert.ToString(customDay.UserId)
                 };
                 CreateTimeslip(newTimeslip);
             }
+            return true;
         }
         public List<NewTimesheetEntryExtensionBase> GetAllTimeslips()
         {
