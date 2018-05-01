@@ -31,7 +31,6 @@ namespace AWSServerlessWebApi.Controllers
         {
             return new ObjectResult(timeslipRepo.CreateTimeslip(timeslipVM));
         }
-        //this is duplicated in CustomDay_WBIController
         //[HttpPost]
         //[Route("CreateByCustomday")]
         //public bool CreateByCustomday([FromBody] CustomDateVM customDateVM)

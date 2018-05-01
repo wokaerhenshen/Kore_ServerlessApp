@@ -546,7 +546,7 @@ namespace AWSServerlessWebApi.Models
                 entity.Property(e => e.CustomDayId)
                 .HasColumnName("CustomDay_Id")
                 .ValueGeneratedNever();
-                
+
                 entity.Property(e => e.NewChangeRequestId)
                 .HasColumnName("New_ChangeRequestId")
                 .ValueGeneratedNever();
@@ -554,12 +554,12 @@ namespace AWSServerlessWebApi.Models
                 entity.HasOne(e => e.CustomDay)
                     .WithMany(p => p.Timeslip_Templates)
                     .HasForeignKey(d => d.CustomDayId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne(e => e.WBI)
                 .WithMany(e => e.Timeslip_Templates)
                 .HasForeignKey(e => e.NewChangeRequestId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
             });
 
 
