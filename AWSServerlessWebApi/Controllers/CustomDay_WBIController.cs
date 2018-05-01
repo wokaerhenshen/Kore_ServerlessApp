@@ -46,10 +46,10 @@ namespace AWSServerlessWebApi.Controllers
 
         [HttpPost]
         [Route("CreateAllTimeslipsUsingCustomDay")]
-        public void CreateAllTimeslipsFromCustomDay([FromBody] CustomDateVM customDateVM)
+        public bool CreateAllTimeslipsFromCustomDay([FromBody] CustomDateVM customDateVM)
         {
             timeslipRepo.CreateTimeslipsByCustomDay(customDateVM);
-            return;
+            return true;
            
         }
 
