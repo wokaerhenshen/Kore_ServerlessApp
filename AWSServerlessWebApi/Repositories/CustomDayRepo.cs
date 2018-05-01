@@ -26,6 +26,7 @@ namespace AWSServerlessWebApi.Repositories
                 UserId = Guid.Parse(customDay.UserId)
                 
             };
+            
             _context.CustomDays.Add(newCustomDay);
             _context.SaveChanges();
 

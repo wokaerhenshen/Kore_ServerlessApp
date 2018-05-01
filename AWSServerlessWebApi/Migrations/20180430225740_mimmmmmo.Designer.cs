@@ -11,14 +11,15 @@ using System;
 namespace AWSServerlessWebApi.Migrations
 {
     [DbContext(typeof(KORE_Interactive_MSCRMContext))]
-    [Migration("20180427082105_mimo")]
-    partial class mimo
+    [Migration("20180430225740_mimmmmmo")]
+    partial class mimmmmmo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.2-rtm-10011");
+                .HasAnnotation("ProductVersion", "2.0.2-rtm-10011")
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("AWSServerlessWebApi.Models.AccountBase", b =>
                 {
@@ -265,6 +266,32 @@ namespace AWSServerlessWebApi.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Custom_Day");
+                });
+
+            modelBuilder.Entity("AWSServerlessWebApi.Models.CustomDay_WBI", b =>
+                {
+                    b.Property<string>("TimeslipTemplateId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CustomDayId")
+                        .HasColumnName("CustomDay_Id");
+
+                    b.Property<DateTime>("EndTime");
+
+                    b.Property<Guid?>("NewChangeRequestId")
+                        .HasColumnName("New_ChangeRequestId");
+
+                    b.Property<string>("Remarks");
+
+                    b.Property<DateTime>("StartTime");
+
+                    b.HasKey("TimeslipTemplateId");
+
+                    b.HasIndex("CustomDayId");
+
+                    b.HasIndex("NewChangeRequestId");
+
+                    b.ToTable("Timeslip_Templates");
                 });
 
             modelBuilder.Entity("AWSServerlessWebApi.Models.NewChangeRequestExtensionBase", b =>
@@ -754,6 +781,19 @@ namespace AWSServerlessWebApi.Migrations
                         .WithMany("CustomDay")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("AWSServerlessWebApi.Models.CustomDay_WBI", b =>
+                {
+                    b.HasOne("AWSServerlessWebApi.Models.CustomDay", "CustomDay")
+                        .WithMany("Timeslip_Templates")
+                        .HasForeignKey("CustomDayId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("AWSServerlessWebApi.Models.NewChangeRequestExtensionBase", "WBI")
+                        .WithMany("Timeslip_Templates")
+                        .HasForeignKey("NewChangeRequestId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("AWSServerlessWebApi.Models.NewProjectExtensionBase", b =>

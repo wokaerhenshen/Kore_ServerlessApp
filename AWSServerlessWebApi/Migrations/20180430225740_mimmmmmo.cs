@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace AWSServerlessWebApi.Migrations
 {
-    public partial class mimo : Migration
+    public partial class mimmmmmo : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -345,6 +345,34 @@ namespace AWSServerlessWebApi.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Timeslip_Templates",
+                columns: table => new
+                {
+                    TimeslipTemplateId = table.Column<string>(nullable: false),
+                    CustomDay_Id = table.Column<string>(nullable: true),
+                    EndTime = table.Column<DateTime>(nullable: false),
+                    New_ChangeRequestId = table.Column<Guid>(nullable: true),
+                    Remarks = table.Column<string>(nullable: true),
+                    StartTime = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Timeslip_Templates", x => x.TimeslipTemplateId);
+                    table.ForeignKey(
+                        name: "FK_Timeslip_Templates_Custom_Day_CustomDay_Id",
+                        column: x => x.CustomDay_Id,
+                        principalTable: "Custom_Day",
+                        principalColumn: "CustomDayId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Timeslip_Templates_New_ChangeRequestExtensionBase_New_ChangeRequestId",
+                        column: x => x.New_ChangeRequestId,
+                        principalTable: "New_ChangeRequestExtensionBase",
+                        principalColumn: "New_ChangeRequestId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AccountBase_MasterId",
                 table: "AccountBase",
@@ -380,16 +408,20 @@ namespace AWSServerlessWebApi.Migrations
                 table: "StringMap",
                 columns: new[] { "ObjectTypeCode", "AttributeName", "AttributeValue", "LangId", "OrganizationId" },
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Timeslip_Templates_CustomDay_Id",
+                table: "Timeslip_Templates",
+                column: "CustomDay_Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Timeslip_Templates_New_ChangeRequestId",
+                table: "Timeslip_Templates",
+                column: "New_ChangeRequestId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Custom_Day");
-
-            migrationBuilder.DropTable(
-                name: "New_ChangeRequestExtensionBase");
-
             migrationBuilder.DropTable(
                 name: "New_ProjectExtensionBase");
 
@@ -403,7 +435,16 @@ namespace AWSServerlessWebApi.Migrations
                 name: "StringMap");
 
             migrationBuilder.DropTable(
+                name: "Timeslip_Templates");
+
+            migrationBuilder.DropTable(
                 name: "AccountBase");
+
+            migrationBuilder.DropTable(
+                name: "Custom_Day");
+
+            migrationBuilder.DropTable(
+                name: "New_ChangeRequestExtensionBase");
 
             migrationBuilder.DropTable(
                 name: "Users");
