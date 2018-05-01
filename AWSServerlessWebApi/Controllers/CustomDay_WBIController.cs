@@ -15,9 +15,12 @@ namespace AWSServerlessWebApi.Controllers
     public class CustomDay_WBIController : Controller
     {
         CustomDay_WBIRepo customDay_WBIRepo;
+        TimeslipRepo timeslipRepo;
+
         public CustomDay_WBIController(KORE_Interactive_MSCRMContext context)
         {
             customDay_WBIRepo = new CustomDay_WBIRepo(context);
+            timeslipRepo = new TimeslipRepo(context);
         }
 
         [HttpPost]
@@ -39,6 +42,15 @@ namespace AWSServerlessWebApi.Controllers
         public IActionResult GetOneTimeslipTemplate(string id)
         {
             return new OkObjectResult(customDay_WBIRepo.GetOneTimeslipTemplate(id));
+        }
+
+        [HttpPost]
+        [Route("CreateAllTimeslipsUsingCustomDay")]
+        public bool CreateAllTimeslipsFromCustomDay([FromBody] CustomDateVM customDateVM)
+        {
+            timeslipRepo.CreateTimeslipsByCustomDay(customDateVM);
+            return true;
+           
         }
 
         [HttpPut]

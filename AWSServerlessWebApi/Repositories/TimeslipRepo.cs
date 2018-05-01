@@ -63,30 +63,67 @@ namespace AWSServerlessWebApi.Repositories
             if (wbi.NewActualHours > wbi.NewEstimatedHours)
             {
                 throw new ArgumentException("Alloted hours for this WBI has been maxed out.");
-            } else
-            {
-                _context.NewTimesheetEntryExtensionBase.Add(timeslip);
-                _context.SaveChanges();
             }
+
+            foreach (var item in _context.NewTimesheetEntryExtensionBase)
+            {
+                if (item.NewTimesheetEntryId != timeslip.NewTimesheetEntryId)
+                {
+                    if (timeslip.NewStartTask <= item.NewEndTask || item.NewStartTask >= timeslip.NewEndTask)
+                    {
+                        throw new ArgumentException("Times cannot overlap");
+                    }
+                }
+            }
+            _context.NewTimesheetEntryExtensionBase.Add(timeslip);
+            _context.SaveChanges();
 
             return timeslip;
         }
+        //update this one
+        //public bool CreateByCustomday(CustomDateVM customDateVM)
+        //{
+        //    List<NewTimesheetEntryExtensionBase> newTimesheetEntryExtensionBases= _context.NewTimesheetEntryExtensionBase.Where(i => i.CustomDayId == customDateVM.CustomdayId).ToList();
+        //    foreach(var timeslip in newTimesheetEntryExtensionBases)
+        //    {
+        //        timeslip.NewStartTask = new DateTime(DateTime.Parse(customDateVM.Date).Year, DateTime.Parse(customDateVM.Date).Month,DateTime.Parse(customDateVM.Date).Day,timeslip.NewStartTask.Value.Hour,timeslip.NewStartTask.Value.Minute, timeslip.NewStartTask.Value.Second);
+        //        timeslip.NewEndTask = new DateTime(DateTime.Parse(customDateVM.Date).Year, DateTime.Parse(customDateVM.Date).Month, DateTime.Parse(customDateVM.Date).Day, timeslip.NewEndTask.Value.Hour, timeslip.NewEndTask.Value.Minute, timeslip.NewEndTask.Value.Second);
+        //        timeslip.NewTimesheetEntryId = Guid.NewGuid();
+        //        timeslip.CustomDayId = "";
+        //        _context.NewTimesheetEntryExtensionBase.Add(timeslip);
+        //        _context.SaveChanges();
+        //    };
 
-        public bool CreateByCustomday(CustomDateVM customDateVM)
+        //    return true;
+        //}
+
+        public bool CreateTimeslipsByCustomDay(CustomDateVM customDateVM)
         {
-            List<NewTimesheetEntryExtensionBase> newTimesheetEntryExtensionBases= _context.NewTimesheetEntryExtensionBase.Where(i => i.CustomDayId == customDateVM.CustomdayId).ToList();
-            foreach(var timeslip in newTimesheetEntryExtensionBases)
+            CustomDay_WBIRepo customDay_WBIRepo = new CustomDay_WBIRepo(_context);
+            CustomDayRepo customDayRepo = new CustomDayRepo(_context);
+
+            var timeslipTemplateList = customDay_WBIRepo.GetAllTimeslipTemplateByCustomDay(customDateVM.CustomdayId);
+            CustomDay customDay = customDayRepo.GetOneCustomDay(customDateVM.CustomdayId);
+
+            foreach (CustomDay_WBI tt in timeslipTemplateList)
             {
-                timeslip.NewStartTask = new DateTime(DateTime.Parse(customDateVM.Date).Year, DateTime.Parse(customDateVM.Date).Month,DateTime.Parse(customDateVM.Date).Day,timeslip.NewStartTask.Value.Hour,timeslip.NewStartTask.Value.Minute, timeslip.NewStartTask.Value.Second);
-                timeslip.NewEndTask = new DateTime(DateTime.Parse(customDateVM.Date).Year, DateTime.Parse(customDateVM.Date).Month, DateTime.Parse(customDateVM.Date).Day, timeslip.NewEndTask.Value.Hour, timeslip.NewEndTask.Value.Minute, timeslip.NewEndTask.Value.Second);
-                timeslip.NewTimesheetEntryId = Guid.NewGuid();
-                timeslip.CustomDayId = "";
-                _context.NewTimesheetEntryExtensionBase.Add(timeslip);
-                _context.SaveChanges();
-            };
+                DateTime newStartTime = new DateTime(DateTime.Parse(customDateVM.Date).Year, DateTime.Parse(customDateVM.Date).Month, DateTime.Parse(customDateVM.Date).Day, tt.StartTime.Hour, tt.StartTime.Minute, tt.StartTime.Second);
+                DateTime newEndTime = new DateTime(DateTime.Parse(customDateVM.Date).Year, DateTime.Parse(customDateVM.Date).Month, DateTime.Parse(customDateVM.Date).Day, tt.EndTime.Hour, tt.EndTime.Minute, tt.EndTime.Second);
+
+                TimeslipVM newTimeslip = new TimeslipVM()
+                {
+                    TimeslipId = null,
+                    StartTime = Convert.ToString(newStartTime),
+                    EndTime = Convert.ToString(newEndTime),
+                    Remarks = tt.Remarks,
+                    DayId = customDateVM.CustomdayId,
+                    WBI_Id = Convert.ToString(tt.NewChangeRequestId),
+                    UserId = Convert.ToString(customDay.UserId)
+                };
+                CreateTimeslip(newTimeslip);
+            }
             return true;
         }
-
         public List<NewTimesheetEntryExtensionBase> GetAllTimeslips()
         {
             return _context.NewTimesheetEntryExtensionBase.ToList();

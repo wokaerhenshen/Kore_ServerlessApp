@@ -17,8 +17,9 @@ namespace AWSServerlessWebApi.Repositories
             _context = context;
         }
 
-        public NewChangeRequestExtensionBase CreateWBI( WBIVM wbiVM)
+        public NewChangeRequestExtensionBase CreateWBI(WBIVM wbiVM)
         {
+
             Guid projectGuid = Guid.Parse(wbiVM.ProjectId);
             NewChangeRequestExtensionBase wbi = new NewChangeRequestExtensionBase()
             {
