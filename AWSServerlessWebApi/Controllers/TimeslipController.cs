@@ -32,12 +32,12 @@ namespace AWSServerlessWebApi.Controllers
             return new ObjectResult(timeslipRepo.CreateTimeslip(timeslipVM));
         }
 
-        [HttpPost]
-        [Route("CreateByCustomday")]
-        public bool CreateByCustomday([FromBody] CustomDateVM customDateVM)
-        {
-            return timeslipRepo.CreateByCustomday(customDateVM);
-        }
+        //[HttpPost]
+        //[Route("CreateByCustomday")]
+        //public bool CreateByCustomday([FromBody] CustomDateVM customDateVM)
+        //{
+        //    return timeslipRepo.CreateByCustomday(customDateVM);
+        //}
 
         [HttpGet]
         [Route("List")]
