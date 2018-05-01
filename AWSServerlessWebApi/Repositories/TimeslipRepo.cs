@@ -69,10 +69,6 @@ namespace AWSServerlessWebApi.Repositories
             {
                 if (item.NewTimesheetEntryId != timeslip.NewTimesheetEntryId)
                 {
-                    //if (timeslip.NewStartTask <= item.NewEndTask || item.NewStartTask >= timeslip.NewEndTask)
-                    //{
-                    //    throw new ArgumentException("Times cannot overlap");
-                    //}
                     if (item.NewStartTask <= timeslip.NewEndTask && item.NewEndTask >= timeslip.NewStartTask)
                     {
                         throw new ArgumentException("Times cannot overlap");
