@@ -43,10 +43,26 @@ namespace AWSServerlessWebApi.Repositories
             {
                 throw new ArgumentNullException("You need to enter an end time...");
             }
-            
-            _context.Timeslip_Templates.Add(timeslip_template);
-            _context.SaveChanges();
-            
+
+            foreach( var item in _context.Timeslip_Templates)
+            {
+                if(item.TimeslipTemplateId != timeslip_template.TimeslipTemplateId)
+                {
+                    if(item.StartTime.Hour >= timeslip_template.EndTime.Hour || timeslip_template.StartTime.Hour >= item.EndTime.Hour)
+                    {
+                        throw new ArgumentException("Times cannot overlap");
+                    }
+                    else
+                    {
+                        _context.Timeslip_Templates.Add(timeslip_template);
+                        _context.SaveChanges();
+
+                        //return timeslip_template;
+                    } 
+                }
+                //bool overlap = _context.Timeslip_Templates.Any(a => timeslip_template.TimeslipTemplateId != a.TimeslipTemplateId && !((a.StartTime >= timeslip_template.EndTime
+                  //                                   || timeslip_template.StartTime >= a.EndTime)));
+            }
             return timeslip_template;
         }
 
