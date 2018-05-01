@@ -64,12 +64,17 @@ namespace AWSServerlessWebApi.Repositories
             {
                 throw new ArgumentException("Alloted hours for this WBI has been maxed out.");
             }
-
+            // a.start <= b.end && a.end >= b.start 
             foreach (var item in _context.NewTimesheetEntryExtensionBase)
             {
                 if (item.NewTimesheetEntryId != timeslip.NewTimesheetEntryId)
                 {
-                    if (timeslip.NewStartTask <= item.NewEndTask || item.NewStartTask >= timeslip.NewEndTask)
+                    //if (timeslip.NewStartTask <= item.NewEndTask || item.NewStartTask >= timeslip.NewEndTask)
+                    //{
+                    //    throw new ArgumentException("Times cannot overlap");
+                    //}
+                    if ((item.NewStartTask <= timeslip.NewEndTask && item.NewEndTask >= timeslip.NewStartTask)
+                        && (timeslip.NewStartTask >= item.NewStartTask && timeslip.NewEndTask <= item.NewEndTask))
                     {
                         throw new ArgumentException("Times cannot overlap");
                     }

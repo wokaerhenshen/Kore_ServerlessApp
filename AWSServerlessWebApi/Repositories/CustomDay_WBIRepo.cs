@@ -48,7 +48,8 @@ namespace AWSServerlessWebApi.Repositories
             {
                 if(item.TimeslipTemplateId != timeslip_template.TimeslipTemplateId)
                 {
-                    if(timeslip_template.StartTime <= item.EndTime || item.StartTime >= timeslip_template.EndTime)
+                    if((timeslip_template.StartTime <= item.EndTime || item.StartTime >= timeslip_template.EndTime)
+                        && (timeslip_template.StartTime >= item.EndTime && timeslip_template.EndTime <= item.EndTime))
                     {
                         throw new ArgumentException("Times cannot overlap");
                     }
