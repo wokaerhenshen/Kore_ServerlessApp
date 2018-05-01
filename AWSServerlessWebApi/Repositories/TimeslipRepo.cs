@@ -84,7 +84,6 @@ namespace AWSServerlessWebApi.Repositories
                 _context.NewTimesheetEntryExtensionBase.Add(timeslip);
                 _context.SaveChanges();
             };
-
             return true;
         }
 
