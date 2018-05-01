@@ -63,11 +63,20 @@ namespace AWSServerlessWebApi.Repositories
             if (wbi.NewActualHours > wbi.NewEstimatedHours)
             {
                 throw new ArgumentException("Alloted hours for this WBI has been maxed out.");
-            } else
-            {
-                _context.NewTimesheetEntryExtensionBase.Add(timeslip);
-                _context.SaveChanges();
             }
+
+            foreach (var item in _context.NewTimesheetEntryExtensionBase)
+            {
+                if (item.NewTimesheetEntryId != timeslip.NewTimesheetEntryId)
+                {
+                    if (timeslip.NewStartTask <= item.NewEndTask || item.NewStartTask >= timeslip.NewEndTask)
+                    {
+                        throw new ArgumentException("Times cannot overlap");
+                    }
+                }
+            }
+            _context.NewTimesheetEntryExtensionBase.Add(timeslip);
+            _context.SaveChanges();
 
             return timeslip;
         }
