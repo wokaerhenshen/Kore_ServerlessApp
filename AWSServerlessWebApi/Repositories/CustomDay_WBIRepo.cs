@@ -18,15 +18,18 @@ namespace AWSServerlessWebApi.Repositories
 
         public CustomDay_WBI CreateTimeslipTemplate(CustomDay_WBIVM customDay_WBIVM)
         {
+            //convert wbi id to Guid
             Guid wbiGuid = Guid.Parse(customDay_WBIVM.WBI_Id);
-            // application user needs to be here
+            
+            
             CustomDay_WBI timeslip_template = new CustomDay_WBI()
             {
                 NewChangeRequestId = wbiGuid,
                 CustomDayId = customDay_WBIVM.CustomDayId,
                 Remarks = customDay_WBIVM.Remarks
             };
-
+            //check if the start time is not null
+            //else parse it into a datetime nad assign it to the timeslip template 
             if (customDay_WBIVM.StartTime != null)
             {
                 timeslip_template.StartTime = DateTime.Parse(customDay_WBIVM.StartTime);
@@ -35,6 +38,8 @@ namespace AWSServerlessWebApi.Repositories
             {
                 throw new ArgumentNullException("You need to enter a start time...");
             }
+            //check if the end time is not null
+            //else parse it into a datetime nad assign it to the timeslip template 
             if (customDay_WBIVM.EndTime != null)
             {
                 timeslip_template.EndTime = DateTime.Parse(customDay_WBIVM.EndTime);
@@ -44,7 +49,9 @@ namespace AWSServerlessWebApi.Repositories
                 throw new ArgumentNullException("You need to enter an end time...");
             }
 
-            foreach( var item in _context.Timeslip_Templates)
+            var timeslipTemplates = GetAllTimeslipTemplateByCustomDay(customDay_WBIVM.CustomDayId);
+
+            foreach( var item in timeslipTemplates)
             {
                 if(item.TimeslipTemplateId != timeslip_template.TimeslipTemplateId)
                 {
