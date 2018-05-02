@@ -19,16 +19,73 @@ namespace AWSServerlessWebApi.Controllers
     public class TimeslipController : Controller
     {
         TimeslipRepo timeslipRepo;
+        WBIRepo wbiRepo;
 
         public TimeslipController(KORE_Interactive_MSCRMContext context)
         {
             timeslipRepo = new TimeslipRepo(context);
+            wbiRepo = new WBIRepo(context);
         }
 
         [HttpPost]
         [Route("Create")]
         public IActionResult Create([FromBody] TimeslipVM timeslipVM)
         {
+            DateTime newStartTime;
+            DateTime newEndTime;
+
+            //check if the dates are null
+            if ((timeslipVM.StartTime == null || timeslipVM.StartTime == "") || 
+                (timeslipVM.EndTime == null || timeslipVM.EndTime == ""))
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Invalid time input. Please enter a valid time." });
+            }
+
+            //check if the user id is null
+            if (timeslipVM.UserId == null || timeslipVM.UserId == "")
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Invalid user. Please log in." });
+            }
+            //check if the wbi id is null
+            if (timeslipVM.WBI_Id == null || timeslipVM.WBI_Id == "")
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Please enter a Work Breakdown Item." });
+            }
+            //check if the end time is earlier than start time
+            if ( Convert.ToDateTime(timeslipVM.StartTime) >= Convert.ToDateTime(timeslipVM.EndTime))
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Invalid time input. End time should be later that start time." });
+            }
+            //check to make sure the actual hours do not exceed the estimated hours
+            TimeSpan? duration = Convert.ToDateTime(timeslipVM.EndTime) - Convert.ToDateTime(timeslipVM.StartTime);
+            int durationInHours = (int)duration?.TotalHours;
+            Guid wbiGuid = Guid.Parse(timeslipVM.WBI_Id);
+            var wbi = wbiRepo.GetOneWBI(wbiGuid);
+            int? localActualHours = wbi.NewActualHours;
+            localActualHours += durationInHours;
+            if (localActualHours > wbi.NewEstimatedHours)
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Alloted hours for this WBI has been maxed out." });
+            }
+            //check to make sure two timeslips do not overlap
+            Guid userGuid = Guid.Parse(timeslipVM.UserId);
+            var timeslipListByUserId = timeslipRepo.GetAllTimeslipsByUserId(userGuid);
+            var date = Convert.ToDateTime(timeslipVM.StartTime);
+            var sameDate = date.Date;
+            var timeslipListByUserIdOnTheSameDay = timeslipListByUserId.Where(u => Convert.ToDateTime(u.NewStartTask).Date == sameDate);
+            //Guid timeslipGuid = Guid.Parse(timeslipVM.TimeslipId);
+            foreach (var item in timeslipListByUserIdOnTheSameDay)
+            {
+                //if (item.NewTimesheetEntryId != timeslipGuid)
+                //{
+                    if (item.NewStartTask <= Convert.ToDateTime(timeslipVM.EndTime) && 
+                        item.NewEndTask >= Convert.ToDateTime(timeslipVM.StartTime))
+                    {
+                        return new BadRequestObjectResult(new { ErrorMessage = "Times cannot overlap" });
+                    }
+                //}
+            }
+
             return new ObjectResult(timeslipRepo.CreateTimeslip(timeslipVM));
         }
         //[HttpPost]

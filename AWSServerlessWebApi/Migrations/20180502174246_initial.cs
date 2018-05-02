@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace AWSServerlessWebApi.Migrations
 {
-    public partial class mimmmmmo : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -364,13 +364,13 @@ namespace AWSServerlessWebApi.Migrations
                         column: x => x.CustomDay_Id,
                         principalTable: "Custom_Day",
                         principalColumn: "CustomDayId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Timeslip_Templates_New_ChangeRequestExtensionBase_New_ChangeRequestId",
                         column: x => x.New_ChangeRequestId,
                         principalTable: "New_ChangeRequestExtensionBase",
                         principalColumn: "New_ChangeRequestId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

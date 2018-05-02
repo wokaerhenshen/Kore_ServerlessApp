@@ -1,10 +1,12 @@
 ﻿using AWSServerlessWebApi.Models;
 using AWSServerlessWebApi.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web.Http.Results;
 
 namespace AWSServerlessWebApi.Repositories
 {
@@ -28,27 +30,10 @@ namespace AWSServerlessWebApi.Repositories
                 NewRemarks = timeslipVM.Remarks,
                 CustomDayId = timeslipVM.DayId,
                 NewChangeRequestId = wbiGuid,
-                OwningUser = userGuid
-                
-            };
-
-            if(timeslipVM.StartTime != null)
-            {
-                //should use TryParse for safety...
-                timeslip.NewStartTask = DateTime.Parse(timeslipVM.StartTime);
-            }
-            else
-            {
-                throw new ArgumentNullException("You need to enter a start time...");
-            }
-            if (timeslipVM.EndTime != null)
-            {
-                timeslip.NewEndTask = DateTime.Parse(timeslipVM.EndTime);
-            }
-            else
-            {
-                throw new ArgumentNullException("You need to enter an end time...");
-            }
+                OwningUser = userGuid,
+                NewStartTask = DateTime.Parse(timeslipVM.StartTime),
+                NewEndTask = DateTime.Parse(timeslipVM.EndTime)
+        };
 
             TimeSpan? duration = timeslip.NewEndTask - timeslip.NewStartTask;
 
@@ -65,13 +50,20 @@ namespace AWSServerlessWebApi.Repositories
                 throw new ArgumentException("Alloted hours for this WBI has been maxed out.");
             }
             // a.start <= b.end && a.end >= b.start 
-            foreach (var item in _context.NewTimesheetEntryExtensionBase)
+
+            var date = Convert.ToDateTime(timeslip.NewStartTask);
+            var sameDate = date.Date;
+
+            foreach (var item in _context.NewTimesheetEntryExtensionBase
+                                         .Where(u => Convert.ToDateTime(u.NewStartTask).Date == sameDate && 
+                                                     u.OwningUser == userGuid))
             {
                 if (item.NewTimesheetEntryId != timeslip.NewTimesheetEntryId)
                 {
                     if (item.NewStartTask <= timeslip.NewEndTask && item.NewEndTask >= timeslip.NewStartTask)
                     {
                         throw new ArgumentException("Times cannot overlap");
+                        //return new JsonResult(new { ErrorMessage = "Times cannot overlap" });
                     }
                 }
             }
@@ -171,6 +163,16 @@ namespace AWSServerlessWebApi.Repositories
             {
                 return false;
             }
+
+            TimeSpan? duration = timeslip.NewEndTask - timeslip.NewStartTask;
+
+            int durationInHours = (int)duration?.TotalHours;
+
+            NewChangeRequestExtensionBase wbi = _context.NewChangeRequestExtensionBase
+                                                .Where(w => w.NewChangeRequestId == timeslip.NewChangeRequestId)
+                                                .FirstOrDefault();
+
+            wbi.NewActualHours -= durationInHours;
 
             _context.NewTimesheetEntryExtensionBase.Remove(timeslip);
             _context.SaveChanges();

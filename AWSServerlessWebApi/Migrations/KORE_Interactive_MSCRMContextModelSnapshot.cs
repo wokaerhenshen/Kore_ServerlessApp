@@ -17,8 +17,7 @@ namespace AWSServerlessWebApi.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.2-rtm-10011")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "2.0.2-rtm-10011");
 
             modelBuilder.Entity("AWSServerlessWebApi.Models.AccountBase", b =>
                 {
@@ -787,12 +786,12 @@ namespace AWSServerlessWebApi.Migrations
                     b.HasOne("AWSServerlessWebApi.Models.CustomDay", "CustomDay")
                         .WithMany("Timeslip_Templates")
                         .HasForeignKey("CustomDayId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("AWSServerlessWebApi.Models.NewChangeRequestExtensionBase", "WBI")
                         .WithMany("Timeslip_Templates")
                         .HasForeignKey("NewChangeRequestId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AWSServerlessWebApi.Models.NewProjectExtensionBase", b =>
