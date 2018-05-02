@@ -44,15 +44,22 @@ namespace AWSServerlessWebApi.Repositories
                 throw new ArgumentNullException("You need to enter an end time...");
             }
 
-            foreach( var item in _context.Timeslip_Templates)
+            foreach (var item in _context.Timeslip_Templates.Where(i=> i.CustomDayId == customDay_WBIVM.CustomDayId))
             {
-                if(item.TimeslipTemplateId != timeslip_template.TimeslipTemplateId)
-                {
-                    if(item.StartTime <= timeslip_template.EndTime && item.EndTime >= timeslip_template.StartTime)
+                
+
+                    if (item.StartTime > timeslip_template.EndTime || item.EndTime < timeslip_template.StartTime)
                     {
-                        throw new ArgumentException("Times cannot overlap");
+                        //throw new ArgumentException("Times cannot overlap");
                     }
-                }
+                    else
+                    {
+
+                    throw new ArgumentException("Times cannot overlap");
+
+                    }
+
+                
             }
             _context.Timeslip_Templates.Add(timeslip_template);
             _context.SaveChanges();

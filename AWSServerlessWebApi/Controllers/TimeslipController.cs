@@ -40,7 +40,26 @@ namespace AWSServerlessWebApi.Controllers
             {
                 return new BadRequestObjectResult(new { ErrorMessage = "Invalid time input. Please enter a valid time." });
             }
-
+            //check that start time is a valid datetime
+            bool success1 = DateTime.TryParse(timeslipVM.StartTime, out DateTime result1);
+            if (success1)
+            {
+                newStartTime = result1;
+            }
+            else
+            {
+                return new BadRequestObjectResult(new { message = "Please enter a valid start time" });
+            }
+            //check that end time is a valid datetime
+            bool success2 = DateTime.TryParse(timeslipVM.EndTime, out DateTime result2);
+            if (success2)
+            {
+                newEndTime = result2;
+            }
+            else
+            {
+                return new BadRequestObjectResult(new { message = "Please enter a valid end time" });
+            }
             //check if the user id is null
             if (timeslipVM.UserId == null || timeslipVM.UserId == "")
             {
@@ -52,7 +71,7 @@ namespace AWSServerlessWebApi.Controllers
                 return new BadRequestObjectResult(new { ErrorMessage = "Please enter a Work Breakdown Item." });
             }
             //check if the end time is earlier than start time
-            if ( Convert.ToDateTime(timeslipVM.StartTime) >= Convert.ToDateTime(timeslipVM.EndTime))
+            if (newStartTime >= newEndTime)
             {
                 return new BadRequestObjectResult(new { ErrorMessage = "Invalid time input. End time should be later that start time." });
             }
@@ -73,18 +92,14 @@ namespace AWSServerlessWebApi.Controllers
             var date = Convert.ToDateTime(timeslipVM.StartTime);
             var sameDate = date.Date;
             var timeslipListByUserIdOnTheSameDay = timeslipListByUserId.Where(u => Convert.ToDateTime(u.NewStartTask).Date == sameDate);
-            //Guid timeslipGuid = Guid.Parse(timeslipVM.TimeslipId);
             foreach (var item in timeslipListByUserIdOnTheSameDay)
             {
-                //if (item.NewTimesheetEntryId != timeslipGuid)
-                //{
                     if (item.NewStartTask <= Convert.ToDateTime(timeslipVM.EndTime) && 
                         item.NewEndTask >= Convert.ToDateTime(timeslipVM.StartTime))
                     {
                         return new BadRequestObjectResult(new { ErrorMessage = "Times cannot overlap" });
                     }
-                //}
-            }
+            }           
 
             return new ObjectResult(timeslipRepo.CreateTimeslip(timeslipVM));
         }

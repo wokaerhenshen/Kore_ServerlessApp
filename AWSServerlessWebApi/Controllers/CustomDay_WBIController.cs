@@ -27,6 +27,63 @@ namespace AWSServerlessWebApi.Controllers
         [Route("Create")]
         public IActionResult Create([FromBody] CustomDay_WBIVM customDay_WBIVM)
         {
+            DateTime newStartTime;
+            DateTime newEndTime;
+
+            //check for start time null or empty
+            if (customDay_WBIVM.StartTime == null || customDay_WBIVM.StartTime == "")
+            {
+                return new BadRequestObjectResult( new { message = "Please enter a start time" });
+            }
+            //check that start time is a valid datetime
+            bool success1 = DateTime.TryParse(customDay_WBIVM.StartTime, out DateTime result1);
+            if (success1)
+            {
+                newStartTime = result1;
+            } else
+            {
+                return new BadRequestObjectResult(new { message = "Please enter a valid start time" });
+            }
+            //check for end time null or empty
+            if (customDay_WBIVM.EndTime == null || customDay_WBIVM.EndTime == "")
+            {
+                return new BadRequestObjectResult(new { message = "Please enter an end time" });
+            }
+            //check that end time is a valid datetime
+            bool success2 = DateTime.TryParse(customDay_WBIVM.EndTime, out DateTime result2);
+            if (success2)
+            {
+                newEndTime = result2;
+            }
+            else
+            {
+                return new BadRequestObjectResult(new { message = "Please enter a valid end time" });
+            }
+            //check that start time is less than (earlier than) end time
+
+            if(newStartTime >= newEndTime)
+            {
+                return new BadRequestObjectResult(new { message = "End time must be later than start time" });
+            }
+            //check that start time and end time are the same date
+            if(newStartTime.Date != newEndTime.Date)
+            {
+                return new BadRequestObjectResult(new { message = "Start and end time must be the same date" });
+            }
+            //check for overlap with other timeslip templates
+            var timeslipTemplates = customDay_WBIRepo.GetAllTimeslipTemplateByCustomDay(customDay_WBIVM.CustomDayId);
+
+            foreach (var item in timeslipTemplates)
+            {
+                if (item.TimeslipTemplateId != customDay_WBIVM.TimeslipTemplateId)
+                {
+                    if (item.StartTime <= newEndTime && item.EndTime >= newStartTime)
+                    {
+                        return new BadRequestObjectResult(new { message = "Times cannot overlap" });
+                    }
+                }
+            }
+
             return new OkObjectResult(customDay_WBIRepo.CreateTimeslipTemplate(customDay_WBIVM));
         }
 
@@ -49,15 +106,76 @@ namespace AWSServerlessWebApi.Controllers
         public bool CreateAllTimeslipsFromCustomDay([FromBody] CustomDateVM customDateVM)
         {
             timeslipRepo.CreateTimeslipsByCustomDay(customDateVM);
-            return true;
-           
+            return true;           
         }
 
         [HttpPut]
         [Route("Update")]
-        public bool Update([FromBody] CustomDay_WBIVM customDay_WBIVM)
+        public IActionResult Update([FromBody] CustomDay_WBIVM customDay_WBIVM)
         {
-            return customDay_WBIRepo.EditTimeslipTemplate(customDay_WBIVM);
+            DateTime newStartTime;
+            DateTime newEndTime;
+
+            if (customDay_WBIVM.TimeslipTemplateId == null || customDay_WBIVM.TimeslipTemplateId == "")
+            {
+                return new BadRequestObjectResult(new { message = "Please provide a TimeslipTemplateId" });
+            }
+
+            //check for start time null or empty
+            if (customDay_WBIVM.StartTime == null || customDay_WBIVM.StartTime == "")
+            {
+                return new BadRequestObjectResult(new { message = "Please enter a start time" });
+            }
+            //check that start time is a valid datetime
+            bool success1 = DateTime.TryParse(customDay_WBIVM.StartTime, out DateTime result1);
+            if (success1)
+            {
+                newStartTime = result1;
+            }
+            else
+            {
+                return new BadRequestObjectResult(new { message = "Please enter a valid start time" });
+            }
+            //check for end time null or empty
+            if (customDay_WBIVM.EndTime == null || customDay_WBIVM.EndTime == "")
+            {
+                return new BadRequestObjectResult(new { message = "Please enter an end time" });
+            }
+            //check that end time is a valid datetime
+            bool success2 = DateTime.TryParse(customDay_WBIVM.EndTime, out DateTime result2);
+            if (success2)
+            {
+                newEndTime = result2;
+            }
+            else
+            {
+                return new BadRequestObjectResult(new { message = "Please enter a valid end time" });
+            }
+            //check that start time is less than (earlier than) end time
+
+            if (newStartTime >= newEndTime)
+            {
+                return new BadRequestObjectResult(new { message = "End time must be later than start time" });
+            }
+            //check that start time and end time are the same date
+            if (newStartTime.Date != newEndTime.Date)
+            {
+                return new BadRequestObjectResult(new { message = "Start and end time must be the same date" });
+            }
+            //check for overlap with other timeslip templates
+            var timeslipTemplates = customDay_WBIRepo.GetAllTimeslipTemplateByCustomDay(customDay_WBIVM.CustomDayId);
+
+            foreach (var item in timeslipTemplates)
+            {
+                if (item.TimeslipTemplateId != customDay_WBIVM.TimeslipTemplateId)
+                {
+                    if (item.StartTime <= newEndTime && item.EndTime >= newStartTime)
+                    {
+                        return new BadRequestObjectResult(new { message = "Times cannot overlap" });
+                    }
+                }
+            }
+            return new OkObjectResult(customDay_WBIRepo.EditTimeslipTemplate(customDay_WBIVM));
         }
 
         [HttpDelete]
