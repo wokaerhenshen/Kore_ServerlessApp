@@ -63,7 +63,6 @@ namespace AWSServerlessWebApi.Repositories
                     if (item.NewStartTask <= timeslip.NewEndTask && item.NewEndTask >= timeslip.NewStartTask)
                     {
                         throw new ArgumentException("Times cannot overlap");
-                        //return new JsonResult(new { ErrorMessage = "Times cannot overlap" });
                     }
                 }
             }
@@ -72,22 +71,6 @@ namespace AWSServerlessWebApi.Repositories
 
             return timeslip;
         }
-        //update this one
-        //public bool CreateByCustomday(CustomDateVM customDateVM)
-        //{
-        //    List<NewTimesheetEntryExtensionBase> newTimesheetEntryExtensionBases= _context.NewTimesheetEntryExtensionBase.Where(i => i.CustomDayId == customDateVM.CustomdayId).ToList();
-        //    foreach(var timeslip in newTimesheetEntryExtensionBases)
-        //    {
-        //        timeslip.NewStartTask = new DateTime(DateTime.Parse(customDateVM.Date).Year, DateTime.Parse(customDateVM.Date).Month,DateTime.Parse(customDateVM.Date).Day,timeslip.NewStartTask.Value.Hour,timeslip.NewStartTask.Value.Minute, timeslip.NewStartTask.Value.Second);
-        //        timeslip.NewEndTask = new DateTime(DateTime.Parse(customDateVM.Date).Year, DateTime.Parse(customDateVM.Date).Month, DateTime.Parse(customDateVM.Date).Day, timeslip.NewEndTask.Value.Hour, timeslip.NewEndTask.Value.Minute, timeslip.NewEndTask.Value.Second);
-        //        timeslip.NewTimesheetEntryId = Guid.NewGuid();
-        //        timeslip.CustomDayId = "";
-        //        _context.NewTimesheetEntryExtensionBase.Add(timeslip);
-        //        _context.SaveChanges();
-        //    };
-
-        //    return true;
-        //}
 
         public bool CreateTimeslipsByCustomDay(CustomDateVM customDateVM)
         {

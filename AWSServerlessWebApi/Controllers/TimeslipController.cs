@@ -31,6 +31,12 @@ namespace AWSServerlessWebApi.Controllers
         [Route("Create")]
         public IActionResult Create([FromBody] TimeslipVM timeslipVM)
         {
+            //check if the view model being passed is null
+            if (timeslipVM == null)
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Invalid timeslip view model" });
+            }
+
             DateTime newStartTime;
             DateTime newEndTime;
 
@@ -103,13 +109,6 @@ namespace AWSServerlessWebApi.Controllers
 
             return new ObjectResult(timeslipRepo.CreateTimeslip(timeslipVM));
         }
-        //[HttpPost]
-        //[Route("CreateByCustomday")]
-        //public bool CreateByCustomday([FromBody] CustomDateVM customDateVM)
-        //{
-        //    timeslipRepo.CreateTimeslipsByCustomDay(customDateVM);
-        //    return true;
-        //}
 
         [HttpGet]
         [Route("List")]
@@ -137,6 +136,82 @@ namespace AWSServerlessWebApi.Controllers
         [Route("Edit")]
         public IActionResult Edit([FromBody] TimeslipVM timeslipVM)
         {
+            //check if the view model being passed is null
+            if (timeslipVM == null)
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Invalid timeslip view model" });
+            }
+
+            DateTime newStartTime;
+            DateTime newEndTime;
+
+            //check if the dates are null
+            if ((timeslipVM.StartTime == null || timeslipVM.StartTime == "") ||
+                (timeslipVM.EndTime == null || timeslipVM.EndTime == ""))
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Invalid time input. Please enter a valid time." });
+            }
+            //check that start time is a valid datetime
+            bool success1 = DateTime.TryParse(timeslipVM.StartTime, out DateTime result1);
+            if (success1)
+            {
+                newStartTime = result1;
+            }
+            else
+            {
+                return new BadRequestObjectResult(new { message = "Please enter a valid start time" });
+            }
+            //check that end time is a valid datetime
+            bool success2 = DateTime.TryParse(timeslipVM.EndTime, out DateTime result2);
+            if (success2)
+            {
+                newEndTime = result2;
+            }
+            else
+            {
+                return new BadRequestObjectResult(new { message = "Please enter a valid end time" });
+            }
+            //check if the user id is null
+            if (timeslipVM.UserId == null || timeslipVM.UserId == "")
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Invalid user. Please log in." });
+            }
+            //check if the wbi id is null
+            if (timeslipVM.WBI_Id == null || timeslipVM.WBI_Id == "")
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Please enter a Work Breakdown Item." });
+            }
+            //check if the end time is earlier than start time
+            if (newStartTime >= newEndTime)
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Invalid time input. End time should be later that start time." });
+            }
+            //check to make sure the actual hours do not exceed the estimated hours
+            TimeSpan? duration = Convert.ToDateTime(timeslipVM.EndTime) - Convert.ToDateTime(timeslipVM.StartTime);
+            int durationInHours = (int)duration?.TotalHours;
+            Guid wbiGuid = Guid.Parse(timeslipVM.WBI_Id);
+            var wbi = wbiRepo.GetOneWBI(wbiGuid);
+            int? localActualHours = wbi.NewActualHours;
+            localActualHours += durationInHours;
+            if (localActualHours > wbi.NewEstimatedHours)
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Alloted hours for this WBI has been maxed out." });
+            }
+            //check to make sure two timeslips do not overlap
+            Guid userGuid = Guid.Parse(timeslipVM.UserId);
+            var timeslipListByUserId = timeslipRepo.GetAllTimeslipsByUserId(userGuid);
+            var date = Convert.ToDateTime(timeslipVM.StartTime);
+            var sameDate = date.Date;
+            var timeslipListByUserIdOnTheSameDay = timeslipListByUserId.Where(u => Convert.ToDateTime(u.NewStartTask).Date == sameDate);
+            foreach (var item in timeslipListByUserIdOnTheSameDay)
+            {
+                if (item.NewStartTask <= Convert.ToDateTime(timeslipVM.EndTime) &&
+                    item.NewEndTask >= Convert.ToDateTime(timeslipVM.StartTime))
+                {
+                    return new BadRequestObjectResult(new { ErrorMessage = "Times cannot overlap" });
+                }
+            }
+
             var timeslip = timeslipRepo.EditTimeslip(timeslipVM);
             if (timeslip == null)
             {
