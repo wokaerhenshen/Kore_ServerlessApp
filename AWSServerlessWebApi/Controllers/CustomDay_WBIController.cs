@@ -33,7 +33,7 @@ namespace AWSServerlessWebApi.Controllers
             //check for start time null or empty
             if (customDay_WBIVM.StartTime == null || customDay_WBIVM.StartTime == "")
             {
-                return new JsonResult( new { message = "Please enter a start time" });
+                return  BadRequest(new { message = "Please enter a valid start time" });
             }
             //check that start time is a valid datetime
             bool success1 = DateTime.TryParse(customDay_WBIVM.StartTime, out DateTime result1);
@@ -79,7 +79,7 @@ namespace AWSServerlessWebApi.Controllers
                 {
                     if (item.StartTime <= newEndTime && item.EndTime >= newStartTime)
                     {
-                        return new JsonResult(new { message = "Times cannot overlap" });
+                        return BadRequest(new { message = "Times cannot overlap" });
                     }
                 }
             }
