@@ -224,10 +224,16 @@ namespace AWSServerlessWebApi.Controllers
         [Route("Delete")]
         public IActionResult Delete([FromBody] DeleteTSVM timeslipId)
         {
-           
             bool success = timeslipRepo.DeleteOneTimeslip(timeslipId.TimeSlipId);
-            
-            return new ObjectResult(success);
+
+            if(success)
+            {
+                return new ObjectResult(success);
+            }else
+            {
+                return new BadRequestObjectResult(new { message = "An error occured when deleting a timeslip." });
+            }
+           
         }
     }
     
