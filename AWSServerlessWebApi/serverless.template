@@ -12,7 +12,6 @@
   },
 
   "Resources" : {
-
     "ProxyFunction" : {
       "Type" : "AWS::Serverless::Function",
       "Properties": {
