@@ -39,7 +39,7 @@ namespace AWSServerlessWebApi.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public async Task<object> Login([FromBody] LoginVM model)
+        public object Login([FromBody] LoginVM model)
         {
             string result = userRepo.SignIn(model);
              
