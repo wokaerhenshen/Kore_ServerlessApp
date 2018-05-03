@@ -58,8 +58,6 @@ namespace AWSServerlessWebApi.Repositories
                     throw new ArgumentException("Times cannot overlap");
 
                     }
-
-                
             }
             _context.Timeslip_Templates.Add(timeslip_template);
             _context.SaveChanges();

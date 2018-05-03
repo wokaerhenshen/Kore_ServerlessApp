@@ -15,12 +15,15 @@ namespace AWSServerlessWebApi.Controllers
     public class CustomDay_WBIController : Controller
     {
         CustomDay_WBIRepo customDay_WBIRepo;
+        CustomDayRepo customDayRepo;
         TimeslipRepo timeslipRepo;
-
+        UserRepo userRepo;
         public CustomDay_WBIController(KORE_Interactive_MSCRMContext context)
         {
             customDay_WBIRepo = new CustomDay_WBIRepo(context);
             timeslipRepo = new TimeslipRepo(context);
+            userRepo = new UserRepo(context);
+            customDayRepo = new CustomDayRepo(context);
         }
 
         [HttpPost]
@@ -103,10 +106,44 @@ namespace AWSServerlessWebApi.Controllers
 
         [HttpPost]
         [Route("CreateAllTimeslipsUsingCustomDay")]
-        public bool CreateAllTimeslipsFromCustomDay([FromBody] CustomDateVM customDateVM)
+        public IActionResult CreateAllTimeslipsFromCustomDay([FromBody] CustomDateVM customDateVM)
         {
-            timeslipRepo.CreateTimeslipsByCustomDay(customDateVM);
-            return true;           
+            //check for Estimated hours
+
+            //get the custom day (for the user ID)
+            CustomDay customDay = customDayRepo.GetOneCustomDay(customDateVM.CustomdayId);
+            //create a variable to store the date
+            DateTime newDateTime;
+
+            //check that date given is a valid datetime
+            bool success1 = DateTime.TryParse(customDateVM.Date, out DateTime result1);
+            if (success1)
+            {
+                newDateTime = result1;
+            }
+            else
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid date" });
+            }
+            //get all the timeslips by user for a single date
+            var userTimeslipsList = timeslipRepo.GetAllTimeslipsByUserIdWithDate(customDay.UserId, newDateTime);
+            //get all timeslip templates by custom day
+            var templateList = customDay_WBIRepo.GetAllTimeslipTemplateByCustomDay(customDateVM.CustomdayId);
+
+            foreach(var timeslip in userTimeslipsList)
+            {
+                foreach(var template in templateList)
+                {
+                    template.StartTime = new DateTime(newDateTime.Year, newDateTime.Month, newDateTime.Day, template.StartTime.Hour, template.StartTime.Minute, template.StartTime.Second);
+                    template.EndTime = new DateTime(newDateTime.Year, newDateTime.Month, newDateTime.Day, template.EndTime.Hour, template.EndTime.Minute, template.EndTime.Second);
+                    if (template.StartTime <= timeslip.NewEndTask && template.EndTime >= timeslip.NewStartTask)
+                    {
+                        return new BadRequestObjectResult(new { ErrorMessage = "One of the times in this custom day overlaps with an existing timeslip. Your request cannot be processed." });
+                    }
+                }
+            }
+
+            return new OkObjectResult(timeslipRepo.CreateTimeslipsByCustomDay(customDateVM));
         }
 
         [HttpPut]
@@ -161,6 +198,10 @@ namespace AWSServerlessWebApi.Controllers
             if (newStartTime.Date != newEndTime.Date)
             {
                 return new BadRequestObjectResult(new { ErrorMessage = "Start and end time must be the same date" });
+            }
+            if (customDay_WBIVM.CustomDayId == null || customDay_WBIVM.CustomDayId == "")
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "CustomDayId cannot be null" });
             }
             //check for overlap with other timeslip templates
             var timeslipTemplates = customDay_WBIRepo.GetAllTimeslipTemplateByCustomDay(customDay_WBIVM.CustomDayId);
