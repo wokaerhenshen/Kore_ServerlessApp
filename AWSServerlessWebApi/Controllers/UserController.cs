@@ -56,8 +56,7 @@ namespace AWSServerlessWebApi.Controllers
         }
 
         // Generates a token using settings stored in the appsettings.json file.
-        private object GenerateJwtToken(string email,
-                                                    string userId)
+        private object GenerateJwtToken(string email, string userId)
         {
             var claims = new List<Claim> {
             new Claim(JwtRegisteredClaimNames.Sub, email),
@@ -98,27 +97,38 @@ namespace AWSServerlessWebApi.Controllers
         [Route("GetOneUser/{id}")]
         public IActionResult GetOneUser(string id)
         {
+            if(id == null || id == "")
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid user id" });
+            }
             Guid guid_id = Guid.Parse(id);
-
             return new OkObjectResult(userRepo.GetOneUser(guid_id));
         }
 
         [HttpPut]
         [Route("Update")]
-        public bool Update([FromBody] UserVM userVM)
+        public IActionResult Update([FromBody] UserVM userVM)
         {
+            if (userVM == null)
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid UserVM" });
+            }
             userRepo.UpdateOneUser(userVM);
-            return true;
+            return new OkObjectResult(true);
         }
 
         [HttpDelete]
         [Route("Delete/{id}")]
-        public bool Delete(string id)
+        public IActionResult Delete(string id)
         {
+            if (id == null || id == "")
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid user id" });
+            }
             Guid guid_id = Guid.Parse(id);
-
             userRepo.DeleteOneUser(guid_id);
-            return true;
+
+            return new OkObjectResult(true);
         }
     }
 }
