@@ -186,10 +186,10 @@ namespace AWSServerlessWebApi.Controllers
                 return new BadRequestObjectResult(new { message = "Invalid user. Please log in." });
             }
             //check if the wbi id is null
-            if (timeslipVM.WBI_Id == null || timeslipVM.WBI_Id == "")
-            {
-                return BadRequest(new { message = "Please enter a Work Breakdown Item." });
-            }
+            //if (timeslipVM.WBI_Id == null || timeslipVM.WBI_Id == "")
+            //{
+            //    return BadRequest(new { message = "Please enter a Work Breakdown Item." });
+            //}
 
             //check if the end time is earlier than start time
             if (newStartTime >= newEndTime)
