@@ -26,6 +26,11 @@ namespace AWSServerlessWebApi.Controllers
         [Route("Create")]
         public IActionResult Create([FromBody] CustomDayVM customDayVM)
         {
+            if(customDayVM == null)
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid CustomDayVM" });
+            }
+
             return new OkObjectResult(customDayRepo.CreateCustomDay(customDayVM));
         }
 
@@ -40,6 +45,11 @@ namespace AWSServerlessWebApi.Controllers
         [Route("GetOneUserCustomDays/{id}")]
         public IActionResult GetOneUserCustomDays(string id)
         {
+            if(id == null ||  id == "")
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid user id" });
+            }
+            
             return new OkObjectResult(customDayRepo.GetOneUserCustomDays(id));
         }
 
@@ -47,26 +57,43 @@ namespace AWSServerlessWebApi.Controllers
         [Route("GetOneCustomDay/{id}")]
         public IActionResult GetOneCustomDay(string id)
         {
+            if(id == null || id == "")
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid custom day id" });
+            }
+
             return new OkObjectResult(customDayRepo.GetOneCustomDay(id));
         }
-
-
-
+        
         [HttpPut]
         [Route("Update")]
-        public bool Update([FromBody] CustomDayVM customDayVM)
+        public IActionResult Update([FromBody] CustomDayVM customDayVM)
         {
-            return customDayRepo.UpdateCustomDay(customDayVM);
+            if (customDayVM == null)
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid CustomDayVM" });
+            }
+
+            return new OkObjectResult(customDayRepo.UpdateCustomDay(customDayVM));
         }
 
         [HttpDelete]
         [Route("Delete/{id}")]
-        public bool Delete(string id)
+        public IActionResult Delete(string id)
         {
-            return customDayRepo.DeleteCustomDay(id);
+            if(id == null || id == "")
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid custom day id" });
+            }
+            
+            bool success = customDayRepo.DeleteCustomDay(id);
+            if (!success)
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "An error occured when deleting a Custom Day." });
+            }
+
+            return new ObjectResult(success);
         }
-
-
         //Here is the answer to my question: Should timeslip include date?
         //answer: when we assign one timeslip to a customday, we can grab the 
         // start time and end time first, after that we can create a new 

@@ -31,10 +31,15 @@ namespace AWSServerlessWebApi.Controllers
 
         [HttpPost]
         [Route("Create")]
-        public bool Create([FromBody] UserVM userVM)
+        public IActionResult Create([FromBody] UserVM userVM)
         {
+            if(userVM == null)
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid UserVM" });
+            }
+
             userRepo.CreateUser(userVM);
-            return true;
+            return new OkObjectResult(true);
         }
 
         [HttpPost]

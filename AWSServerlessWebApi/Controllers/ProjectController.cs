@@ -27,10 +27,14 @@ namespace AWSServerlessWebApi.Controllers
 
         [HttpPost]
         [Route("Create")]
-        public bool Create([FromBody] ProjectVM Project)
-        {            
+        public IActionResult Create([FromBody] ProjectVM Project)
+        {    
+            if(Project == null)
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid ProjectVM" });
+            }
             projectRepo.CreateProject(Project);
-            return true;
+            return new OkObjectResult(true);
         }
 
         [HttpGet]
@@ -44,8 +48,12 @@ namespace AWSServerlessWebApi.Controllers
         [Route("GetOneProject/{id}")]
         public IActionResult GetOneProject(string id)
         {
-            Guid guid_id = Guid.Parse(id);
+            if(id == null || id == "")
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid project id" });
+            }
 
+            Guid guid_id = Guid.Parse(id);
             return new OkObjectResult(projectRepo.GetOneProject(guid_id));
         }
 
@@ -53,40 +61,61 @@ namespace AWSServerlessWebApi.Controllers
         [Route("GetOneProjectByWBIId/{id}")]
         public IActionResult GetOneProjectByWBIId(string id)
         {
+            if (id == null || id == "")
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid wbi id" });
+            }
+
             Guid guid_id = Guid.Parse(id);
             return new OkObjectResult(projectRepo.GetOneProjectByWBIId(guid_id));
         }
-
 
         [HttpGet]
         [Route("GetAllProjectsByClientId/{id}")]
         public IActionResult GetAllProjectsByClientId(string id)
         {
+            if (id == null || id == "")
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid client id" });
+            }
+
             Guid clientGuid = Guid.Parse(id);
             return new OkObjectResult(projectRepo.GetAllProjectsByClientId(clientGuid));
         }
+
         [HttpGet]
         [Route("GetAllProjectTypes")]
         public IActionResult GetAllProjectTypes()
         {
             return new OkObjectResult(projectRepo.GetAllProjectTypes());
         }
+
         [HttpPut]
         [Route("Update")]
-        public bool Update([FromBody] ProjectVM Project)
+        public IActionResult Update([FromBody] ProjectVM Project)
         {
+            if(Project == null)
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid ProjectVM" });
+            }
+
             projectRepo.UpdateOneProject(Project);
-            return true;
+            return new OkObjectResult(true);
         }
 
         [HttpDelete]
         [Route("Delete/{id}")]
-        public bool Delete(string id)
+        public IActionResult Delete(string id)
         {
+            if(id == null || id == "")
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid project id" });
+            }
+
             Guid guid_id = Guid.Parse(id);
 
             projectRepo.DeleteOneProject(guid_id);
-            return true;
+            return new OkObjectResult(true);
         }
     }
 

@@ -26,18 +26,22 @@ namespace AWSServerlessWebApi.Controllers
 
         [HttpPost]
         [Route("Create")]
-        public bool Create(string Name)
+        public IActionResult Create(string Name)
         {
+            if (Name == null || Name == "")
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a Client Name." });
+            }
+
             ClientVM client = new ClientVM()
             {
-                
+
                 ClientName = Name,
                 DeletionStateCode = ConstantDirectory.DeleteStateCodeDefault,
                 StateCode = ConstantDirectory.StateCodeDefault
             };
-
             clientRepo.CreateClient(client);
-            return true;
+            return new OkObjectResult(true);
         }
 
         [HttpGet]
@@ -51,36 +55,51 @@ namespace AWSServerlessWebApi.Controllers
         [Route("GetOneClient/{id}")]
         public IActionResult GetOneClient(string id)
         {
-            //put in try/catch
-            Guid guid_id = Guid.Parse(id);
+            if(id == null || id == "")
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid client id." });
+            }
 
+            Guid guid_id = Guid.Parse(id);
             return new OkObjectResult(clientRepo.GetOneClient(guid_id));
         }
 
         //update client
         [HttpPut]
         [Route("Update")]
-        public bool Update(string id, string Name)
+        public IActionResult Update(string id, string Name)
         {
+            if(id == null || id == "")
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid client id." });
+            }
+            if(Name == null || Name == "")
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid client name." });
+            }
+            
             ClientVM client = new ClientVM()
             {
                 ClientId = id,
                 ClientName = Name                
             };
-
             clientRepo.UpdateOneClient(client);
-            return true;
+            return new OkObjectResult(true);
         }
 
         //delete client
         [HttpDelete]
         [Route("Delete")]
-        public bool Delete(string id)
+        public IActionResult Delete(string id)
         {
+            if(id == null || id == "")
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid client id." });
+            }
             Guid guid_id = Guid.Parse(id);
-
             clientRepo.DeleteOneClient(guid_id);
-            return true;
+
+            return new OkObjectResult(true);
         }
 
     }

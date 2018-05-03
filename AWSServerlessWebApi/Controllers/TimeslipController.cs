@@ -54,7 +54,7 @@ namespace AWSServerlessWebApi.Controllers
             }
             else
             {
-                return new BadRequestObjectResult(new { message = "Please enter a valid start time" });
+                return new BadRequestObjectResult(new { ErrorMessage = "Please enter a valid start time" });
             }
             //check that end time is a valid datetime
             bool success2 = DateTime.TryParse(timeslipVM.EndTime, out DateTime result2);
@@ -64,7 +64,7 @@ namespace AWSServerlessWebApi.Controllers
             }
             else
             {
-                return new BadRequestObjectResult(new { message = "Please enter a valid end time" });
+                return new BadRequestObjectResult(new { ErrorMessage = "Please enter a valid end time" });
             }
             //check if the user id is null
             if (timeslipVM.UserId == null || timeslipVM.UserId == "")
@@ -121,6 +121,11 @@ namespace AWSServerlessWebApi.Controllers
         [Route("GetOneTimeslip/{id}")]
         public IActionResult GetOneTimeslip(string id)
         {
+            if(id == null || id == "")
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid timeslip id." });
+            }
+
             return new ObjectResult(timeslipRepo.GetOneTimeslip(id));
         }
 
@@ -128,6 +133,10 @@ namespace AWSServerlessWebApi.Controllers
         [Route("GetAllTimeslipsByUserId/{id}")]
         public IActionResult GetAllTimeslipsByUserId(string id)
         {
+            if(id == null || id == "")
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid user id." });
+            }
             Guid userGuid = Guid.Parse(id);
             return new OkObjectResult(timeslipRepo.GetAllTimeslipsByUserId(userGuid));
         }
@@ -159,7 +168,7 @@ namespace AWSServerlessWebApi.Controllers
             }
             else
             {
-                return new BadRequestObjectResult(new { message = "Please enter a valid start time" });
+                return new BadRequestObjectResult(new { ErrorMessage = "Please enter a valid start time" });
             }
             //check that end time is a valid datetime
             bool success2 = DateTime.TryParse(timeslipVM.EndTime, out DateTime result2);
@@ -169,7 +178,7 @@ namespace AWSServerlessWebApi.Controllers
             }
             else
             {
-                return new BadRequestObjectResult(new { message = "Please enter a valid end time" });
+                return new BadRequestObjectResult(new { ErrorMessage = "Please enter a valid end time" });
             }
             //check if the user id is null
             if (timeslipVM.UserId == null || timeslipVM.UserId == "")
@@ -219,21 +228,29 @@ namespace AWSServerlessWebApi.Controllers
             }
             return new ObjectResult(timeslip);
         }
-        //add a method to assign a timeslip to a custom day
+
         [HttpPost]
         [Route("Delete")]
         public IActionResult Delete([FromBody] DeleteTSVM timeslipId)
         {
-            bool success = timeslipRepo.DeleteOneTimeslip(timeslipId.TimeSlipId);
-
-            if(success)
+            //check if the view model is null
+            if(timeslipId == null)
             {
-                return new ObjectResult(success);
-            }else
-            {
-                return new BadRequestObjectResult(new { message = "An error occured when deleting a timeslip." });
+                return new BadRequestObjectResult(new { ErrorMessage = "Invalid DeleteTSVM. View model cannot be null" });
             }
-           
+            //check if the timeslip id is null or has empty string
+            if(timeslipId.TimeSlipId == null || timeslipId.TimeSlipId == "")
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid timeslip id." });
+            }
+
+            bool success = timeslipRepo.DeleteOneTimeslip(timeslipId.TimeSlipId);
+            if (!success)
+            {
+                return new BadRequestObjectResult(new { ErrorMessage = "An error occured when deleting a timeslip." });
+            }
+
+            return new ObjectResult(success);
         }
     }
     
