@@ -214,6 +214,7 @@ namespace AWSServerlessWebApi.Controllers
             var date = Convert.ToDateTime(timeslipVM.StartTime);
             var sameDate = date.Date;
             Guid timeslipGuid = Guid.Parse(timeslipVM.TimeslipId);
+            //this makes sure to exclude the same timeslip when validating overlaps
             var timeslipListByUserIdOnTheSameDay = timeslipListByUserId.Where(u => Convert.ToDateTime(u.NewStartTask).Date == sameDate)
                                                                        .Where(i => i.NewTimesheetEntryId != timeslipGuid);
             foreach (var item in timeslipListByUserIdOnTheSameDay)
