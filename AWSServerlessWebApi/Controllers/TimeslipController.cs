@@ -197,10 +197,11 @@ namespace AWSServerlessWebApi.Controllers
                 return new BadRequestObjectResult(new { message = "Invalid user. Please log in." });
             }
             //check if the wbi id is null
-            if (timeslipVM.WBI_Id == null || timeslipVM.WBI_Id == "")
-            {
-                return new BadRequestObjectResult(new { message = "Please enter a Work Breakdown Item." });
-            }
+            //if (timeslipVM.WBI_Id == null || timeslipVM.WBI_Id == "")
+            //{
+            //    return BadRequest(new { message = "Please enter a Work Breakdown Item." });
+            //}
+
             //check if the end time is earlier than start time
             if (newStartTime >= newEndTime)
             {
@@ -209,7 +210,8 @@ namespace AWSServerlessWebApi.Controllers
             //check to make sure the actual hours do not exceed the estimated hours
             TimeSpan? duration = Convert.ToDateTime(timeslipVM.EndTime) - Convert.ToDateTime(timeslipVM.StartTime);
             int durationInHours = (int)duration?.TotalHours;
-            Guid wbiGuid = Guid.Parse(timeslipVM.WBI_Id);
+            var tempWBI_Id = timeslipRepo.GetOneTimeslip(timeslipVM.TimeslipId).NewChangeRequestId.ToString();
+            Guid wbiGuid = Guid.Parse(tempWBI_Id);
             var wbi = wbiRepo.GetOneWBI(wbiGuid);
             int? localActualHours = wbi.NewActualHours;
             localActualHours += durationInHours;
@@ -224,7 +226,9 @@ namespace AWSServerlessWebApi.Controllers
             var timeslipListByUserId = timeslipRepo.GetAllTimeslipsByUserId(userGuid);
             var date = Convert.ToDateTime(timeslipVM.StartTime);
             var sameDate = date.Date;
-            var timeslipListByUserIdOnTheSameDay = timeslipListByUserId.Where(u => Convert.ToDateTime(u.NewStartTask).Date == sameDate);
+            Guid timeslipGuid = Guid.Parse(timeslipVM.TimeslipId);
+            var timeslipListByUserIdOnTheSameDay = timeslipListByUserId.Where(u => Convert.ToDateTime(u.NewStartTask).Date == sameDate)
+                                                                       .Where(i => i.NewTimesheetEntryId != timeslipGuid);
             foreach (var item in timeslipListByUserIdOnTheSameDay)
             {
                 if (item.NewStartTask <= Convert.ToDateTime(timeslipVM.EndTime) &&
