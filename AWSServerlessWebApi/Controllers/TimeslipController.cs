@@ -213,7 +213,9 @@ namespace AWSServerlessWebApi.Controllers
             var timeslipListByUserId = timeslipRepo.GetAllTimeslipsByUserId(userGuid);
             var date = Convert.ToDateTime(timeslipVM.StartTime);
             var sameDate = date.Date;
-            var timeslipListByUserIdOnTheSameDay = timeslipListByUserId.Where(u => Convert.ToDateTime(u.NewStartTask).Date == sameDate);
+            Guid timeslipGuid = Guid.Parse(timeslipVM.TimeslipId);
+            var timeslipListByUserIdOnTheSameDay = timeslipListByUserId.Where(u => Convert.ToDateTime(u.NewStartTask).Date == sameDate)
+                                                                       .Where(i => i.NewTimesheetEntryId != timeslipGuid);
             foreach (var item in timeslipListByUserIdOnTheSameDay)
             {
                 if (item.NewStartTask <= Convert.ToDateTime(timeslipVM.EndTime) &&
