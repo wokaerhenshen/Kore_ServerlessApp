@@ -188,8 +188,9 @@ namespace AWSServerlessWebApi.Controllers
             //check if the wbi id is null
             if (timeslipVM.WBI_Id == null || timeslipVM.WBI_Id == "")
             {
-                return new BadRequestObjectResult(new { message = "Please enter a Work Breakdown Item." });
+                return BadRequest(new { message = "Please enter a Work Breakdown Item." });
             }
+
             //check if the end time is earlier than start time
             if (newStartTime >= newEndTime)
             {
