@@ -137,8 +137,19 @@ namespace AWSServerlessWebApi.Controllers
             {
                 return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid user id." });
             }
-            Guid userGuid = Guid.Parse(id);
-            return new OkObjectResult(timeslipRepo.GetAllTimeslipsByUserId(userGuid));
+            Guid userGuid;
+            bool success = Guid.TryParse(id, out userGuid);
+            if (success)
+            {
+                var timeslipList = timeslipRepo.GetAllTimeslipsByUserId(userGuid);
+                if(timeslipList == null || timeslipList.Count == 0)
+                {
+                    return new OkObjectResult("There are no timeslips for this user");
+                }
+                return new OkObjectResult(timeslipList);
+            }
+            return new BadRequestObjectResult(new { message = "id could not be parsed as a Guid" });
+            
         }
 
         [HttpPut]
@@ -206,6 +217,8 @@ namespace AWSServerlessWebApi.Controllers
             {
                 return new BadRequestObjectResult(new { message = "Alloted hours for this WBI has been maxed out." });
             }
+
+
             //check to make sure two timeslips do not overlap
             Guid userGuid = Guid.Parse(timeslipVM.UserId);
             var timeslipListByUserId = timeslipRepo.GetAllTimeslipsByUserId(userGuid);
@@ -226,6 +239,7 @@ namespace AWSServerlessWebApi.Controllers
             {
                 return new NotFoundObjectResult(timeslip);
             }
+
             return new ObjectResult(timeslip);
         }
 

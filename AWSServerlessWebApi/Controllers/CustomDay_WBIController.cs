@@ -199,12 +199,14 @@ namespace AWSServerlessWebApi.Controllers
             {
                 return new BadRequestObjectResult(new { ErrorMessage = "Start and end time must be the same date" });
             }
-            if (customDay_WBIVM.CustomDayId == null || customDay_WBIVM.CustomDayId == "")
-            {
-                return new BadRequestObjectResult(new { ErrorMessage = "CustomDayId cannot be null" });
-            }
+            //if (customDay_WBIVM.CustomDayId == null || customDay_WBIVM.CustomDayId == "")
+            //{
+            //    return new BadRequestObjectResult(new { ErrorMessage = "CustomDayId cannot be null" });
+            //}
+            var timeslipTemplate = customDay_WBIRepo.GetOneTimeslipTemplate(customDay_WBIVM.TimeslipTemplateId);
+
             //check for overlap with other timeslip templates
-            var timeslipTemplates = customDay_WBIRepo.GetAllTimeslipTemplateByCustomDay(customDay_WBIVM.CustomDayId);
+            var timeslipTemplates = customDay_WBIRepo.GetAllTimeslipTemplateByCustomDay(timeslipTemplate.CustomDayId);
 
             foreach (var item in timeslipTemplates)
             {
