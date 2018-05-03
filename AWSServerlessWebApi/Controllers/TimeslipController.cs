@@ -100,8 +100,8 @@ namespace AWSServerlessWebApi.Controllers
             var timeslipListByUserIdOnTheSameDay = timeslipListByUserId.Where(u => Convert.ToDateTime(u.NewStartTask).Date == sameDate);
             foreach (var item in timeslipListByUserIdOnTheSameDay)
             {
-                    if (item.NewStartTask <= Convert.ToDateTime(timeslipVM.EndTime) && 
-                        item.NewEndTask >= Convert.ToDateTime(timeslipVM.StartTime))
+                    if (item.NewStartTask < Convert.ToDateTime(timeslipVM.EndTime) && 
+                        item.NewEndTask > Convert.ToDateTime(timeslipVM.StartTime))
                     {
                         return new BadRequestObjectResult(new { message = "Times cannot overlap" });
                     }
@@ -232,8 +232,8 @@ namespace AWSServerlessWebApi.Controllers
                                                                        .Where(i => i.NewTimesheetEntryId != timeslipGuid);
             foreach (var item in timeslipListByUserIdOnTheSameDay)
             {
-                if (item.NewStartTask <= Convert.ToDateTime(timeslipVM.EndTime) &&
-                    item.NewEndTask >= Convert.ToDateTime(timeslipVM.StartTime))
+                if (item.NewStartTask < Convert.ToDateTime(timeslipVM.EndTime) &&
+                    item.NewEndTask > Convert.ToDateTime(timeslipVM.StartTime))
                 {
                     return new BadRequestObjectResult(new { message = "Times cannot overlap" });
                 }

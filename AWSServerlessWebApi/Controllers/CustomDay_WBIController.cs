@@ -80,7 +80,7 @@ namespace AWSServerlessWebApi.Controllers
             {
                 if (item.TimeslipTemplateId != customDay_WBIVM.TimeslipTemplateId)
                 {
-                    if (item.StartTime <= newEndTime && item.EndTime >= newStartTime)
+                    if (item.StartTime < newEndTime && item.EndTime > newStartTime)
                     {
                         return new BadRequestObjectResult(new { message = "Times cannot overlap" });
                     }
@@ -213,7 +213,7 @@ namespace AWSServerlessWebApi.Controllers
             {
                 if (item.TimeslipTemplateId != customDay_WBIVM.TimeslipTemplateId)
                 {
-                    if (item.StartTime <= newEndTime && item.EndTime >= newStartTime)
+                    if (item.StartTime < newEndTime && item.EndTime > newStartTime)
                     {
                         return new BadRequestObjectResult(new { message = "Times cannot overlap" });
                     }
