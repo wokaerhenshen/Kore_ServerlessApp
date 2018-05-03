@@ -114,6 +114,10 @@ namespace AWSServerlessWebApi.Repositories
         {
             return _context.NewTimesheetEntryExtensionBase.Where(t => t.OwningUser == userId).ToList();
         }
+        public List<NewTimesheetEntryExtensionBase> GetAllTimeslipsByUserIdWithDate(Guid userId, DateTime date)
+        {
+            return _context.NewTimesheetEntryExtensionBase.Where(t => t.OwningUser == userId && t.NewStartTask.Value.Date == date.Date).ToList();
+        }
         public List<NewTimesheetEntryExtensionBase> GetAllTimeslipsByCustomDayId(string dayId)
         {
             return _context.NewTimesheetEntryExtensionBase.Where(t => t.CustomDayId == dayId).ToList();
