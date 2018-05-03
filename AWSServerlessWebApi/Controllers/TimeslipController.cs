@@ -198,7 +198,8 @@ namespace AWSServerlessWebApi.Controllers
             //check to make sure the actual hours do not exceed the estimated hours
             TimeSpan? duration = Convert.ToDateTime(timeslipVM.EndTime) - Convert.ToDateTime(timeslipVM.StartTime);
             int durationInHours = (int)duration?.TotalHours;
-            Guid wbiGuid = Guid.Parse(timeslipVM.WBI_Id);
+            var tempWBI_Id = timeslipRepo.GetOneTimeslip(timeslipVM.TimeslipId).NewChangeRequestId.ToString();
+            Guid wbiGuid = Guid.Parse(tempWBI_Id);
             var wbi = wbiRepo.GetOneWBI(wbiGuid);
             int? localActualHours = wbi.NewActualHours;
             localActualHours += durationInHours;
