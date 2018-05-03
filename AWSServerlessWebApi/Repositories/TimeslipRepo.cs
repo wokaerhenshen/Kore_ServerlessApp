@@ -114,6 +114,10 @@ namespace AWSServerlessWebApi.Repositories
         {
             return _context.NewTimesheetEntryExtensionBase.Where(t => t.OwningUser == userId).ToList();
         }
+        public List<NewTimesheetEntryExtensionBase> GetAllTimeslipsByUserIdWithDate(Guid userId, DateTime date)
+        {
+            return _context.NewTimesheetEntryExtensionBase.Where(t => t.OwningUser == userId && t.NewStartTask.Value.Date == date.Date).ToList();
+        }
         public List<NewTimesheetEntryExtensionBase> GetAllTimeslipsByCustomDayId(string dayId)
         {
             return _context.NewTimesheetEntryExtensionBase.Where(t => t.CustomDayId == dayId).ToList();
@@ -129,6 +133,28 @@ namespace AWSServerlessWebApi.Repositories
             }
             else
             {
+                NewChangeRequestExtensionBase wbi = _context.NewChangeRequestExtensionBase
+                                                    .Where(w => w.NewChangeRequestId == timeslip.NewChangeRequestId)
+                                                    .FirstOrDefault();
+                TimeSpan? oldDuration = timeslip.NewEndTask - timeslip.NewStartTask; //old timeslip's difference
+                int oldDurationInHours = (int)oldDuration?.TotalHours;
+
+                TimeSpan? newDuration = DateTime.Parse(timeslipVM.EndTime) - DateTime.Parse(timeslipVM.StartTime);//new timeslip's difference
+                int newDurationInHours = (int)newDuration?.TotalHours;
+
+                if (newDurationInHours > oldDurationInHours)
+                {
+                    //add 
+                    int difference = newDurationInHours - oldDurationInHours;
+                    wbi.NewActualHours = wbi.NewActualHours + difference;
+
+                } else if (newDurationInHours < oldDurationInHours)
+                {
+                    //minus
+                    int difference = oldDurationInHours - newDurationInHours;
+                    wbi.NewActualHours = wbi.NewActualHours - difference;
+                }
+
                 timeslip.NewStartTask = DateTime.Parse(timeslipVM.StartTime);
                 timeslip.NewEndTask = DateTime.Parse(timeslipVM.EndTime);
                 timeslip.NewRemarks = timeslipVM.Remarks;
