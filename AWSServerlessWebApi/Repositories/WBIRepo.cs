@@ -11,6 +11,7 @@ namespace AWSServerlessWebApi.Repositories
     public class WBIRepo
     {
         KORE_Interactive_MSCRMContext _context;
+        const int NewDefaultHours = 0;
 
         public WBIRepo(KORE_Interactive_MSCRMContext context)
         {
@@ -20,13 +21,14 @@ namespace AWSServerlessWebApi.Repositories
         public NewChangeRequestExtensionBase CreateWBI(WBIVM wbiVM)
         {
 
+            
             Guid projectGuid = Guid.Parse(wbiVM.ProjectId);
             NewChangeRequestExtensionBase wbi = new NewChangeRequestExtensionBase()
             {
                 NewChangeRequestId = Guid.NewGuid(),
                 NewRemarks = wbiVM.Description,
                 NewEstimatedHours = wbiVM.EstimatedHours,
-                NewActualHours = wbiVM.ActualHours,
+                NewActualHours = NewDefaultHours,
                 NewProjectId = projectGuid
             };
             _context.NewChangeRequestExtensionBase.Add(wbi);

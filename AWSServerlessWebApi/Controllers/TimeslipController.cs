@@ -128,14 +128,34 @@ namespace AWSServerlessWebApi.Controllers
 
             return new ObjectResult(timeslipRepo.GetOneTimeslip(id));
         }
-
+        [HttpGet]
+        [Route("GetAllTimeslipsByWBIId/{id}")]
+        public IActionResult GetAllTimeslipsByWBIId(string id)
+        {
+            if (id == null || id == "")
+            {
+                return new BadRequestObjectResult(new { message = "Please provide a valid user id." });
+            }
+            Guid wbiGuid;
+            bool success = Guid.TryParse(id, out wbiGuid);
+            if (success)
+            {
+                var timeslipList = timeslipRepo.GetAllTimeslipsByWbiId(wbiGuid);
+                if (timeslipList == null || timeslipList.Count == 0)
+                {
+                    return new OkObjectResult("There are no timeslips for this user");
+                }
+                return new OkObjectResult(timeslipList);
+            }
+            return new BadRequestObjectResult(new { message = "id could not be parsed as a Guid" });
+        }
         [HttpGet]
         [Route("GetAllTimeslipsByUserId/{id}")]
         public IActionResult GetAllTimeslipsByUserId(string id)
         {
             if(id == null || id == "")
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid user id." });
+                return new BadRequestObjectResult(new { message = "Please provide a valid user id." });
             }
             Guid userGuid;
             bool success = Guid.TryParse(id, out userGuid);

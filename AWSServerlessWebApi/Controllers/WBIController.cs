@@ -29,7 +29,17 @@ namespace AWSServerlessWebApi.Controllers
         [Route("Create")]
         public IActionResult Create([FromBody] WBIVM wbiVM)
         {
-            return new OkObjectResult(wbiRepo.CreateWBI(wbiVM));
+            if (wbiVM.ProjectId == null || wbiVM.ProjectId == "")
+            {
+                return new BadRequestObjectResult( new { message = "Please provide a ProjectId" });
+            }
+            Guid result;
+            bool success = Guid.TryParse(wbiVM.ProjectId, out result);
+            if (success)
+            {
+                return new OkObjectResult(wbiRepo.CreateWBI(wbiVM));
+            }
+            return new BadRequestObjectResult(new { message = "ProjectId must be parsed into a valid Guid" });
         }
 
         [HttpGet]

@@ -122,7 +122,10 @@ namespace AWSServerlessWebApi.Repositories
         {
             return _context.NewTimesheetEntryExtensionBase.Where(t => t.CustomDayId == dayId).ToList();
         }
-
+        public List<NewTimesheetEntryExtensionBase> GetAllTimeslipsByWbiId(Guid wbiId)
+        {
+            return _context.NewTimesheetEntryExtensionBase.Where(t => t.NewChangeRequestId == wbiId).ToList();
+        }
         public NewTimesheetEntryExtensionBase EditTimeslip(TimeslipVM timeslipVM)
         {
             
