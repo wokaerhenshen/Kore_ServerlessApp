@@ -130,11 +130,11 @@ namespace AWSServerlessWebApi.Repositories
 
                 TimeslipWithWBINameVM timeslipWithWBINameVM = new TimeslipWithWBINameVM()
                 {
-                    TimeslipId = null,
-                    StartTime = newStartTime.ToString(),
-                    EndTime = newEndTime.ToString(),
-                    Remarks = t.NewRemarks,
-                    WBI_Id = t.NewChangeRequestId.ToString(),
+                    newTimesheetEntryId = t.NewTimesheetEntryId.ToString(),
+                    newStartTask = newStartTime.ToString(),
+                    newEndTask = newEndTime.ToString(),
+                    newRemarks = t.NewRemarks,
+                    newChangeRequestId = t.NewChangeRequestId.ToString(),
                     WBIName = _context.NewChangeRequestExtensionBase.Where(u => u.NewChangeRequestId == t.NewChangeRequestId).FirstOrDefault().NewName
                 };
 
