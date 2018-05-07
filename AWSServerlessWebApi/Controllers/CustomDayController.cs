@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Swashbuckle.AspNetCore;
 
 namespace AWSServerlessWebApi.Controllers
 {
@@ -22,18 +23,33 @@ namespace AWSServerlessWebApi.Controllers
             customDayRepo = new CustomDayRepo(context);
         }
 
+        ///    <summary>Create one custom day.</summary>
+        ///    <remarks>A "custom day" is a collection of timeslip templates for one 24-hour period.
+        ///    To create, you must provide the UserId as a string which can be parsed as a Guid.</remarks>
         [HttpPost]
         [Route("Create")]
         public IActionResult Create([FromBody] CustomDayVM customDayVM)
         {
+            string userId = customDayVM.UserId;
+
             if(customDayVM == null)
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid CustomDayVM" });
+                return new BadRequestObjectResult(new { message = "Please provide a valid CustomDayVM" });
             }
-
-            return new OkObjectResult(customDayRepo.CreateCustomDay(customDayVM));
+            if (userId == null || userId == "")
+            {
+                return new BadRequestObjectResult(new { message = "Please provide a UserId." });
+            }
+            Guid userGuid;
+            bool success = Guid.TryParse(userId, out userGuid);
+            if (success)
+            {
+                return new OkObjectResult(customDayRepo.CreateCustomDay(customDayVM));
+            }
+            return new BadRequestObjectResult(new { message = "UserId could not be parsed as a Guid" });  
         }
-
+        ///    <summary>Returns a list of all custom days.</summary>
+        ///    <remarks></remarks>
         [HttpGet]
         [Route("List")]
         public IActionResult List()
@@ -47,10 +63,18 @@ namespace AWSServerlessWebApi.Controllers
         {
             if(id == null ||  id == "")
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid user id" });
+                return new BadRequestObjectResult(new { message = "Please provide a UserId" });
             }
+           
+            Guid userGuid;
+            bool success = Guid.TryParse(id, out userGuid);
+            if (success)
+            {
+
+                return new OkObjectResult(customDayRepo.GetOneUserCustomDays(id));
+            }
+            return new BadRequestObjectResult(new { message = "UserId could not be parsed as a Guid" });
             
-            return new OkObjectResult(customDayRepo.GetOneUserCustomDays(id));
         }
 
         [HttpGet]
@@ -59,7 +83,7 @@ namespace AWSServerlessWebApi.Controllers
         {
             if(id == null || id == "")
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid custom day id" });
+                return new BadRequestObjectResult(new { message = "Please provide a valid custom day id" });
             }
 
             return new OkObjectResult(customDayRepo.GetOneCustomDay(id));
@@ -71,7 +95,7 @@ namespace AWSServerlessWebApi.Controllers
         {
             if (customDayVM == null)
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid CustomDayVM" });
+                return new BadRequestObjectResult(new { message = "Please provide a valid CustomDayVM" });
             }
 
             return new OkObjectResult(customDayRepo.UpdateCustomDay(customDayVM));
@@ -83,13 +107,13 @@ namespace AWSServerlessWebApi.Controllers
         {
             if(id == null || id == "")
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid custom day id" });
+                return new BadRequestObjectResult(new { message = "Please provide a valid custom day id" });
             }
             
             bool success = customDayRepo.DeleteCustomDay(id);
             if (!success)
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "An error occured when deleting a Custom Day." });
+                return new BadRequestObjectResult(new { message = "An error occured when deleting a Custom Day." });
             }
 
             return new ObjectResult(success);

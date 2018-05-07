@@ -29,6 +29,9 @@
 
 
     <PackageReference Include="MySql.Data.Entity" Version="6.10.6" />
+
+
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="2.4.0" />
   </ItemGroup>
 
   <ItemGroup>

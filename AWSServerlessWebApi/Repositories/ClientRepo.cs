@@ -16,7 +16,7 @@ namespace AWSServerlessWebApi.Repositories
             _context = context;
         }
 
-        public void CreateClient(ClientVM clientVM)
+        public AccountBase CreateClient(ClientVM clientVM)
         {
             AccountBase client = new AccountBase()
             {
@@ -28,6 +28,8 @@ namespace AWSServerlessWebApi.Repositories
             };
             _context.AccountBase.Add(client);
             _context.SaveChanges();
+
+            return client;
         }
 
         public List<AccountBase> GetAllClients()
