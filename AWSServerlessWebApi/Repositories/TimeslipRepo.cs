@@ -135,7 +135,7 @@ namespace AWSServerlessWebApi.Repositories
                     EndTime = newEndTime.ToString(),
                     Remarks = t.NewRemarks,
                     WBI_Id = t.NewChangeRequestId.ToString(),
-                    WBIName = _context.NewChangeRequestExtensionBase.Where(u => u.NewChangeRequestId == t.NewChangeRequestId).FirstOrDefault().ToString()
+                    WBIName = _context.NewChangeRequestExtensionBase.Where(u => u.NewChangeRequestId == t.NewChangeRequestId).FirstOrDefault().NewName
                 };
 
                 timeslipListWithWBIName.Add(timeslipWithWBINameVM);
