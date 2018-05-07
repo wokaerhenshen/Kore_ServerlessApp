@@ -8,11 +8,11 @@ namespace AWSServerlessWebApi.ViewModels
 {
     public class TimeslipWithWBINameVM
     {
-        public string TimeslipId { get; set; }
-        public string StartTime { get; set; }
-        public string EndTime { get; set; }
-        public string Remarks { get; set; }
-        public string WBI_Id { get; set; }
+        public string newTimesheetEntryId { get; set; }
+        public string newStartTask { get; set; }
+        public string newEndTask { get; set; }
+        public string newRemarks { get; set; }
+        public string newChangeRequestId { get; set; }
         public string WBIName { get; set; }
     }
 }

@@ -75,6 +75,35 @@ namespace AWSServerlessWebApi.Repositories
             return _context.Timeslip_Templates.Where(t => t.TimeslipTemplateId == id).FirstOrDefault();
         }
 
+        public List<TimeslipWithWBINameVM> GetAllTimeslipTemplatesByCustomDayWithWBIName(string customDayId)
+        {
+            WBIRepo wbiRepo = new WBIRepo(_context);
+
+            var timeslipListByUserId = GetAllTimeslipTemplateByCustomDay(customDayId);
+
+            var timeslipListWithWBIName = new List<TimeslipWithWBINameVM>();
+
+            foreach (NewTimesheetEntryExtensionBase t in timeslipListByUserId)
+            {
+                DateTime? newStartTime = t.NewStartTask;
+                DateTime? newEndTime = t.NewEndTask;
+
+                TimeslipWithWBINameVM timeslipWithWBINameVM = new TimeslipWithWBINameVM()
+                {
+                    newTimesheetEntryId = t.NewTimesheetEntryId.ToString(),
+                    newStartTask = newStartTime.ToString(),
+                    newEndTask = newEndTime.ToString(),
+                    newRemarks = t.NewRemarks,
+                    newChangeRequestId = t.NewChangeRequestId.ToString(),
+                    WBIName = _context.NewChangeRequestExtensionBase.Where(u => u.NewChangeRequestId == t.NewChangeRequestId).FirstOrDefault().NewName
+                };
+
+                timeslipListWithWBIName.Add(timeslipWithWBINameVM);
+            }
+
+            return timeslipListWithWBIName;
+        }
+
         public bool EditTimeslipTemplate(CustomDay_WBIVM customDay_WBIVM)
         {
 
