@@ -172,6 +172,29 @@ namespace AWSServerlessWebApi.Controllers
             
         }
 
+        [HttpGet]
+        [Route("GetAllTimeslipsByUserIdWithWBIName/{id}")]
+        public IActionResult GetAllTimeslipsByUserIdWithWBIName(string id)
+        {
+            if (id == null || id == "")
+            {
+                return new BadRequestObjectResult(new { message = "Please provide a valid user id." });
+            }
+            Guid userGuid;
+            bool success = Guid.TryParse(id, out userGuid);
+            if (success)
+            {
+                var timeslipListWithWBIName = timeslipRepo.GetAllTimeslipsByUserIdWithWBIName(userGuid);
+                if (timeslipListWithWBIName == null || timeslipListWithWBIName.Count == 0)
+                {
+                    return new OkObjectResult("There are no timeslips for this user");
+                }
+                return new OkObjectResult(timeslipListWithWBIName);
+            }
+            return new BadRequestObjectResult(new { message = "id could not be parsed as a Guid" });
+
+        }
+
         [HttpPut]
         [Route("Edit")]
         public IActionResult Edit([FromBody] TimeslipVM timeslipVM)
