@@ -26,6 +26,7 @@ namespace AWSServerlessWebApi.Repositories
 
         public CustomDay CreateCustomDay(CustomDayVM customDay)
         {
+
             CustomDay newCustomDay = new CustomDay()
             {
                 CustomDayId = GenerateCustomDayId(),

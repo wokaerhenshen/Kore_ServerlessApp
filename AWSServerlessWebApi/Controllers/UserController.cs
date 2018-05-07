@@ -35,7 +35,7 @@ namespace AWSServerlessWebApi.Controllers
         {
             if(userVM == null)
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid UserVM" });
+                return new BadRequestObjectResult(new { message = "Please provide a valid UserVM" });
             }
 
             userRepo.CreateUser(userVM);
@@ -99,7 +99,7 @@ namespace AWSServerlessWebApi.Controllers
         {
             if(id == null || id == "")
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid user id" });
+                return new BadRequestObjectResult(new { message = "Please provide a valid user id" });
             }
             Guid guid_id = Guid.Parse(id);
             return new OkObjectResult(userRepo.GetOneUser(guid_id));
@@ -111,7 +111,7 @@ namespace AWSServerlessWebApi.Controllers
         {
             if (userVM == null)
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid UserVM" });
+                return new BadRequestObjectResult(new { message = "Please provide a valid UserVM" });
             }
             userRepo.UpdateOneUser(userVM);
             return new OkObjectResult(true);
@@ -123,7 +123,7 @@ namespace AWSServerlessWebApi.Controllers
         {
             if (id == null || id == "")
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid user id" });
+                return new BadRequestObjectResult(new { message = "Please provide a valid user id" });
             }
             Guid guid_id = Guid.Parse(id);
             userRepo.DeleteOneUser(guid_id);

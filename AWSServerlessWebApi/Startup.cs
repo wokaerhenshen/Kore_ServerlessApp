@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace AWSServerlessWebApi
 {
@@ -66,6 +67,11 @@ namespace AWSServerlessWebApi
 
             services.AddMvc();
 
+            // Register the Swagger generator, defining one or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "KORE Timeslip API", Version = "v1" });
+            });
             //var context = services.GetRequiredService<KORE_Interactive_MSCRMContext>();
 
             // Add S3 to the ASP.NET Core dependency injection framework.
@@ -75,6 +81,14 @@ namespace AWSServerlessWebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "KORE Timeslip API V1");
+            });
             app.UseCors("AllowAll");
             app.UseMvc();          
         }

@@ -54,7 +54,7 @@ namespace AWSServerlessWebApi.Controllers
             }
             else
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Please enter a valid start time" });
+                return new BadRequestObjectResult(new { message = "Please enter a valid start time" });
             }
             //check that end time is a valid datetime
             bool success2 = DateTime.TryParse(timeslipVM.EndTime, out DateTime result2);
@@ -64,7 +64,7 @@ namespace AWSServerlessWebApi.Controllers
             }
             else
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Please enter a valid end time" });
+                return new BadRequestObjectResult(new { message = "Please enter a valid end time" });
             }
             //check if the user id is null
             if (timeslipVM.UserId == null || timeslipVM.UserId == "")
@@ -123,19 +123,39 @@ namespace AWSServerlessWebApi.Controllers
         {
             if(id == null || id == "")
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid timeslip id." });
+                return new BadRequestObjectResult(new { message = "Please provide a valid timeslip id." });
             }
 
             return new ObjectResult(timeslipRepo.GetOneTimeslip(id));
         }
-
+        [HttpGet]
+        [Route("GetAllTimeslipsByWBIId/{id}")]
+        public IActionResult GetAllTimeslipsByWBIId(string id)
+        {
+            if (id == null || id == "")
+            {
+                return new BadRequestObjectResult(new { message = "Please provide a valid user id." });
+            }
+            Guid wbiGuid;
+            bool success = Guid.TryParse(id, out wbiGuid);
+            if (success)
+            {
+                var timeslipList = timeslipRepo.GetAllTimeslipsByWbiId(wbiGuid);
+                if (timeslipList == null || timeslipList.Count == 0)
+                {
+                    return new OkObjectResult("There are no timeslips for this user");
+                }
+                return new OkObjectResult(timeslipList);
+            }
+            return new BadRequestObjectResult(new { message = "id could not be parsed as a Guid" });
+        }
         [HttpGet]
         [Route("GetAllTimeslipsByUserId/{id}")]
         public IActionResult GetAllTimeslipsByUserId(string id)
         {
             if(id == null || id == "")
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid user id." });
+                return new BadRequestObjectResult(new { message = "Please provide a valid user id." });
             }
             Guid userGuid;
             bool success = Guid.TryParse(id, out userGuid);
@@ -179,7 +199,7 @@ namespace AWSServerlessWebApi.Controllers
             }
             else
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Please enter a valid start time" });
+                return new BadRequestObjectResult(new { message = "Please enter a valid start time" });
             }
             //check that end time is a valid datetime
             bool success2 = DateTime.TryParse(timeslipVM.EndTime, out DateTime result2);
@@ -189,7 +209,7 @@ namespace AWSServerlessWebApi.Controllers
             }
             else
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Please enter a valid end time" });
+                return new BadRequestObjectResult(new { message = "Please enter a valid end time" });
             }
             //check if the user id is null
             if (timeslipVM.UserId == null || timeslipVM.UserId == "")
@@ -255,18 +275,18 @@ namespace AWSServerlessWebApi.Controllers
             //check if the view model is null
             if(timeslipId == null)
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Invalid DeleteTSVM. View model cannot be null" });
+                return new BadRequestObjectResult(new { message = "Invalid DeleteTSVM. View model cannot be null" });
             }
             //check if the timeslip id is null or has empty string
             if(timeslipId.TimeSlipId == null || timeslipId.TimeSlipId == "")
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid timeslip id." });
+                return new BadRequestObjectResult(new { message = "Please provide a valid timeslip id." });
             }
 
             bool success = timeslipRepo.DeleteOneTimeslip(timeslipId.TimeSlipId);
             if (!success)
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "An error occured when deleting a timeslip." });
+                return new BadRequestObjectResult(new { message = "An error occured when deleting a timeslip." });
             }
 
             return new ObjectResult(success);

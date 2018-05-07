@@ -114,6 +114,36 @@ namespace AWSServerlessWebApi.Repositories
         {
             return _context.NewTimesheetEntryExtensionBase.Where(t => t.OwningUser == userId).ToList();
         }
+
+        public List<TimeslipWithWBINameVM> GetAllTimeslipsByUserIdWithWBIName(Guid userId)
+        {
+            WBIRepo wbiRepo = new WBIRepo(_context);
+
+            var timeslipListByUserId = GetAllTimeslipsByUserId(userId);
+
+            var timeslipListWithWBIName = new List<TimeslipWithWBINameVM>();
+
+            foreach (NewTimesheetEntryExtensionBase t in timeslipListByUserId)
+            {
+                DateTime? newStartTime = t.NewStartTask;
+                DateTime? newEndTime = t.NewEndTask;
+
+                TimeslipWithWBINameVM timeslipWithWBINameVM = new TimeslipWithWBINameVM()
+                {
+                    TimeslipId = null,
+                    StartTime = newStartTime.ToString(),
+                    EndTime = newEndTime.ToString(),
+                    Remarks = t.NewRemarks,
+                    WBI_Id = t.NewChangeRequestId.ToString(),
+                    WBIName = _context.NewChangeRequestExtensionBase.Where(u => u.NewChangeRequestId == t.NewChangeRequestId).FirstOrDefault().NewName
+                };
+
+                timeslipListWithWBIName.Add(timeslipWithWBINameVM);
+            }
+
+            return timeslipListWithWBIName;
+        }
+
         public List<NewTimesheetEntryExtensionBase> GetAllTimeslipsByUserIdWithDate(Guid userId, DateTime date)
         {
             return _context.NewTimesheetEntryExtensionBase.Where(t => t.OwningUser == userId && t.NewStartTask.Value.Date == date.Date).ToList();
@@ -122,7 +152,10 @@ namespace AWSServerlessWebApi.Repositories
         {
             return _context.NewTimesheetEntryExtensionBase.Where(t => t.CustomDayId == dayId).ToList();
         }
-
+        public List<NewTimesheetEntryExtensionBase> GetAllTimeslipsByWbiId(Guid wbiId)
+        {
+            return _context.NewTimesheetEntryExtensionBase.Where(t => t.NewChangeRequestId == wbiId).ToList();
+        }
         public NewTimesheetEntryExtensionBase EditTimeslip(TimeslipVM timeslipVM)
         {
             

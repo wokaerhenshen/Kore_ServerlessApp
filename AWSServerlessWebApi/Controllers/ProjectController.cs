@@ -31,7 +31,7 @@ namespace AWSServerlessWebApi.Controllers
         {    
             if(Project == null)
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid ProjectVM" });
+                return new BadRequestObjectResult(new { message = "Please provide a valid ProjectVM" });
             }
             projectRepo.CreateProject(Project);
             return new OkObjectResult(true);
@@ -50,7 +50,7 @@ namespace AWSServerlessWebApi.Controllers
         {
             if(id == null || id == "")
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid project id" });
+                return new BadRequestObjectResult(new { message = "Please provide a valid project id" });
             }
 
             Guid guid_id = Guid.Parse(id);
@@ -63,7 +63,7 @@ namespace AWSServerlessWebApi.Controllers
         {
             if (id == null || id == "")
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid wbi id" });
+                return new BadRequestObjectResult(new { message = "Please provide a valid wbi id" });
             }
 
             Guid guid_id = Guid.Parse(id);
@@ -76,7 +76,7 @@ namespace AWSServerlessWebApi.Controllers
         {
             if (id == null || id == "")
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid client id" });
+                return new BadRequestObjectResult(new { message = "Please provide a valid client id" });
             }
 
             Guid clientGuid = Guid.Parse(id);
@@ -96,7 +96,7 @@ namespace AWSServerlessWebApi.Controllers
         {
             if(Project == null)
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid ProjectVM" });
+                return new BadRequestObjectResult(new { message = "Please provide a valid ProjectVM" });
             }
 
             projectRepo.UpdateOneProject(Project);
@@ -109,7 +109,7 @@ namespace AWSServerlessWebApi.Controllers
         {
             if(id == null || id == "")
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid project id" });
+                return new BadRequestObjectResult(new { message = "Please provide a valid project id" });
             }
 
             Guid guid_id = Guid.Parse(id);
