@@ -165,7 +165,7 @@ namespace AWSServerlessWebApi.Data
                     NewStartTask = DateTime.ParseExact("2018-04-20 08:00", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture),
                     NewEndTask = DateTime.ParseExact("2018-04-20 11:00", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture),
                     NewRemarks = "Test Remark",
-                    NewChangeRequestId = workBreakdownItems.Single(w => w.NewRemarks == "Calgary's Finance").NewChangeRequestId,
+                    NewChangeRequestId = workBreakdownItems.Single(w => w.NewName == "Calgary's Finance").NewChangeRequestId,
                     OwningUser = users.Single(u => u.Email == "bob@home.com").UserId
                 },
                 new NewTimesheetEntryExtensionBase
@@ -174,7 +174,7 @@ namespace AWSServerlessWebApi.Data
                     NewStartTask = DateTime.ParseExact("2018-04-20 13:00", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture),
                     NewEndTask = DateTime.ParseExact("2018-04-20 16:00", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture),
                     NewRemarks = "Test Remark two",
-                    NewChangeRequestId = workBreakdownItems.Single(w => w.NewRemarks == "Vancouver's Finance").NewChangeRequestId,
+                    NewChangeRequestId = workBreakdownItems.Single(w => w.NewName == "Vancouver's Finance").NewChangeRequestId,
                     OwningUser = users.Single(u => u.Email == "sally@home.com").UserId
                 },
             };
@@ -207,7 +207,7 @@ namespace AWSServerlessWebApi.Data
                 new CustomDay_WBI
                 {
                     TimeslipTemplateId = "testId1",
-                    NewChangeRequestId = workBreakdownItems.Single(w => w.NewRemarks == "Calgary's Finance").NewChangeRequestId,
+                    NewChangeRequestId = workBreakdownItems.Single(w => w.NewName == "Calgary's Finance").NewChangeRequestId,
                     CustomDayId = customMonday.CustomDayId,
                     StartTime = DateTime.ParseExact("08:00", "HH:mm", CultureInfo.InvariantCulture),
                     EndTime = DateTime.ParseExact("11:00", "HH:mm", CultureInfo.InvariantCulture),
@@ -216,7 +216,7 @@ namespace AWSServerlessWebApi.Data
                 new CustomDay_WBI
                 {
                     TimeslipTemplateId = "testId2",
-                    NewChangeRequestId = workBreakdownItems.Single(w => w.NewRemarks == "Vancouver's Finance").NewChangeRequestId,
+                    NewChangeRequestId = workBreakdownItems.Single(w => w.NewName == "Vancouver's Finance").NewChangeRequestId,
                     CustomDayId = customMonday.CustomDayId,
                     StartTime = DateTime.ParseExact("13:00", "HH:mm", CultureInfo.InvariantCulture),
                     EndTime = DateTime.ParseExact("16:00", "HH:mm", CultureInfo.InvariantCulture),
