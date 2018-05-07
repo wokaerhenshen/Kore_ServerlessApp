@@ -149,6 +149,7 @@ namespace AWSServerlessWebApi.Controllers
             }
             return new BadRequestObjectResult(new { message = "id could not be parsed as a Guid" });
         }
+
         [HttpGet]
         [Route("GetAllTimeslipsByUserId/{id}")]
         public IActionResult GetAllTimeslipsByUserId(string id)
