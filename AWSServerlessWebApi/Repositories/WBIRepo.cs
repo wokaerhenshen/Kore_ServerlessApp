@@ -26,7 +26,7 @@ namespace AWSServerlessWebApi.Repositories
             NewChangeRequestExtensionBase wbi = new NewChangeRequestExtensionBase()
             {
                 NewChangeRequestId = Guid.NewGuid(),
-                NewRemarks = wbiVM.Description,
+                NewName = wbiVM.Description,
                 NewEstimatedHours = wbiVM.EstimatedHours,
                 NewActualHours = NewDefaultHours,
                 NewProjectId = projectGuid
@@ -69,7 +69,7 @@ namespace AWSServerlessWebApi.Repositories
             else
             {
                 
-                wbi.NewRemarks = wbiVM.Description;
+                wbi.NewName = wbiVM.Description;
                 wbi.NewEstimatedHours = wbiVM.EstimatedHours;
                 wbi.NewActualHours = wbiVM.ActualHours;
                
