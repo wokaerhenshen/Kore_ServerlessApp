@@ -75,33 +75,30 @@ namespace AWSServerlessWebApi.Repositories
             return _context.Timeslip_Templates.Where(t => t.TimeslipTemplateId == id).FirstOrDefault();
         }
 
-        public List<TimeslipWithWBINameVM> GetAllTimeslipTemplatesByCustomDayWithWBIName(string customDayId)
+        public List<CustomDay_WBIWithWBINameVM> GetAllTimeslipTemplatesByCustomDayWithWBIName(string customDayId)
         {
             WBIRepo wbiRepo = new WBIRepo(_context);
 
-            var timeslipListByUserId = GetAllTimeslipTemplateByCustomDay(customDayId);
+            var timeslipTemplateListByCustomDay = GetAllTimeslipTemplateByCustomDay(customDayId);
 
-            var timeslipListWithWBIName = new List<TimeslipWithWBINameVM>();
+            var timeslipTemplateListWithWBIName = new List<CustomDay_WBIWithWBINameVM>();
 
-            foreach (NewTimesheetEntryExtensionBase t in timeslipListByUserId)
+            foreach (CustomDay_WBI t in timeslipTemplateListByCustomDay)
             {
-                DateTime? newStartTime = t.NewStartTask;
-                DateTime? newEndTime = t.NewEndTask;
-
-                TimeslipWithWBINameVM timeslipWithWBINameVM = new TimeslipWithWBINameVM()
+                CustomDay_WBIWithWBINameVM customDay_WBIWithWBINameVM = new CustomDay_WBIWithWBINameVM()
                 {
-                    newTimesheetEntryId = t.NewTimesheetEntryId.ToString(),
-                    newStartTask = newStartTime.ToString(),
-                    newEndTask = newEndTime.ToString(),
-                    newRemarks = t.NewRemarks,
+                    TimeslipTemplateId = t.TimeslipTemplateId,
+                    newStartTask = t.StartTime.ToString(),
+                    newEndTask = t.EndTime.ToString(),
+                    newRemarks = t.Remarks,
                     newChangeRequestId = t.NewChangeRequestId.ToString(),
                     WBIName = _context.NewChangeRequestExtensionBase.Where(u => u.NewChangeRequestId == t.NewChangeRequestId).FirstOrDefault().NewName
                 };
 
-                timeslipListWithWBIName.Add(timeslipWithWBINameVM);
+                timeslipTemplateListWithWBIName.Add(customDay_WBIWithWBINameVM);
             }
 
-            return timeslipListWithWBIName;
+            return timeslipTemplateListWithWBIName;
         }
 
         public bool EditTimeslipTemplate(CustomDay_WBIVM customDay_WBIVM)

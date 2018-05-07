@@ -98,6 +98,23 @@ namespace AWSServerlessWebApi.Controllers
         }
 
         [HttpGet]
+        [Route("GetAllTimeslipTemplatesByCustomDayWithWBIName/{id}")]
+        public IActionResult GetAllTimeslipTemplatesByCustomDayWithWBIName(string id)
+        {
+            if (id == null || id == "")
+            {
+                return new BadRequestObjectResult(new { message = "Please provide a valid CustomDayId." });
+            }
+            
+            var timeslipTemplateListWithWBIName = customDay_WBIRepo.GetAllTimeslipTemplatesByCustomDayWithWBIName(id);
+            if (timeslipTemplateListWithWBIName == null || timeslipTemplateListWithWBIName.Count == 0)
+            {
+                return new OkObjectResult("There are no timeslip templates for this custom day");
+            }
+            return new OkObjectResult(timeslipTemplateListWithWBIName);
+        }
+
+        [HttpGet]
         [Route("GetOneTimeslipTemplate/{id}")]
         public IActionResult GetOneTimeslipTemplate(string id)
         {
