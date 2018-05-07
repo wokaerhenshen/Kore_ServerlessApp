@@ -30,7 +30,7 @@ namespace AWSServerlessWebApi.Controllers
         {
             if (Name == null || Name == "")
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a Client Name." });
+                return new BadRequestObjectResult(new { message = "Please provide a Client Name." });
             }
 
             ClientVM client = new ClientVM()
@@ -40,8 +40,8 @@ namespace AWSServerlessWebApi.Controllers
                 DeletionStateCode = ConstantDirectory.DeleteStateCodeDefault,
                 StateCode = ConstantDirectory.StateCodeDefault
             };
-            clientRepo.CreateClient(client);
-            return new OkObjectResult(true);
+            
+            return new OkObjectResult(clientRepo.CreateClient(client));
         }
 
         [HttpGet]
@@ -57,7 +57,7 @@ namespace AWSServerlessWebApi.Controllers
         {
             if(id == null || id == "")
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid client id." });
+                return new BadRequestObjectResult(new { message = "Please provide a valid client id." });
             }
 
             Guid guid_id = Guid.Parse(id);
@@ -71,11 +71,11 @@ namespace AWSServerlessWebApi.Controllers
         {
             if(id == null || id == "")
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid client id." });
+                return new BadRequestObjectResult(new { message = "Please provide a valid client id." });
             }
             if(Name == null || Name == "")
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid client name." });
+                return new BadRequestObjectResult(new { message = "Please provide a valid client name." });
             }
             
             ClientVM client = new ClientVM()
@@ -94,7 +94,7 @@ namespace AWSServerlessWebApi.Controllers
         {
             if(id == null || id == "")
             {
-                return new BadRequestObjectResult(new { ErrorMessage = "Please provide a valid client id." });
+                return new BadRequestObjectResult(new { message = "Please provide a valid client id." });
             }
             Guid guid_id = Guid.Parse(id);
             clientRepo.DeleteOneClient(guid_id);
