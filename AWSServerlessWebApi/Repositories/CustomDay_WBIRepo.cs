@@ -88,10 +88,10 @@ namespace AWSServerlessWebApi.Repositories
                 CustomDay_WBIWithWBINameVM customDay_WBIWithWBINameVM = new CustomDay_WBIWithWBINameVM()
                 {
                     TimeslipTemplateId = t.TimeslipTemplateId,
-                    newStartTask = t.StartTime.ToString(),
-                    newEndTask = t.EndTime.ToString(),
-                    newRemarks = t.Remarks,
-                    newChangeRequestId = t.NewChangeRequestId.ToString(),
+                    StartTime = t.StartTime,
+                    EndTime = t.EndTime,
+                    Remarks = t.Remarks,
+                    NewChangeRequestId = t.NewChangeRequestId,
                     WBIName = _context.NewChangeRequestExtensionBase.Where(u => u.NewChangeRequestId == t.NewChangeRequestId).FirstOrDefault().NewName
                 };
 

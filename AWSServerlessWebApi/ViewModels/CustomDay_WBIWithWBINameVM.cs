@@ -8,10 +8,10 @@ namespace AWSServerlessWebApi.ViewModels
     public class CustomDay_WBIWithWBINameVM
     {
         public string TimeslipTemplateId { get; set; }
-        public string newStartTask { get; set; }
-        public string newEndTask { get; set; }
-        public string newRemarks { get; set; }
-        public string newChangeRequestId { get; set; }
+        public Guid? NewChangeRequestId { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
+        public string Remarks { get; set; }
         public string WBIName { get; set; }
     }
 }
