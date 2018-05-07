@@ -109,7 +109,7 @@ namespace AWSServerlessWebApi.Controllers
             var timeslipTemplateListWithWBIName = customDay_WBIRepo.GetAllTimeslipTemplatesByCustomDayWithWBIName(id);
             if (timeslipTemplateListWithWBIName == null || timeslipTemplateListWithWBIName.Count == 0)
             {
-                return new OkObjectResult("There are no timeslip templates for this custom day");
+                return new BadRequestObjectResult("There are no timeslip templates for this custom day");
             }
             return new OkObjectResult(timeslipTemplateListWithWBIName);
         }
