@@ -109,7 +109,7 @@ namespace AWSServerlessWebApi.Controllers
             var timeslipTemplateListWithWBIName = customDay_WBIRepo.GetAllTimeslipTemplatesByCustomDayWithWBIName(id);
             if (timeslipTemplateListWithWBIName == null || timeslipTemplateListWithWBIName.Count == 0)
             {
-                return new BadRequestObjectResult("There are no timeslip templates for this custom day");
+                return new BadRequestObjectResult(new { message = "There are no timeslip templates for this custom day" });
             }
             return new OkObjectResult(timeslipTemplateListWithWBIName);
         }
@@ -153,7 +153,7 @@ namespace AWSServerlessWebApi.Controllers
                 {
                     template.StartTime = new DateTime(newDateTime.Year, newDateTime.Month, newDateTime.Day, template.StartTime.Hour, template.StartTime.Minute, template.StartTime.Second);
                     template.EndTime = new DateTime(newDateTime.Year, newDateTime.Month, newDateTime.Day, template.EndTime.Hour, template.EndTime.Minute, template.EndTime.Second);
-                    if (template.StartTime <= timeslip.NewEndTask && template.EndTime >= timeslip.NewStartTask)
+                    if (template.StartTime < timeslip.NewEndTask && template.EndTime > timeslip.NewStartTask)
                     {
                         return new BadRequestObjectResult(new { message = "One of the times in this custom day overlaps with an existing timeslip. Your request cannot be processed." });
                     }
