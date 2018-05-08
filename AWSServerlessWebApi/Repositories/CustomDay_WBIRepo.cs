@@ -1,5 +1,6 @@
 ﻿using AWSServerlessWebApi.Models;
 using AWSServerlessWebApi.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace AWSServerlessWebApi.Repositories
             _context = context;
         }
 
-        public CustomDay_WBI CreateTimeslipTemplate(CustomDay_WBIVM customDay_WBIVM)
+        public IActionResult CreateTimeslipTemplate(CustomDay_WBIVM customDay_WBIVM)
         {
             Guid wbiGuid = Guid.Parse(customDay_WBIVM.WBI_Id);
             // application user needs to be here
@@ -33,36 +34,38 @@ namespace AWSServerlessWebApi.Repositories
             }
             else
             {
-                throw new ArgumentNullException("You need to enter a start time...");
+                //throw new ArgumentNullException("You need to enter a start time...");
+                return new BadRequestObjectResult(new { message = "You need to enter a start time..." });
             }
+
             if (customDay_WBIVM.EndTime != null)
             {
                 timeslip_template.EndTime = DateTime.Parse(customDay_WBIVM.EndTime);
             }
             else
             {
-                throw new ArgumentNullException("You need to enter an end time...");
+                return new BadRequestObjectResult(new { message = "You need to enter an end time..." });
             }
 
             foreach (var item in _context.Timeslip_Templates.Where(i=> i.CustomDayId == customDay_WBIVM.CustomDayId))
             {
                 
 
-                    if (item.StartTime > timeslip_template.EndTime || item.EndTime < timeslip_template.StartTime)
+                    if (item.StartTime >= timeslip_template.EndTime || item.EndTime <= timeslip_template.StartTime)
                     {
                         //throw new ArgumentException("Times cannot overlap");
                     }
                     else
                     {
 
-                    throw new ArgumentException("Times cannot overlap");
+                    return new BadRequestObjectResult(new { message = "Times cannot overlap" });
 
-                    }
+                }
             }
             _context.Timeslip_Templates.Add(timeslip_template);
             _context.SaveChanges();
 
-            return timeslip_template;
+            return new OkObjectResult(timeslip_template);
         }
 
         public List<CustomDay_WBI> GetAllTimeslipTemplateByCustomDay(string customDayId)
