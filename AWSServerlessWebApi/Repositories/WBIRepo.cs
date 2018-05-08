@@ -49,7 +49,7 @@ namespace AWSServerlessWebApi.Repositories
 
         public List<NewChangeRequestExtensionBase> GetWBIBySearchString(string search)
         {
-            return _context.NewChangeRequestExtensionBase.Where(i => i.NewRemarks.Contains(search)).ToList();
+            return _context.NewChangeRequestExtensionBase.Where(i => i.NewName.Contains(search)).ToList();
         }
 
         public NewChangeRequestExtensionBase GetOneWBI(Guid id)
