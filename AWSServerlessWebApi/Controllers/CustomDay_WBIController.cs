@@ -80,9 +80,25 @@ namespace AWSServerlessWebApi.Controllers
             {
                 if (item.TimeslipTemplateId != customDay_WBIVM.TimeslipTemplateId)
                 {
-                    if (item.StartTime < newEndTime && item.EndTime > newStartTime)
+                    if (item.StartTime.Hour < newEndTime.Hour && item.EndTime.Hour > newStartTime.Hour)
                     {
                         return new BadRequestObjectResult(new { message = "Times cannot overlap" });
+                    }
+
+                    if (item.StartTime.Hour == newEndTime.Hour)
+                    {
+                        if (item.StartTime.Minute < newEndTime.Minute)
+                        {
+                            return new BadRequestObjectResult(new { message = "Times cannot overlap" });
+                        }
+                    }
+
+                    if (item.EndTime.Hour == newStartTime.Hour)
+                    {
+                        if (item.EndTime.Minute > newStartTime.Minute)
+                        {
+                            return new BadRequestObjectResult(new { message = "Times cannot overlap" });
+                        }
                     }
                 }
             }
