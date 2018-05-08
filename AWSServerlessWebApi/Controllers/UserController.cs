@@ -31,15 +31,26 @@ namespace AWSServerlessWebApi.Controllers
 
         [HttpPost]
         [Route("Create")]
-        public IActionResult Create([FromBody] UserVM userVM)
+        public object Create([FromBody] UserVM userVM)
         {
             if(userVM == null)
             {
                 return new BadRequestObjectResult(new { message = "Please provide a valid UserVM" });
             }
-
+            
             userRepo.CreateUser(userVM);
-            return new OkObjectResult(true);
+            LoginVM model = new LoginVM
+            {
+                Email = userVM.Email,
+                Password = userVM.Password
+            };
+            string result = userRepo.SignIn(model);
+            if (result != "karl")
+            {
+                return GenerateJwtToken(model.Email, result);
+            }
+            return new BadRequestObjectResult(new { message = "Invalid login attempt" });
+
         }
 
         [HttpPost]
@@ -52,7 +63,7 @@ namespace AWSServerlessWebApi.Controllers
             {
                 return GenerateJwtToken(model.Email, result);
             }
-            throw new ApplicationException("INVALID_LOGIN_ATTEMPT");
+            return new BadRequestObjectResult(new { message = "Invalid login attempt" });
         }
 
         // Generates a token using settings stored in the appsettings.json file.

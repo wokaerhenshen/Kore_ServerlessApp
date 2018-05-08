@@ -29,10 +29,15 @@ namespace AWSServerlessWebApi.Controllers
         [Route("Create")]
         public IActionResult Create([FromBody] WBIVM wbiVM)
         {
+            if(wbiVM.EstimatedHours <= 0)
+            {
+                return new BadRequestObjectResult(new { message = "Estimated hours cannot be less than or equal to zero" });
+            }
             if (wbiVM.ProjectId == null || wbiVM.ProjectId == "")
             {
                 return new BadRequestObjectResult( new { message = "Please provide a ProjectId" });
             }
+            
             Guid result;
             bool success = Guid.TryParse(wbiVM.ProjectId, out result);
             if (success)
