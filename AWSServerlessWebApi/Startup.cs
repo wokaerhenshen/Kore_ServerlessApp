@@ -89,13 +89,10 @@ namespace AWSServerlessWebApi
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "KORE Timeslip API V1");
             });
-<<<<<<< HEAD
+
             
             app.UseMvc();          
-=======
-            app.UseCors("AllowAll");
-            app.UseMvc();
->>>>>>> b2168e4179024a04735148c21170f056b83db76d
+
         }
     }
 }
