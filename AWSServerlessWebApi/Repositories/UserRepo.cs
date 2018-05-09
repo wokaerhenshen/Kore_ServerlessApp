@@ -15,7 +15,7 @@ namespace AWSServerlessWebApi.Repositories
     public class UserRepo
     {
         KORE_Interactive_MSCRMContext _context;
-        
+
 
         public UserRepo(KORE_Interactive_MSCRMContext context)
         {
@@ -45,7 +45,8 @@ namespace AWSServerlessWebApi.Repositories
             if (user != null)
             {
                 return user.UserId.ToString();
-            }else
+            }
+            else
             {
                 return "karl";
             }
@@ -61,7 +62,7 @@ namespace AWSServerlessWebApi.Repositories
         {
             return _context.Users.Where(i => i.UserId == id).FirstOrDefault();
         }
-        
+
         public void UpdateOneUser(UserVM userVM)
         {
 

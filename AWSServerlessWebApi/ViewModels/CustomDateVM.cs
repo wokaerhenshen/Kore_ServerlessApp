@@ -9,6 +9,5 @@ namespace AWSServerlessWebApi.ViewModels
     {
         public string CustomdayId { get; set; }
         public string Date { get; set; }
-        
     }
 }

@@ -14,9 +14,7 @@ using Newtonsoft.Json;
 
 namespace AWSServerlessWebApi.Controllers
 {
-    /// <summary>
-    /// ASP.NET Core controller acting as a S3 Proxy.
-    /// </summary>
+    // ASP.NET Core controller acting as a S3 Proxy.
     [Route("api/[controller]")]
     public class S3ProxyController : Controller
     {
@@ -31,7 +29,7 @@ namespace AWSServerlessWebApi.Controllers
             this.S3Client = s3Client;
 
             this.BucketName = configuration[Startup.AppS3BucketKey];
-            if(string.IsNullOrEmpty(this.BucketName))
+            if (string.IsNullOrEmpty(this.BucketName))
             {
                 logger.LogCritical("Missing configuration for S3 bucket. The AppS3Bucket configuration must be set to a S3 bucket.");
                 throw new Exception("Missing configuration for S3 bucket. The AppS3Bucket configuration must be set to a S3 bucket.");
@@ -43,22 +41,6 @@ namespace AWSServerlessWebApi.Controllers
         [HttpGet]
         public string Get()
         {
-            //var listResponse = await this.S3Client.ListObjectsV2Async(new ListObjectsV2Request
-            //{
-            //    BucketName = this.BucketName
-            //});
-
-            //try
-            //{
-            //    this.Response.ContentType = "text/json";
-            //    return new JsonResult(listResponse.S3Objects, new JsonSerializerSettings { Formatting = Formatting.Indented });
-            //}
-            //catch(AmazonS3Exception e)
-            //{
-            //    this.Response.StatusCode = (int)e.StatusCode;
-            //    return new JsonResult(e.Message);
-            //}
-
             return "ok";
         }
 
@@ -117,8 +99,8 @@ namespace AWSServerlessWebApi.Controllers
         {
             var deleteRequest = new DeleteObjectRequest
             {
-                 BucketName = this.BucketName,
-                 Key = key
+                BucketName = this.BucketName,
+                Key = key
             };
 
             try

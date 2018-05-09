@@ -28,8 +28,8 @@ namespace AWSServerlessWebApi.Controllers
         [HttpPost]
         [Route("Create")]
         public IActionResult Create([FromBody] ProjectVM Project)
-        {    
-            if(Project == null)
+        {
+            if (Project == null)
             {
                 return new BadRequestObjectResult(new { message = "Please provide a valid ProjectVM" });
             }
@@ -48,7 +48,7 @@ namespace AWSServerlessWebApi.Controllers
         [Route("GetOneProject/{id}")]
         public IActionResult GetOneProject(string id)
         {
-            if(id == null || id == "")
+            if (id == null || id == "")
             {
                 return new BadRequestObjectResult(new { message = "Please provide a valid project id" });
             }
@@ -94,7 +94,7 @@ namespace AWSServerlessWebApi.Controllers
         [Route("Update")]
         public IActionResult Update([FromBody] ProjectVM Project)
         {
-            if(Project == null)
+            if (Project == null)
             {
                 return new BadRequestObjectResult(new { message = "Please provide a valid ProjectVM" });
             }
@@ -107,7 +107,7 @@ namespace AWSServerlessWebApi.Controllers
         [Route("Delete/{id}")]
         public IActionResult Delete(string id)
         {
-            if(id == null || id == "")
+            if (id == null || id == "")
             {
                 return new BadRequestObjectResult(new { message = "Please provide a valid project id" });
             }

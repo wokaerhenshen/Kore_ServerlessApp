@@ -28,11 +28,10 @@ namespace AWSServerlessWebApi
                 var services = scope.ServiceProvider;
 
                 var context = services.GetRequiredService<KORE_Interactive_MSCRMContext>();
-                
+
                 Seeder seeder = new Seeder(context);
                 seeder.SeedData();
                 seeder.SeedStringMap();
-
             }
             host.Run();
 

@@ -35,12 +35,11 @@ namespace AWSServerlessWebApi.Controllers
 
             ClientVM client = new ClientVM()
             {
-
                 ClientName = Name,
                 DeletionStateCode = ConstantDirectory.DeleteStateCodeDefault,
                 StateCode = ConstantDirectory.StateCodeDefault
             };
-            
+
             return new OkObjectResult(clientRepo.CreateClient(client));
         }
 
@@ -55,7 +54,7 @@ namespace AWSServerlessWebApi.Controllers
         [Route("GetOneClient/{id}")]
         public IActionResult GetOneClient(string id)
         {
-            if(id == null || id == "")
+            if (id == null || id == "")
             {
                 return new BadRequestObjectResult(new { message = "Please provide a valid client id." });
             }
@@ -69,19 +68,19 @@ namespace AWSServerlessWebApi.Controllers
         [Route("Update")]
         public IActionResult Update(string id, string Name)
         {
-            if(id == null || id == "")
+            if (id == null || id == "")
             {
                 return new BadRequestObjectResult(new { message = "Please provide a valid client id." });
             }
-            if(Name == null || Name == "")
+            if (Name == null || Name == "")
             {
                 return new BadRequestObjectResult(new { message = "Please provide a valid client name." });
             }
-            
+
             ClientVM client = new ClientVM()
             {
                 ClientId = id,
-                ClientName = Name                
+                ClientName = Name
             };
             clientRepo.UpdateOneClient(client);
             return new OkObjectResult(true);
@@ -92,7 +91,7 @@ namespace AWSServerlessWebApi.Controllers
         [Route("Delete")]
         public IActionResult Delete(string id)
         {
-            if(id == null || id == "")
+            if (id == null || id == "")
             {
                 return new BadRequestObjectResult(new { message = "Please provide a valid client id." });
             }

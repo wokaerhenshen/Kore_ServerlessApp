@@ -33,11 +33,11 @@ namespace AWSServerlessWebApi.Controllers
         [Route("Create")]
         public object Create([FromBody] UserVM userVM)
         {
-            if(userVM == null)
+            if (userVM == null)
             {
                 return new BadRequestObjectResult(new { message = "Please provide a valid UserVM" });
             }
-            
+
             userRepo.CreateUser(userVM);
             LoginVM model = new LoginVM
             {
@@ -58,7 +58,7 @@ namespace AWSServerlessWebApi.Controllers
         public object Login([FromBody] LoginVM model)
         {
             string result = userRepo.SignIn(model);
-             
+
             if (result != "karl")
             {
                 return GenerateJwtToken(model.Email, result);
@@ -108,7 +108,7 @@ namespace AWSServerlessWebApi.Controllers
         [Route("GetOneUser/{id}")]
         public IActionResult GetOneUser(string id)
         {
-            if(id == null || id == "")
+            if (id == null || id == "")
             {
                 return new BadRequestObjectResult(new { message = "Please provide a valid user id" });
             }

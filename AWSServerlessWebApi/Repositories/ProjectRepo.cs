@@ -13,7 +13,7 @@ namespace AWSServerlessWebApi.Repositories
 
         KORE_Interactive_MSCRMContext _context;
 
-        public ProjectRepo (KORE_Interactive_MSCRMContext context)
+        public ProjectRepo(KORE_Interactive_MSCRMContext context)
         {
             _context = context;
         }
@@ -53,7 +53,7 @@ namespace AWSServerlessWebApi.Repositories
                 };
                 _context.NewProjectTypeExtensionBase.Add(currentProjectType);
                 _context.SaveChanges();
-            } 
+            }
 
             NewProjectExtensionBase project = new NewProjectExtensionBase()
             {
@@ -105,12 +105,6 @@ namespace AWSServerlessWebApi.Repositories
             project.NewName = projectVM.ProjectName;
             project.NewStartDate = projectVM.StartDate;
             project.NewEndDate = projectVM.EndDate;
-            //project.NewAccountId = Guid.Parse(projectVM.ClientId);
-
-            //NewProjectTypeExtensionBase projectType = _context.NewProjectTypeExtensionBase
-            //                                         .Where(u => u.NewProjectTypeId == project.NewProjectTypeId)
-            //                                         .FirstOrDefault();
-            //projectType.NewName = projectVM.ProjectType;
 
             _context.SaveChanges();
         }

@@ -36,14 +36,15 @@ namespace AWSServerlessWebApi.Controllers
             //check for start time null or empty
             if (customDay_WBIVM.StartTime == null || customDay_WBIVM.StartTime == "")
             {
-                return new BadRequestObjectResult( new { message = "Please enter a start time" });
+                return new BadRequestObjectResult(new { message = "Please enter a start time" });
             }
             //check that start time is a valid datetime
             bool success1 = DateTime.TryParse(customDay_WBIVM.StartTime, out DateTime result1);
             if (success1)
             {
                 newStartTime = result1;
-            } else
+            }
+            else
             {
                 return new BadRequestObjectResult(new { message = "Please enter a valid start time" });
             }
@@ -64,12 +65,12 @@ namespace AWSServerlessWebApi.Controllers
             }
             //check that start time is less than (earlier than) end time
 
-            if(newStartTime >= newEndTime)
+            if (newStartTime >= newEndTime)
             {
                 return new BadRequestObjectResult(new { message = "End time must be later than start time" });
             }
             //check that start time and end time are the same date
-            if(newStartTime.Date != newEndTime.Date)
+            if (newStartTime.Date != newEndTime.Date)
             {
                 return new BadRequestObjectResult(new { message = "Start and end time must be the same date" });
             }
@@ -121,7 +122,7 @@ namespace AWSServerlessWebApi.Controllers
             {
                 return new BadRequestObjectResult(new { message = "Please provide a valid CustomDayId." });
             }
-            
+
             var timeslipTemplateListWithWBIName = customDay_WBIRepo.GetAllTimeslipTemplatesByCustomDayWithWBIName(id);
             if (timeslipTemplateListWithWBIName == null || timeslipTemplateListWithWBIName.Count == 0)
             {
@@ -141,8 +142,6 @@ namespace AWSServerlessWebApi.Controllers
         [Route("CreateAllTimeslipsUsingCustomDay")]
         public IActionResult CreateAllTimeslipsFromCustomDay([FromBody] CustomDateVM customDateVM)
         {
-            //check for Estimated hours
-
             //get the custom day (for the user ID)
             CustomDay customDay = customDayRepo.GetOneCustomDay(customDateVM.CustomdayId);
             //create a variable to store the date
@@ -163,9 +162,9 @@ namespace AWSServerlessWebApi.Controllers
             //get all timeslip templates by custom day
             var templateList = customDay_WBIRepo.GetAllTimeslipTemplateByCustomDay(customDateVM.CustomdayId);
 
-            foreach(var timeslip in userTimeslipsList)
+            foreach (var timeslip in userTimeslipsList)
             {
-                foreach(var template in templateList)
+                foreach (var template in templateList)
                 {
                     template.StartTime = new DateTime(newDateTime.Year, newDateTime.Month, newDateTime.Day, template.StartTime.Hour, template.StartTime.Minute, template.StartTime.Second);
                     template.EndTime = new DateTime(newDateTime.Year, newDateTime.Month, newDateTime.Day, template.EndTime.Hour, template.EndTime.Minute, template.EndTime.Second);
@@ -233,10 +232,6 @@ namespace AWSServerlessWebApi.Controllers
                 return new BadRequestObjectResult(new { message = "Start and end time must be the same date" });
             }
 
-            //if (customDay_WBIVM.CustomDayId == null || customDay_WBIVM.CustomDayId == "")
-            //{
-            //    return new BadRequestObjectResult(new { ErrorMessage = "CustomDayId cannot be null" });
-            //}
             var timeslipTemplate = customDay_WBIRepo.GetOneTimeslipTemplate(customDay_WBIVM.TimeslipTemplateId);
 
             //check for overlap with other timeslip templates

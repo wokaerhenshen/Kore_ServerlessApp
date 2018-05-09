@@ -19,11 +19,10 @@ namespace AWSServerlessWebApi.Repositories
             _context = context;
         }
 
-        public NewTimesheetEntryExtensionBase CreateTimeslip (TimeslipVM timeslipVM)
+        public NewTimesheetEntryExtensionBase CreateTimeslip(TimeslipVM timeslipVM)
         {
             Guid userGuid = Guid.Parse(timeslipVM.UserId);
             Guid wbiGuid = Guid.Parse(timeslipVM.WBI_Id);
-            // application user needs to be here
             NewTimesheetEntryExtensionBase timeslip = new NewTimesheetEntryExtensionBase()
             {
                 NewTimesheetEntryId = Guid.NewGuid(),
@@ -33,7 +32,7 @@ namespace AWSServerlessWebApi.Repositories
                 OwningUser = userGuid,
                 NewStartTask = DateTime.Parse(timeslipVM.StartTime),
                 NewEndTask = DateTime.Parse(timeslipVM.EndTime)
-        };
+            };
 
             TimeSpan? duration = timeslip.NewEndTask - timeslip.NewStartTask;
 
@@ -55,7 +54,7 @@ namespace AWSServerlessWebApi.Repositories
             var sameDate = date.Date;
 
             foreach (var item in _context.NewTimesheetEntryExtensionBase
-                                         .Where(u => Convert.ToDateTime(u.NewStartTask).Date == sameDate && 
+                                         .Where(u => Convert.ToDateTime(u.NewStartTask).Date == sameDate &&
                                                      u.OwningUser == userGuid))
             {
                 if (item.NewTimesheetEntryId != timeslip.NewTimesheetEntryId)
@@ -110,7 +109,7 @@ namespace AWSServerlessWebApi.Repositories
             return _context.NewTimesheetEntryExtensionBase.Where(t => t.NewTimesheetEntryId == guid).FirstOrDefault();
         }
 
-        public List<NewTimesheetEntryExtensionBase> GetAllTimeslipsByUserId (Guid userId)
+        public List<NewTimesheetEntryExtensionBase> GetAllTimeslipsByUserId(Guid userId)
         {
             return _context.NewTimesheetEntryExtensionBase.Where(t => t.OwningUser == userId).ToList();
         }
@@ -158,7 +157,7 @@ namespace AWSServerlessWebApi.Repositories
         }
         public NewTimesheetEntryExtensionBase EditTimeslip(TimeslipVM timeslipVM)
         {
-            
+
             var timeslip = GetOneTimeslip(timeslipVM.TimeslipId);
             if (timeslip == null)
             {
@@ -181,7 +180,8 @@ namespace AWSServerlessWebApi.Repositories
                     int difference = newDurationInHours - oldDurationInHours;
                     wbi.NewActualHours = wbi.NewActualHours + difference;
 
-                } else if (newDurationInHours < oldDurationInHours)
+                }
+                else if (newDurationInHours < oldDurationInHours)
                 {
                     //minus
                     int difference = oldDurationInHours - newDurationInHours;
@@ -191,7 +191,7 @@ namespace AWSServerlessWebApi.Repositories
                 timeslip.NewStartTask = DateTime.Parse(timeslipVM.StartTime);
                 timeslip.NewEndTask = DateTime.Parse(timeslipVM.EndTime);
                 timeslip.NewRemarks = timeslipVM.Remarks;
-                
+
                 _context.SaveChanges();
             }
             return timeslip;

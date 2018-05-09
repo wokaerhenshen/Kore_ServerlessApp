@@ -24,9 +24,6 @@ namespace AWSServerlessWebApi.Models
         public bool? NewApprovedForBilling { get; set; }
         public bool? NewCredit { get; set; }
         public Guid? NewTimesheetbatchid { get; set; }
-
-
-        // the columns below and getten from a similar table
         public DateTime? CreatedOn { get; set; }
         public Guid? CreatedBy { get; set; }
         public DateTime? ModifiedOn { get; set; }
@@ -41,8 +38,6 @@ namespace AWSServerlessWebApi.Models
         public DateTime? OverriddenCreatedOn { get; set; }
         public string CustomDayId { get; set; }
 
-
-       // public virtual CustomDay CustomDay { get; set; }
         public virtual User User { get; set; }
     }
 }

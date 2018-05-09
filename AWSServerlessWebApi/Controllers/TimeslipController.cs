@@ -41,7 +41,7 @@ namespace AWSServerlessWebApi.Controllers
             DateTime newEndTime;
 
             //check if the dates are null
-            if ((timeslipVM.StartTime == null || timeslipVM.StartTime == "") || 
+            if ((timeslipVM.StartTime == null || timeslipVM.StartTime == "") ||
                 (timeslipVM.EndTime == null || timeslipVM.EndTime == ""))
             {
                 return new BadRequestObjectResult(new { message = "Invalid time input. Please enter a valid time." });
@@ -100,12 +100,12 @@ namespace AWSServerlessWebApi.Controllers
             var timeslipListByUserIdOnTheSameDay = timeslipListByUserId.Where(u => Convert.ToDateTime(u.NewStartTask).Date == sameDate);
             foreach (var item in timeslipListByUserIdOnTheSameDay)
             {
-                    if (item.NewStartTask < Convert.ToDateTime(timeslipVM.EndTime) && 
-                        item.NewEndTask > Convert.ToDateTime(timeslipVM.StartTime))
-                    {
-                        return new BadRequestObjectResult(new { message = "Times cannot overlap" });
-                    }
-            }           
+                if (item.NewStartTask < Convert.ToDateTime(timeslipVM.EndTime) &&
+                    item.NewEndTask > Convert.ToDateTime(timeslipVM.StartTime))
+                {
+                    return new BadRequestObjectResult(new { message = "Times cannot overlap" });
+                }
+            }
 
             return new ObjectResult(timeslipRepo.CreateTimeslip(timeslipVM));
         }
@@ -121,7 +121,7 @@ namespace AWSServerlessWebApi.Controllers
         [Route("GetOneTimeslip/{id}")]
         public IActionResult GetOneTimeslip(string id)
         {
-            if(id == null || id == "")
+            if (id == null || id == "")
             {
                 return new BadRequestObjectResult(new { message = "Please provide a valid timeslip id." });
             }
@@ -154,7 +154,7 @@ namespace AWSServerlessWebApi.Controllers
         [Route("GetAllTimeslipsByUserId/{id}")]
         public IActionResult GetAllTimeslipsByUserId(string id)
         {
-            if(id == null || id == "")
+            if (id == null || id == "")
             {
                 return new BadRequestObjectResult(new { message = "Please provide a valid user id." });
             }
@@ -163,14 +163,14 @@ namespace AWSServerlessWebApi.Controllers
             if (success)
             {
                 var timeslipList = timeslipRepo.GetAllTimeslipsByUserId(userGuid);
-                if(timeslipList == null || timeslipList.Count == 0)
+                if (timeslipList == null || timeslipList.Count == 0)
                 {
                     return new OkObjectResult("There are no timeslips for this user");
                 }
                 return new OkObjectResult(timeslipList);
             }
             return new BadRequestObjectResult(new { message = "id could not be parsed as a Guid" });
-            
+
         }
 
         [HttpGet]
@@ -240,11 +240,6 @@ namespace AWSServerlessWebApi.Controllers
             {
                 return new BadRequestObjectResult(new { message = "Invalid user. Please log in." });
             }
-            //check if the wbi id is null
-            //if (timeslipVM.WBI_Id == null || timeslipVM.WBI_Id == "")
-            //{
-            //    return BadRequest(new { message = "Please enter a Work Breakdown Item." });
-            //}
 
             //check if the end time is earlier than start time
             if (newStartTime >= newEndTime)
@@ -297,12 +292,12 @@ namespace AWSServerlessWebApi.Controllers
         public IActionResult Delete([FromBody] DeleteTSVM timeslipId)
         {
             //check if the view model is null
-            if(timeslipId == null)
+            if (timeslipId == null)
             {
                 return new BadRequestObjectResult(new { message = "Invalid DeleteTSVM. View model cannot be null" });
             }
             //check if the timeslip id is null or has empty string
-            if(timeslipId.TimeSlipId == null || timeslipId.TimeSlipId == "")
+            if (timeslipId.TimeSlipId == null || timeslipId.TimeSlipId == "")
             {
                 return new BadRequestObjectResult(new { message = "Please provide a valid timeslip id." });
             }
@@ -316,5 +311,5 @@ namespace AWSServerlessWebApi.Controllers
             return new ObjectResult(success);
         }
     }
-    
+
 }

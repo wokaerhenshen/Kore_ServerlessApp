@@ -46,8 +46,7 @@ namespace AWSServerlessWebApi.Repositories
             Guid clientGuid = Guid.Parse(clientVM.ClientId);
             AccountBase client = _context.AccountBase.Where(i => i.AccountId == clientGuid).FirstOrDefault();
             client.Name = clientVM.ClientName;
-            //client.DeletionStateCode = clientVM.DeletionStateCode;
-            //client.StateCode = clientVM.StateCode;
+
             _context.SaveChanges();
         }
 
