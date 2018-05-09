@@ -5,8 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AWSServerlessWebApi.Models;
-//using AWSServerlessWebApi.Data;
-//using AWSServerlessWebApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -35,7 +33,7 @@ namespace AWSServerlessWebApi
 
             services.AddDbContext<KORE_Interactive_MSCRMContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-                        // Call this before AddMvc()
+            // Call this before AddMvc()
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll",
@@ -52,7 +50,8 @@ namespace AWSServerlessWebApi
             // Add this before services.AddMvc()
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             services.AddAuthentication()
-            .AddJwtBearer(cfg => {
+            .AddJwtBearer(cfg =>
+            {
                 cfg.RequireHttpsMetadata = false;
                 cfg.SaveToken = true;
                 cfg.TokenValidationParameters = new TokenValidationParameters
@@ -90,8 +89,13 @@ namespace AWSServerlessWebApi
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "KORE Timeslip API V1");
             });
+<<<<<<< HEAD
             
             app.UseMvc();          
+=======
+            app.UseCors("AllowAll");
+            app.UseMvc();
+>>>>>>> b2168e4179024a04735148c21170f056b83db76d
         }
     }
 }

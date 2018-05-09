@@ -263,7 +263,7 @@ namespace AWSServerlessWebApi.Data
                             StringMapId = Guid.Parse(cells[9])
                         }
                     };
-                    foreach ( StringMap s in stringmaps)
+                    foreach (StringMap s in stringmaps)
                     {
                         _context.StringMap.Add(s);
                     }

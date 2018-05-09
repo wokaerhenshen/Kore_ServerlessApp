@@ -12,7 +12,7 @@ namespace AWSServerlessWebApi.Models
         public virtual DbSet<NewProjectExtensionBase> NewProjectExtensionBase { get; set; }
         public virtual DbSet<NewProjectTypeExtensionBase> NewProjectTypeExtensionBase { get; set; }
         public virtual DbSet<NewTimesheetEntryExtensionBase> NewTimesheetEntryExtensionBase { get; set; }
-        
+
         public virtual DbSet<StringMap> StringMap { get; set; }
         public virtual DbSet<CustomDay> CustomDays { get; set; }
         public virtual DbSet<CustomDay_WBI> Timeslip_Templates { get; set; }
@@ -29,8 +29,6 @@ namespace AWSServerlessWebApi.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-//                optionsBuilder.UseSqlServer(@"Server=KARL;Database=KORE_Interactive_MSCRM;Trusted_Connection=True;MultipleActiveResultSets=true");
             }
         }
 
@@ -481,19 +479,10 @@ namespace AWSServerlessWebApi.Models
 
                 entity.Property(e => e.NewTimesheetbatchid).HasColumnName("new_timesheetbatchid");
 
-
-                // the properties below and hard coded :
-                // nothing actually
                 entity.HasOne(e => e.User)
                     .WithMany(p => p.NewTimesheetEntryExtensionBase)
                     .HasForeignKey(d => d.OwningUser)
                     .OnDelete(DeleteBehavior.Restrict);
-
-                //entity.HasOne(e => e.CustomDay)
-                //  .WithMany(p => p.Timeslips)
-                //  .HasForeignKey(d => d.CustomDayId)
-                //  .OnDelete(DeleteBehavior.Cascade);
-
             });
 
             modelBuilder.Entity<StringMap>(entity =>

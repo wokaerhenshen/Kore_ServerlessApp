@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 namespace AWSServerlessWebApi.Controllers
 {
     [Produces("application/json")]
-    
     [Route("wbi")]
     public class WBIController : Controller
     {
@@ -29,15 +28,15 @@ namespace AWSServerlessWebApi.Controllers
         [Route("Create")]
         public IActionResult Create([FromBody] WBIVM wbiVM)
         {
-            if(wbiVM.EstimatedHours <= 0)
+            if (wbiVM.EstimatedHours <= 0)
             {
                 return new BadRequestObjectResult(new { message = "Estimated hours cannot be less than or equal to zero" });
             }
             if (wbiVM.ProjectId == null || wbiVM.ProjectId == "")
             {
-                return new BadRequestObjectResult( new { message = "Please provide a ProjectId" });
+                return new BadRequestObjectResult(new { message = "Please provide a ProjectId" });
             }
-            
+
             Guid result;
             bool success = Guid.TryParse(wbiVM.ProjectId, out result);
             if (success)
@@ -77,13 +76,6 @@ namespace AWSServerlessWebApi.Controllers
             return new OkObjectResult(wbiRepo.GetOneWBI(guid));
         }
 
-        //[HttpGet]
-        //[Route("GetProjectNameByWBI/{id}")]
-        //public string GetProjectNameByWBI(string id)
-        //{
-        //    return wbiRepo.GetProjectNameByWBI(id);
-        //}
-
         [HttpPut]
         [Route("Edit")]
         public IActionResult Edit([FromBody]WBIVM wbiVM)
@@ -104,7 +96,5 @@ namespace AWSServerlessWebApi.Controllers
             var success = wbiRepo.DeleteOneWBI(guid);
             return new ObjectResult(success);
         }
-
-
     }
 }

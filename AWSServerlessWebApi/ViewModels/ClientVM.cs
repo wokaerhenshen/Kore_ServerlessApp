@@ -11,7 +11,5 @@ namespace AWSServerlessWebApi.ViewModels
         public string ClientName { get; set; }
         public int DeletionStateCode { get; set; }
         public int StateCode { get; set; }
-
-     //   public virtual ICollection<ProjectVM> Projects { get; set; }
     }
 }

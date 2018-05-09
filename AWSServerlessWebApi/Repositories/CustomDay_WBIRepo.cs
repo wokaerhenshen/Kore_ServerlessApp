@@ -20,7 +20,6 @@ namespace AWSServerlessWebApi.Repositories
         public IActionResult CreateTimeslipTemplate(CustomDay_WBIVM customDay_WBIVM)
         {
             Guid wbiGuid = Guid.Parse(customDay_WBIVM.WBI_Id);
-            // application user needs to be here
             CustomDay_WBI timeslip_template = new CustomDay_WBI()
             {
                 NewChangeRequestId = wbiGuid,
@@ -47,16 +46,16 @@ namespace AWSServerlessWebApi.Repositories
                 return new BadRequestObjectResult(new { message = "You need to enter an end time..." });
             }
 
-            foreach (var item in _context.Timeslip_Templates.Where(i=> i.CustomDayId == customDay_WBIVM.CustomDayId))
+            foreach (var item in _context.Timeslip_Templates.Where(i => i.CustomDayId == customDay_WBIVM.CustomDayId))
             {
-                
 
-                    if (item.StartTime >= timeslip_template.EndTime || item.EndTime <= timeslip_template.StartTime)
-                    {
-                        //throw new ArgumentException("Times cannot overlap");
-                    }
-                    else
-                    {
+
+                if (item.StartTime >= timeslip_template.EndTime || item.EndTime <= timeslip_template.StartTime)
+                {
+
+                }
+                else
+                {
 
                     return new BadRequestObjectResult(new { message = "Times cannot overlap" });
 

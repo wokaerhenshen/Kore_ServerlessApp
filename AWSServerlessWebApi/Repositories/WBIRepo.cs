@@ -20,8 +20,6 @@ namespace AWSServerlessWebApi.Repositories
 
         public NewChangeRequestExtensionBase CreateWBI(WBIVM wbiVM)
         {
-
-            
             Guid projectGuid = Guid.Parse(wbiVM.ProjectId);
             NewChangeRequestExtensionBase wbi = new NewChangeRequestExtensionBase()
             {
@@ -68,11 +66,11 @@ namespace AWSServerlessWebApi.Repositories
             }
             else
             {
-                
+
                 wbi.NewName = wbiVM.Description;
                 wbi.NewEstimatedHours = wbiVM.EstimatedHours;
                 wbi.NewActualHours = wbiVM.ActualHours;
-               
+
                 _context.SaveChanges();
             }
             return wbi;
